@@ -1,0 +1,359 @@
+IQ-TREE multicore version 2.1.3 COVID-edition for Linux 64-bit built Apr 21 2021
+Developed by Bui Quang Minh, James Barbetti, Nguyen Lam Tung,
+Olga Chernomor, Heiko Schmidt, Dominik Schrempf, Michael Woodhams.
+
+Host:    weirlab60 (AVX, 503 GB RAM)
+Command: /home/0_PROGRAMS/iqtree-2.1.3-Linux/bin/iqtree2 -s datasets/Cryptopipo_rubrocapilla_imeriout_m07.GBSPipfilbwa.allsites.filtered.for_pixy.auto.49_0.2_5_20.fasta -redo -t PARS -ninit 2 -nt AUTO -B 1000 --prefix Cryptopipo_rubrocapilla_imeriout_m07.GBSPipfilbwa.allsites.filtered.for_pixy.auto.49_0.2_5_20.boot1000
+Seed:    175964 (Using SPRNG - Scalable Parallel Random Number Generator)
+Time:    Tue Jul 25 00:18:12 2023
+Kernel:  AVX - auto-detect threads (120 CPU cores detected)
+
+Reading alignment file datasets/Cryptopipo_rubrocapilla_imeriout_m07.GBSPipfilbwa.allsites.filtered.for_pixy.auto.49_0.2_5_20.fasta ... Fasta format detected
+Alignment most likely contains DNA/RNA sequences
+Alignment has 68 sequences with 2130795 columns, 305776 distinct patterns
+17948 parsimony-informative, 16274 singleton sites, 2096573 constant sites
+                                   Gap/Ambiguity  Composition  p-value
+   1  Ceratopipra_erythrocephala_SGC288    1.09%    passed     33.95%
+   2  Ceratopipra_erythrocephala_B7534     1.34%    passed     41.36%
+   3  Ceratopipra_erythrocephala_B7539     1.21%    passed     42.85%
+   4  Ceratopipra_erythrocephala_B7536     1.37%    passed     39.88%
+   5  Ceratopipra_erythrocephala_B7537     1.26%    passed     43.19%
+   6  Ceratopipra_rubrocapilla_CPE012      1.04%    passed     38.29%
+   7  Ceratopipra_rubrocapilla_CPE025      1.12%    passed     53.56%
+   8  Ceratopipra_rubrocapilla_CPE049      8.14%    passed     43.04%
+   9  Ceratopipra_rubrocapilla_CPE069      0.90%    passed     40.04%
+  10  Ceratopipra_rubrocapilla_CPEII008    0.96%    passed     49.26%
+  11  Ceratopipra_rubrocapilla_UNA002      1.06%    passed     45.22%
+  12  Ceratopipra_rubrocapilla_UNA018      0.96%    passed     26.07%
+  13  Ceratopipra_rubrocapilla_UNA088      7.10%    failed      0.09%
+  14  Ceratopipra_rubrocapilla_UNA110      0.97%    passed     35.31%
+  15  Ceratopipra_rubrocapilla_UNA124      3.80%    passed     88.03%
+  16  Ceratopipra_rubrocapilla_AMA340      1.92%    passed     65.46%
+  17  Ceratopipra_rubrocapilla_AMA601      4.67%    passed     82.31%
+  18  Ceratopipra_rubrocapilla_AMA656     37.19%    failed      0.00%
+  19  Ceratopipra_rubrocapilla_B4615       9.08%    failed      0.00%
+  20  Ceratopipra_rubrocapilla_B5082      13.86%    failed      0.00%
+  21  Ceratopipra_rubrocapilla_CAM117      0.84%    passed     34.73%
+  22  Ceratopipra_rubrocapilla_CUJ027      5.97%    passed     70.85%
+  23  Ceratopipra_rubrocapilla_CUJ072     12.68%    failed      0.09%
+  24  Ceratopipra_rubrocapilla_OM022       0.84%    passed     48.63%
+  25  Ceratopipra_rubrocapilla_OM112       1.07%    passed     48.71%
+  26  Ceratopipra_rubrocapilla_OM172       0.86%    passed     45.94%
+  27  Ceratopipra_rubrocapilla_PUC008      0.78%    passed     44.32%
+  28  Ceratopipra_rubrocapilla_PUC007      0.82%    passed     42.86%
+  29  Ceratopipra_rubrocapilla_UFAC1007   46.74%    failed      0.00%
+  30  Ceratopipra_rubrocapilla_UFAC305     0.95%    passed     41.47%
+  31  Ceratopipra_rubrocapilla_UFAC476    32.00%    failed      3.52%
+  32  Ceratopipra_rubrocapilla_AMZ610     52.31%    failed      0.00%
+  33  Ceratopipra_rubrocapilla_FPR006      1.13%    passed     47.08%
+  34  Ceratopipra_rubrocapilla_FPR015     20.77%    failed      0.00%
+  35  Ceratopipra_rubrocapilla_FPR021      0.77%    passed     51.60%
+  36  Ceratopipra_rubrocapilla_MAM010      7.82%    passed     95.89%
+  37  Ceratopipra_rubrocapilla_MAR092     22.00%    failed      0.00%
+  38  Ceratopipra_rubrocapilla_MPDS628    43.14%    failed      0.00%
+  39  Ceratopipra_rubrocapilla_OP100       0.94%    passed     46.79%
+  40  Ceratopipra_rubrocapilla_PIME024     0.83%    passed     44.68%
+  41  Ceratopipra_rubrocapilla_PIME079    33.38%    passed     52.05%
+  42  Ceratopipra_rubrocapilla_PIME460     2.11%    passed     98.21%
+  43  Ceratopipra_rubrocapilla_BR033       2.49%    passed      5.89%
+  44  Ceratopipra_rubrocapilla_BR036       6.95%    failed      0.00%
+  45  Ceratopipra_rubrocapilla_MF005       0.76%    passed     47.93%
+  46  Ceratopipra_rubrocapilla_PIME062     0.79%    passed     38.73%
+  47  Ceratopipra_rubrocapilla_PIME134     6.89%    failed      0.00%
+  48  Ceratopipra_rubrocapilla_PIME135     0.86%    passed     41.51%
+  49  Ceratopipra_rubrocapilla_PIME169     7.88%    passed     99.73%
+  50  Ceratopipra_rubrocapilla_PIME482    14.03%    failed      0.00%
+  51  Ceratopipra_rubrocapilla_PIME522     4.52%    passed     98.66%
+  52  Ceratopipra_rubrocapilla_PPS041     31.55%    failed      0.00%
+  53  Ceratopipra_rubrocapilla_PPS174     17.36%    failed      0.00%
+  54  Ceratopipra_rubrocapilla_PPS221     20.11%    failed      0.00%
+  55  Ceratopipra_rubrocapilla_TLP025     13.56%    failed      0.00%
+  56  Ceratopipra_rubrocapilla_TLP123      1.65%    passed     99.98%
+  57  Ceratopipra_rubrocapilla_WM293       2.85%    passed     83.04%
+  58  Ceratopipra_rubrocapilla_AMZ551     43.17%    failed      0.00%
+  59  Ceratopipra_rubrocapilla_GAPTO259    5.46%    failed      0.00%
+  60  Ceratopipra_rubrocapilla_GAPTO268    3.51%    failed      0.18%
+  61  Ceratopipra_rubrocapilla_GAPTO277   40.33%    failed      0.00%
+  62  Ceratopipra_rubrocapilla_GAPTO327    2.76%    failed      2.74%
+  63  Ceratopipra_rubrocapilla_MT087       0.90%    passed     56.76%
+  64  Ceratopipra_rubrocapilla_MT123       0.86%    passed     43.16%
+  65  Ceratopipra_rubrocapilla_PPBIO221   42.30%    failed      0.00%
+  66  Ceratopipra_rubrocapilla_PPBIO305   23.08%    failed      0.00%
+  67  Ceratopipra_rubrocapilla_RDO007      4.71%    passed     80.46%
+  68  Ceratopipra_rubrocapilla_UHE442      3.41%    passed     61.53%
+WARNING: 1 sequences contain more than 50% gaps/ambiguity
+****  TOTAL                               10.16%  25 sequences failed composition chi2 test (p-value<5%; df=3)
+NOTE: minimal branch length is reduced to 0.000000046931 for long alignment
+
+Creating fast initial parsimony tree by random order stepwise addition...
+14.145 seconds, parsimony score: 99114 (based on 34222 sites)
+Measuring multi-threading efficiency up to 120 CPU cores
+8 trees examined
+Threads: 1 / Time: 120.489 sec / Speedup: 1.000 / Efficiency: 100% / LogL: -3872056
+Threads: 2 / Time: 69.996 sec / Speedup: 1.721 / Efficiency: 86% / LogL: -3872056
+Threads: 3 / Time: 51.215 sec / Speedup: 2.353 / Efficiency: 78% / LogL: -3872056
+Threads: 4 / Time: 45.218 sec / Speedup: 2.665 / Efficiency: 67% / LogL: -3872056
+Threads: 5 / Time: 39.769 sec / Speedup: 3.030 / Efficiency: 61% / LogL: -3872056
+Threads: 6 / Time: 33.928 sec / Speedup: 3.551 / Efficiency: 59% / LogL: -3872056
+Threads: 7 / Time: 31.493 sec / Speedup: 3.826 / Efficiency: 55% / LogL: -3872056
+Threads: 8 / Time: 24.555 sec / Speedup: 4.907 / Efficiency: 61% / LogL: -3872056
+Threads: 9 / Time: 23.635 sec / Speedup: 5.098 / Efficiency: 57% / LogL: -3872056
+Threads: 10 / Time: 23.213 sec / Speedup: 5.191 / Efficiency: 52% / LogL: -3872056
+Threads: 11 / Time: 21.422 sec / Speedup: 5.624 / Efficiency: 51% / LogL: -3872056
+Threads: 12 / Time: 18.032 sec / Speedup: 6.682 / Efficiency: 56% / LogL: -3872056
+Threads: 13 / Time: 17.292 sec / Speedup: 6.968 / Efficiency: 54% / LogL: -3872056
+Threads: 14 / Time: 18.428 sec / Speedup: 6.538 / Efficiency: 47% / LogL: -3872056
+BEST NUMBER OF THREADS: 12
+
+Perform fast likelihood tree search using GTR+I+G model...
+Estimate model parameters (epsilon = 5.000)
+Perform nearest neighbor interchange...
+Estimate model parameters (epsilon = 1.000)
+1. Initial log-likelihood: -3577407.424
+2. Current log-likelihood: -3577404.503
+3. Current log-likelihood: -3577403.166
+Optimal log-likelihood: -3577402.231
+Rate parameters:  A-C: 1.06491  A-G: 9.43054  A-T: 1.00564  C-G: 1.08138  C-T: 9.39275  G-T: 1.00000
+Base frequencies:  A: 0.233  C: 0.267  G: 0.267  T: 0.233
+Proportion of invariable sites: 0.972
+Gamma shape alpha: 0.376
+Parameters optimization took 3 rounds (37.090 sec)
+Time for fast ML tree search: 907.556 seconds
+
+NOTE: ModelFinder requires 7908 MB RAM!
+ModelFinder will test up to 286 DNA models (sample size: 2130795) ...
+ No. Model         -LnL         df  AIC          AICc         BIC
+  1  GTR+F         3852938.293  141 7706158.586  7706158.605  7707931.239
+  2  GTR+F+I       3602439.332  142 7205162.663  7205162.682  7206947.888
+  3  GTR+F+G4      3760078.232  142 7520440.464  7520440.483  7522225.689
+  4  GTR+F+I+G4    3577400.278  143 7155086.555  7155086.575  7156884.352
+  5  GTR+F+R2      3581470.826  143 7163227.653  7163227.672  7165025.450
+  6  GTR+F+R3      3581469.683  145 7163229.367  7163229.386  7165052.307
+ 17  SYM+I+G4      3582295.235  140 7164870.469  7164870.488  7166630.550
+ 30  TVM+F+I+G4    3577401.342  142 7155086.685  7155086.704  7156871.910
+ 43  TVMe+I+G4     3582295.980  139 7164869.959  7164869.977  7166617.468
+ 56  TIM3+F+I+G4   3577400.087  141 7155082.175  7155082.193  7156854.827
+ 69  TIM3e+I+G4    3582328.692  138 7164933.383  7164933.401  7166668.320
+ 82  TIM2+F+I+G4   3577406.521  141 7155095.042  7155095.060  7156867.694
+ 95  TIM2e+I+G4    3582354.199  138 7164984.397  7164984.415  7166719.334
+108  TIM+F+I+G4    3577406.698  141 7155095.397  7155095.416  7156868.050
+121  TIMe+I+G4     3582382.592  138 7165041.184  7165041.202  7166776.121
+134  TPM3u+F+I+G4  3577401.115  140 7155082.230  7155082.248  7156842.311
+147  TPM3+F+I+G4   3577401.075  140 7155082.149  7155082.168  7156842.230
+160  TPM2u+F+I+G4  3577407.744  140 7155095.489  7155095.507  7156855.569
+173  TPM2+F+I+G4   3577407.744  140 7155095.489  7155095.507  7156855.569
+186  K3Pu+F+I+G4   3577407.881  140 7155095.763  7155095.781  7156855.843
+199  K3P+I+G4      3582383.909  137 7165041.817  7165041.835  7166764.182
+212  TN+F+I+G4     3577408.008  140 7155096.016  7155096.035  7156856.097
+225  TNe+I+G4      3582385.341  137 7165044.681  7165044.699  7166767.046
+238  HKY+F+I+G4    3577407.966  139 7155093.931  7155093.950  7156841.440
+251  K2P+I+G4      3582386.683  136 7165045.366  7165045.383  7166755.159
+264  F81+F+I+G4    3627107.087  138 7254490.175  7254490.193  7256225.112
+277  JC+I+G4       3631433.971  135 7263137.943  7263137.960  7264835.164
+Akaike Information Criterion:           TPM3+F+I+G4
+Corrected Akaike Information Criterion: TPM3+F+I+G4
+Bayesian Information Criterion:         HKY+F+I+G4
+Best-fit model: HKY+F+I+G4 chosen according to BIC
+
+All model information printed to Cryptopipo_rubrocapilla_imeriout_m07.GBSPipfilbwa.allsites.filtered.for_pixy.auto.49_0.2_5_20.boot1000.model.gz
+CPU time for ModelFinder: 34027.049 seconds (9h:27m:7s)
+Wall-clock time for ModelFinder: 3240.193 seconds (0h:54m:0s)
+Generating 1000 samples for ultrafast bootstrap (seed: 175964)...
+
+NOTE: 3863 MB RAM (3 GB) is required!
+Estimate model parameters (epsilon = 0.100)
+Thoroughly optimizing +I+G parameters from 10 start values...
+Init pinv, alpha: 0.000, 0.382 / Estimate: 0.000, 0.020 / LogL: -3760176.665
+Init pinv, alpha: 0.109, 0.382 / Estimate: 0.973, 0.380 / LogL: -3577408.074
+Init pinv, alpha: 0.219, 0.382 / Estimate: 0.973, 0.380 / LogL: -3577408.052
+Init pinv, alpha: 0.328, 0.382 / Estimate: 0.973, 0.381 / LogL: -3577408.041
+Init pinv, alpha: 0.437, 0.382 / Estimate: 0.973, 0.380 / LogL: -3577408.059
+Init pinv, alpha: 0.547, 0.382 / Estimate: 0.973, 0.380 / LogL: -3577408.089
+Init pinv, alpha: 0.656, 0.382 / Estimate: 0.973, 0.381 / LogL: -3577408.045
+Init pinv, alpha: 0.765, 0.382 / Estimate: 0.973, 0.380 / LogL: -3577408.060
+Init pinv, alpha: 0.875, 0.382 / Estimate: 0.973, 0.380 / LogL: -3577408.054
+Init pinv, alpha: 0.984, 0.382 / Estimate: 0.973, 0.384 / LogL: -3577408.052
+Optimal pinv,alpha: 0.973, 0.381 / LogL: -3577408.041
+
+Parameters optimization took 6065.685 sec
+Computing ML distances based on estimated model parameters...
+Computing ML distances took 0.337306 sec (of wall-clock time) 4.021044 sec(of CPU time)
+Computing RapidNJ tree took 0.008080 sec (of wall-clock time) 0.087715 sec (of CPU time)
+Log-likelihood of RapidNJ tree: -3578261.241
+--------------------------------------------------------------------
+|             INITIALIZING CANDIDATE TREE SET                      |
+--------------------------------------------------------------------
+
+Do NNI search on 2 best initial trees
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 1: -3577375.012
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 2: -3577188.254
+Finish initializing candidate tree set (4)
+Current best tree score: -3577188.254 / CPU time: 109.523
+Number of iterations: 2
+--------------------------------------------------------------------
+|               OPTIMIZING CANDIDATE TREE SET                      |
+--------------------------------------------------------------------
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 8: -3577139.830
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 10: -3577030.396
+Iteration 10 / LogL: -3577030.396 / Time: 1h:50m:29s
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 12: -3577003.083
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 13: -3576953.990
+Iteration 20 / LogL: -3577133.249 / Time: 1h:57m:34s
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 23: -3576922.077
+Iteration 30 / LogL: -3576928.784 / Time: 2h:3m:36s (6h:36m:24s left)
+Iteration 40 / LogL: -3576948.488 / Time: 2h:9m:52s (4h:36m:23s left)
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 43: -3576913.571
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 45: -3576908.734
+Iteration 50 / LogL: -3576961.405 / Time: 2h:15m:58s (4h:23m:38s left)
+Log-likelihood cutoff on original alignment: -3577208.056
+Iteration 60 / LogL: -3576933.073 / Time: 2h:22m:26s (3h:25m:12s left)
+Iteration 70 / LogL: -3576941.795 / Time: 2h:28m:43s (2h:41m:39s left)
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 79: -3576906.568
+Iteration 80 / LogL: -3576938.857 / Time: 2h:34m:43s (3h:13m:53s left)
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 85: -3576891.281
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 88: -3576882.391
+Iteration 90 / LogL: -3576903.428 / Time: 2h:42m:9s (2h:58m:32s left)
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 100: -3576866.589
+Iteration 100 / LogL: -3576866.589 / Time: 2h:48m:28s (2h:50m:10s left)
+Log-likelihood cutoff on original alignment: -3577208.056
+NOTE: Bootstrap correlation coefficient of split occurrence frequencies: 0.937
+NOTE: UFBoot does not converge, continue at least 100 more iterations
+Iteration 110 / LogL: -3576986.217 / Time: 2h:54m:54s (2h:24m:24s left)
+Iteration 120 / LogL: -3576902.279 / Time: 3h:1m:5s (2h:1m:44s left)
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 123: -3576862.300
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 128: -3576854.504
+Iteration 130 / LogL: -3576917.786 / Time: 3h:7m:47s (2h:22m:40s left)
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 137: -3576840.186
+Iteration 140 / LogL: -3576907.044 / Time: 3h:14m:52s (2h:15m:59s left)
+Iteration 150 / LogL: -3576872.844 / Time: 3h:20m:53s (1h:57m:17s left)
+Log-likelihood cutoff on original alignment: -3577139.873
+Iteration 160 / LogL: -3576942.370 / Time: 3h:27m:23s (1h:40m:26s left)
+Iteration 170 / LogL: -3576847.257 / Time: 3h:34m:18s (1h:24m:57s left)
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 173: -3576828.003
+Iteration 180 / LogL: -3576876.271 / Time: 3h:40m:52s (1h:54m:45s left)
+Iteration 190 / LogL: -3576881.196 / Time: 3h:47m:32s (1h:39m:55s left)
+Iteration 200 / LogL: -3576861.645 / Time: 3h:54m:29s (1h:26m:1s left)
+Log-likelihood cutoff on original alignment: -3577139.873
+NOTE: Bootstrap correlation coefficient of split occurrence frequencies: 0.936
+NOTE: UFBoot does not converge, continue at least 100 more iterations
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 201: -3576827.622
+Iteration 210 / LogL: -3576968.307 / Time: 4h:1m:14s (1h:45m:2s left)
+Iteration 220 / LogL: -3576988.445 / Time: 4h:8m:14s (1h:31m:48s left)
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 221: -3576825.166
+Iteration 230 / LogL: -3576833.342 / Time: 4h:15m:5s (1h:41m:22s left)
+Iteration 240 / LogL: -3576831.470 / Time: 4h:22m:39s (1h:29m:0s left)
+Iteration 250 / LogL: -3576828.856 / Time: 4h:30m:6s (1h:17m:0s left)
+Log-likelihood cutoff on original alignment: -3577121.218
+Iteration 260 / LogL: -3576911.698 / Time: 4h:37m:2s (1h:5m:14s left)
+Iteration 270 / LogL: -3576979.600 / Time: 4h:43m:16s (0h:53m:42s left)
+Iteration 280 / LogL: -3576860.044 / Time: 4h:49m:44s (0h:42m:34s left)
+Iteration 290 / LogL: -3576906.951 / Time: 4h:55m:38s (0h:31m:42s left)
+Iteration 300 / LogL: -3576900.185 / Time: 5h:1m:57s (0h:21m:12s left)
+Log-likelihood cutoff on original alignment: -3577121.218
+NOTE: Bootstrap correlation coefficient of split occurrence frequencies: 0.976
+NOTE: UFBoot does not converge, continue at least 100 more iterations
+Iteration 310 / LogL: -3576934.674 / Time: 5h:8m:1s (1h:29m:42s left)
+Iteration 320 / LogL: -3576886.856 / Time: 5h:14m:37s (1h:18m:54s left)
+Iteration 330 / LogL: -3576846.467 / Time: 5h:21m:1s (1h:8m:18s left)
+Iteration 340 / LogL: -3576827.685 / Time: 5h:27m:16s (0h:57m:55s left)
+Estimate model parameters (epsilon = 0.100)
+UPDATE BEST LOG-LIKELIHOOD: -3576823.978
+Iteration 350 / LogL: -3576901.947 / Time: 5h:33m:19s (0h:47m:45s left)
+Log-likelihood cutoff on original alignment: -3577121.218
+Iteration 360 / LogL: -3576827.719 / Time: 5h:39m:35s (0h:37m:50s left)
+Iteration 370 / LogL: -3576825.219 / Time: 5h:45m:49s (0h:28m:6s left)
+Iteration 380 / LogL: -3576998.217 / Time: 5h:52m:1s (0h:18m:34s left)
+Iteration 390 / LogL: -3576901.550 / Time: 5h:58m:3s (0h:9m:12s left)
+Iteration 400 / LogL: -3576889.598 / Time: 6h:4m:16s (0h:0m:0s left)
+Log-likelihood cutoff on original alignment: -3577121.218
+NOTE: Bootstrap correlation coefficient of split occurrence frequencies: 0.976
+NOTE: UFBoot does not converge, continue at least 100 more iterations
+Iteration 410 / LogL: -3576928.267 / Time: 6h:10m:41s (1h:21m:34s left)
+Iteration 420 / LogL: -3576841.667 / Time: 6h:17m:25s (1h:12m:3s left)
+Iteration 430 / LogL: -3576845.744 / Time: 6h:23m:27s (1h:2m:34s left)
+Iteration 440 / LogL: -3576883.780 / Time: 6h:29m:35s (0h:53m:14s left)
+Iteration 450 / LogL: -3576827.769 / Time: 6h:35m:35s (0h:44m:3s left)
+Log-likelihood cutoff on original alignment: -3577121.218
+Iteration 460 / LogL: -3576881.325 / Time: 6h:42m:14s (0h:35m:3s left)
+Iteration 470 / LogL: -3576824.101 / Time: 6h:48m:27s (0h:26m:7s left)
+Iteration 480 / LogL: -3576865.764 / Time: 6h:55m:7s (0h:17m:19s left)
+Iteration 490 / LogL: -3576922.280 / Time: 7h:1m:4s (0h:8m:36s left)
+Iteration 500 / LogL: -3576892.390 / Time: 7h:7m:57s (0h:0m:0s left)
+Log-likelihood cutoff on original alignment: -3577121.218
+NOTE: Bootstrap correlation coefficient of split occurrence frequencies: 0.987
+NOTE: UFBoot does not converge, continue at least 100 more iterations
+Iteration 510 / LogL: -3576862.030 / Time: 7h:13m:40s (1h:16m:40s left)
+Iteration 520 / LogL: -3576827.666 / Time: 7h:19m:53s (1h:7m:48s left)
+Iteration 530 / LogL: -3576851.662 / Time: 7h:25m:31s (0h:58m:57s left)
+Iteration 540 / LogL: -3576831.458 / Time: 7h:31m:39s (0h:50m:16s left)
+Iteration 550 / LogL: -3576827.777 / Time: 7h:37m:44s (0h:41m:41s left)
+Log-likelihood cutoff on original alignment: -3577121.218
+Iteration 560 / LogL: -3576929.412 / Time: 7h:43m:43s (0h:33m:10s left)
+Iteration 570 / LogL: -3576893.095 / Time: 7h:50m:4s (0h:24m:47s left)
+Iteration 580 / LogL: -3576828.106 / Time: 7h:56m:21s (0h:16m:27s left)
+Iteration 590 / LogL: -3576824.011 / Time: 8h:2m:40s (0h:8m:11s left)
+Iteration 600 / LogL: -3577004.531 / Time: 8h:9m:23s (0h:0m:0s left)
+Log-likelihood cutoff on original alignment: -3577121.218
+NOTE: Bootstrap correlation coefficient of split occurrence frequencies: 0.995
+TREE SEARCH COMPLETED AFTER 600 ITERATIONS / Time: 8h:9m:23s
+
+--------------------------------------------------------------------
+|                    FINALIZING TREE SEARCH                        |
+--------------------------------------------------------------------
+Performs final model parameters optimization
+Estimate model parameters (epsilon = 0.010)
+1. Initial log-likelihood: -3576823.978
+Optimal log-likelihood: -3576823.978
+Rate parameters:  A-C: 1.00000  A-G: 9.02405  A-T: 1.00000  C-G: 1.00000  C-T: 9.02405  G-T: 1.00000
+Base frequencies:  A: 0.233  C: 0.267  G: 0.267  T: 0.233
+Proportion of invariable sites: 0.973
+Gamma shape alpha: 0.382
+Parameters optimization took 1 rounds (10.903 sec)
+BEST SCORE FOUND : -3576823.978
+Creating bootstrap support values...
+Split supports printed to NEXUS file Cryptopipo_rubrocapilla_imeriout_m07.GBSPipfilbwa.allsites.filtered.for_pixy.auto.49_0.2_5_20.boot1000.splits.nex
+Total tree length: 0.094
+
+Total number of iterations: 600
+CPU time used for tree search: 272145.428 sec (75h:35m:45s)
+Wall-clock time used for tree search: 23218.639 sec (6h:26m:58s)
+Total CPU time used: 343181.645 sec (95h:19m:41s)
+Total wall-clock time used: 29375.119 sec (8h:9m:35s)
+
+Computing bootstrap consensus tree...
+Reading input file Cryptopipo_rubrocapilla_imeriout_m07.GBSPipfilbwa.allsites.filtered.for_pixy.auto.49_0.2_5_20.boot1000.splits.nex...
+68 taxa and 723 splits.
+Consensus tree written to Cryptopipo_rubrocapilla_imeriout_m07.GBSPipfilbwa.allsites.filtered.for_pixy.auto.49_0.2_5_20.boot1000.contree
+Reading input trees file Cryptopipo_rubrocapilla_imeriout_m07.GBSPipfilbwa.allsites.filtered.for_pixy.auto.49_0.2_5_20.boot1000.contree
+Log-likelihood of consensus tree: -3576841.575
+
+Analysis results written to: 
+  IQ-TREE report:                Cryptopipo_rubrocapilla_imeriout_m07.GBSPipfilbwa.allsites.filtered.for_pixy.auto.49_0.2_5_20.boot1000.iqtree
+  Maximum-likelihood tree:       Cryptopipo_rubrocapilla_imeriout_m07.GBSPipfilbwa.allsites.filtered.for_pixy.auto.49_0.2_5_20.boot1000.treefile
+  Likelihood distances:          Cryptopipo_rubrocapilla_imeriout_m07.GBSPipfilbwa.allsites.filtered.for_pixy.auto.49_0.2_5_20.boot1000.mldist
+
+Ultrafast bootstrap approximation results written to:
+  Split support values:          Cryptopipo_rubrocapilla_imeriout_m07.GBSPipfilbwa.allsites.filtered.for_pixy.auto.49_0.2_5_20.boot1000.splits.nex
+  Consensus tree:                Cryptopipo_rubrocapilla_imeriout_m07.GBSPipfilbwa.allsites.filtered.for_pixy.auto.49_0.2_5_20.boot1000.contree
+  Screen log file:               Cryptopipo_rubrocapilla_imeriout_m07.GBSPipfilbwa.allsites.filtered.for_pixy.auto.49_0.2_5_20.boot1000.log
+
+Date and Time: Tue Jul 25 09:22:07 2023

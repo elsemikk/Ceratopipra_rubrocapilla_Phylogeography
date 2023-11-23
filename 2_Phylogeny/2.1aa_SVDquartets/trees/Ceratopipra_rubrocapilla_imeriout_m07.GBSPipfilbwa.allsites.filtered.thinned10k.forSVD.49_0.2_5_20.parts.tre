@@ -1,0 +1,17 @@
+#NEXUS 
+
+Begin trees;  [Treefile saved Fri Jul 28 17:57:31 2023]
+[!
+>Data file = Cryptopipo_rubrocapilla_imeriout_m07.GBSPipfilbwa.allsites.filtered.thinned10k.forSVD.49_0.2_5_20.parts.nex
+]
+	Translate
+		1 Imeri,
+		2 AtlanticForest,
+		3 Inambari,
+		4 Rondonia,
+		5 Tapajos,
+		6 Headwaters,
+		7 XinguBelem
+		;
+tree 'PAUP_1' = [&U] (1,((((2,7)100,5)100,6)100,4)100,3)100;
+End;

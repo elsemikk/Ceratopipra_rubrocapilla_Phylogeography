@@ -1,0 +1,29 @@
+#NEXUS 
+Begin taxa;
+	Dimensions ntax=7;
+	Taxlabels
+		Imeri
+		AtlanticForest
+		Inambari
+		Rondonia
+		Tapajos
+		Headwaters
+		XinguBelem
+		;
+End;
+
+Begin trees;  [Treefile saved Fri Jul 28 17:56:40 2023]
+[!>Trees found during each SVDQuartets bootstrap replicate using data file 'Cryptopipo_rubrocapilla_imeriout_m07.GBSPipfilbwa.allsites.filtered.thinned10k.forSVD.49_0.2_5_20.parts.nex'...]
+	Translate
+		1 Imeri,
+		2 AtlanticForest,
+		3 Inambari,
+		4 Rondonia,
+		5 Tapajos,
+		6 Headwaters,
+		7 XinguBelem
+		;
+
+[Trees found in bootstrap replicate #1]
+tree B_1.1 = [&U] [&W 1] (1,((((2,7),5),6),4),3);
+end;
