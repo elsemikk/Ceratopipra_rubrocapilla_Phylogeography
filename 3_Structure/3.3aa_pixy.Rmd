@@ -1,0 +1,814 @@
+---
+title: "Untitled"
+author: "Else Mikkelsen"
+date: "2023-05-13"
+output: html_document
+---
+
+This notebook is analyzing the pixy output for the *Ceratopipra rubrocapilla* dataset.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(cache = TRUE, cache.lazy = FALSE)
+knitr::opts_knit$set(root.dir = '~/Documents/GitHub/Ceratopipra_rubrocapilla_Phylogeography/3_Structure/3.3aa_pixy')
+
+#load required packages
+library(tidyverse)
+library("viridis")           
+library(RColorBrewer)
+library(zoo) #for rollmean function
+
+```
+
+First, load some functions for loading the data. Depending on the downstream analysis, I want the data either in "long" format (generally recommended) or "wide" format.
+```{r pixy}
+#convert pixy data to long format
+#This function came from the pixy documentation
+pixy_to_long <- function(pixy_files){
+  pixy_df <- list()
+  for(i in 1:length(pixy_files)){
+    stat_file_type <- gsub(".*_|.txt", "", pixy_files[i])
+    if(stat_file_type == "pi"){
+      df <- read_delim(pixy_files[i], delim = "\t")
+      df <- df %>%
+        gather(-pop, -window_pos_1, -window_pos_2, -chromosome,
+               key = "statistic", value = "value") %>%
+        rename(pop1 = pop) %>%
+        mutate(pop2 = NA)
+      pixy_df[[i]] <- df
+    } else{
+      df <- read_delim(pixy_files[i], delim = "\t")
+      df <- df %>%
+        gather(-pop1, -pop2, -window_pos_1, -window_pos_2, -chromosome,
+               key = "statistic", value = "value")
+      pixy_df[[i]] <- df
+    }
+  }
+  bind_rows(pixy_df) %>%
+    arrange(pop1, pop2, chromosome, window_pos_1, statistic)
+}
+
+
+#convert pixy data to wide format
+pixy_to_wide <- function(pixy_files){
+  pixy_df <- list()
+  for(i in 1:length(pixy_files)){
+    stat_file_type <- gsub(".*_|.txt", "", pixy_files[i])
+    if(stat_file_type == "pi"){
+      df <- read_delim(pixy_files[i], delim = "\t")
+            pixy_df[[i]] <- df %>%
+            select(pop, chromosome, window_pos_1, window_pos_2, no_sites, avg_pi) %>%
+            spread(key=pop, value=avg_pi)
+    } else if(stat_file_type == "dxy"){
+      df <- read_delim(pixy_files[i], delim = "\t")
+            pixy_df[[i]] <- df %>%
+            unite("pop", pop1:pop2, remove = TRUE) %>%
+            select(pop, chromosome, window_pos_1, window_pos_2, no_sites, avg_dxy) %>%
+            spread(key=pop, value=avg_dxy)
+    } else{
+      df <- read_delim(pixy_files[i], delim = "\t")
+            pixy_df[[i]] <- df %>%
+            unite("pop", pop1:pop2, sep = "_Fst_", remove = TRUE)%>%
+            select(pop, chromosome, window_pos_1, window_pos_2, no_snps, avg_wc_fst) %>%
+            spread(key=pop, value=avg_wc_fst)
+    }
+  }
+  #merge all the dataframes according to position
+  pixy_df %>% reduce(left_join, by = c("chromosome", "window_pos_1", "window_pos_2"))
+}
+```
+
+Now, load the data!
+```{r load_data, message=FALSE, results='hide'}
+#I have a couple different datasets in different folders; pick which one to analyze
+#fairfilters are the filters that I consider to be a good balance between resolution and noise (window size 500 kb) 
+
+#there are two datasets are for the publication. "headwaterslabelled" divides the dataset into the main areas of endemism (Inambari, Rondonia, Tapajos, Xingu, and the Atlantic Forest. Headwater samples are separated to separate populations for Rondonia, Tapajos, and Xingu.) The "subpops" dataset further separates Inambari into East and West, and Xingu into north and central, and the Atlantic Forest into its two sampling locations.
+folder <- "window_500k_37_0.2_5_20.0_headwaterslabelled" #This sample has Xingu, Tapajos, and Rondonia headwater samples separated from their respective populations, but Central/North Xingu are combined, as are East and West Inambari and the two Atlantic Forest populations.
+folder <- "window_500k_37_0.2_5_20.0_subpops" #This sample has Xingu, Tapajos, and Rondonia headwater samples separated from their respective populations, and Central & North Xingu are separated, as are East and West Inambari and the two Atlantic Forest populations.
+
+
+#get a list of chromosomes to read. I have each chromosome in a separate file. This is just the prefix of the pixy files. If you have a single prefix, just define "chroms" as whatever that prefix is.
+#files<-c("chr_1", "chr_1A", "chr_2", "chr_3", "chr_4", "chr_4A", "chr_5", "chr_6", "chr_7", "chr_8", "chr_9", "chr_10", "chr_11", "chr_12", "chr_13", "chr_14", "chr_15", "chr_17", "chr_18", "chr_19", "chr_20", "chr_21", "chr_22", "chr_23", "chr_24", "chr_25", "chr_26", "chr_27", "chr_28", "chr_29") #All autosomes
+files<-c("chr_1", "chr_1A", "chr_2", "chr_3", "chr_4", "chr_4A", "chr_5", "chr_6", "chr_7", "chr_8", "chr_9", "chr_10", "chr_11", "chr_12", "chr_13", "chr_14", "chr_15", "chr_17", "chr_18", "chr_19", "chr_20", "chr_21", "chr_22", "chr_23", "chr_24", "chr_25", "chr_26", "chr_27", "chr_28", "chr_29", "chr_Znopseudo_2het_trimmed") #All chromosomes including chrZ
+
+#there are a couple comparisons available to test bioinformatic filters on the Z chromosome, used to test robustness of results (results are qualitatively very similar, but removing the pseudoautosomal region does decrease estimates of diversity quite a bit - not surprising and likely a combination of a real biological difference across the chromosome and increased error rate due to mismapped reads)
+#files<-c("chr_Z") #chrZ without filters to remove pseudoautosomal/chrW region
+#files<-c("chr_Znopseudo") #chrZ with filters to remove pseudoautosomal region, but not other areas where W likely aligns
+
+#loop through the chosen files and load the data
+
+#setup empty df to hold data
+pixy_df <- NULL
+#loop through chromosomes, reading their data and adding it to the dataframe
+for(file in files){
+  print(c("loading ", file))
+  chrom_df <- pixy_to_long(c(paste("Ceratopipra_rubrocapilla/", folder, "/", file, "_dxy.txt", sep=""), paste("Ceratopipra_rubrocapilla/", folder, "/", file, "_pi.txt", sep=""), paste("Ceratopipra_rubrocapilla/", folder, "/", file, "_fst.txt", sep="")))
+  pixy_df <- rbind(pixy_df, chrom_df)
+}
+
+
+#we can load an alternative dataset for Fst, with a min minor allele frequency filter of 0.05. Alleles with frequency below 0.05 may be less informative.
+#choose the Fst dataset that corresponds to the dxy/pi dataset above
+fstfolder <- "window_500k_37_0.2_5_20.0_qualmaf5_headwaterslabelled"
+fstfolder <- "window_500k_37_0.2_5_20.0_qualmaf5_subpops"
+
+#setup empty df to hold data
+pixy_fstdf <- NULL
+#loop through chromosomes, reading their data and adding it to the dataframe
+for(file in files){
+  print(c("loading ", file))
+  chrom_df <- pixy_to_long(c(paste("Ceratopipra_rubrocapilla/", fstfolder, "/", file, "_fst.txt", sep="")))
+  pixy_fstdf <- rbind(pixy_fstdf, chrom_df)
+}
+
+
+#this dataset was to look for areas around the pseudoautosomal region where W sequences may map to the Z
+fstfolder <- "chrZ_investigation/Ceratopipra_rubrocapilla/window_1bp_chrZ"
+files<-c("chr_Z") #chr_Z was investigated for differentiation between males and females
+
+#setup empty df to hold data
+pixy_chrZ_investigation_fstdf <- NULL
+#loop through chromosomes, reading their data and adding it to the dataframe
+for(file in files){
+  print(c("loading ", file))
+  chrom_df <- pixy_to_long(c(paste("Ceratopipra_rubrocapilla/", fstfolder, "/", file, "_fst.txt", sep="")))
+  pixy_chrZ_investigation_fstdf <- rbind(pixy_chrZ_investigation_fstdf, chrom_df)
+}
+#I needed to do this when my population was just named "F", which R interprets as "false" 
+pixy_chrZ_investigation_fstdf$pop1 <- "Male"
+pixy_chrZ_investigation_fstdf$pop2 <- "Female"
+
+
+# create a custom labeller for special characters in pi/dxy/fst, so that the labels look nicer in the plot
+pixy_labeller <- as_labeller(c(avg_pi = "pi", avg_dxy = "D[XY]", avg_wc_fst = "F[ST]"), default = label_parsed)
+
+```
+
+I also want a long format dataframe so I can calculate some statistics more easily.
+```{r long, message=FALSE, results='hide'}
+#setup empty df to hold data
+pixy_df2 <- NULL
+#loop through chromosomes, reading their data and adding it to the dataframe
+for(file in files){
+  print(c("loading ", file))
+  chrom_df <- pixy_to_wide(c(paste("Ceratopipra_rubrocapilla/", folder, "/", file, "_dxy.txt", sep=""), paste("Ceratopipra_rubrocapilla/", folder, "/", file, "_pi.txt", sep=""), paste("Ceratopipra_rubrocapilla/", folder, "/", file, "_fst.txt", sep="")))
+  pixy_df2 <- rbind(pixy_df2, chrom_df)
+}
+
+```
+
+## Calculate means
+Let's quickly observe the means for each statistic. To properly get the mean of pi and dxy, we cannot simply average across all windows since each window could have variable amounts of missing data - rather, we will sum all the differences between all individuals across all sites, and divide that by the total number of sites that were compared across all sites and all individuals.
+
+```{r means}
+#simple but less correct way
+#means <- pixy_df %>% group_by(pop1, pop2, statistic) %>% summarise(mean=mean(value, na.rm=T))
+#means
+
+#more correct way
+
+#firstly, can decide to filter to look at only some chromosomes (eg, exclude sex chromosomes). I am selecting only the autosomes. I will look at chrZ separately as it has a different effective population size and is expected to experience different levels of diversity, divergence, and differentiation.
+chromosomes<-c("chr_1", "chr_1A", "chr_2", "chr_3", "chr_4", "chr_4A", "chr_5", "chr_6", "chr_7", "chr_8", "chr_9", "chr_10", "chr_11", "chr_12", "chr_13", "chr_14", "chr_15", "chr_17", "chr_18", "chr_19", "chr_20", "chr_21", "chr_22", "chr_23", "chr_24", "chr_25", "chr_26", "chr_27", "chr_28", "chr_29")
+
+#make a list of populations to analyze
+
+#could look at subpopulations. Note that the order here will affect what order they are reported in.
+populations <- c("AtlanticForest", "AtlanticForest_Ibateguara", "AtlanticForest_Ilheus", "InambariE", "InambariW", "Inambari", "Rondonia", "RondoniaHeadwaters", "Tapajos", "TapajosHeadwaters", "XinguC", "XinguHeadwaters", "XinguN", "XinguBelem")
+
+#alternatively, could look at just the main populations
+populations <- c("Inambari", "Rondonia", "Tapajos", "XinguBelem", "AtlanticForest")
+
+#calculate genome-wide pi for each population selected above
+print("calculating genome-wide pi per species")
+for(species1 in populations){
+  temp<- pixy_df %>% dplyr::filter(pop1==species1) %>% dplyr::filter(is.na(pop2)) %>% dplyr::filter(chromosome %in% chromosomes)
+  differences<- sum(temp[temp$statistic=="count_diffs",]$value, na.rm=T)
+  comparisons<- sum(temp[temp$statistic=="count_comparisons",]$value, na.rm=T)
+  pi<- differences/comparisons
+  if(!is.na(pi)){print(c(species1, pi))}
+}
+
+
+#calculate chr_Z pi
+print("calculating Z chromosome pi per species")
+for(species1 in populations){
+  temp<- pixy_df %>% dplyr::filter(pop1==species1) %>% dplyr::filter(is.na(pop2)) %>% dplyr::filter(chromosome %in% "chr_Z")
+  differences<- sum(temp[temp$statistic=="count_diffs",]$value, na.rm=T)
+  comparisons<- sum(temp[temp$statistic=="count_comparisons",]$value, na.rm=T)
+  pi<- differences/comparisons
+  if(!is.na(pi)){print(c(species1, pi))}
+}
+
+#this is an alternative, quicker and less correct way to get an estimate of genome wide pi, I would like to compare
+#calculate genome-wide pi
+print("calculating genome-wide pi per species, averaged across windows")
+pixy_df %>% dplyr::filter(pop1==species1) %>% dplyr::filter(!is.na(value)) %>% dplyr::filter(chromosome %in% chromosomes)  %>% dplyr::filter(statistic=="avg_pi") %>% group_by(pop1) %>% summarise(pi=mean(value), nopi= sum(value ==0)/n(), lowpi= sum(value < 0.001)/n(), medlowpi= sum(value < 0.002)/n())
+
+
+#calculate genome-wide dxy
+print("calculating genome-wide dxy per species")
+for(species1 in populations){
+  for(species2 in populations){
+    temp<- pixy_df %>% dplyr::filter(pop1==species1) %>% dplyr::filter(pop2==species2) %>% dplyr::filter(chromosome %in% chromosomes)
+    differences<- sum(temp[temp$statistic=="count_diffs",]$value, na.rm=T)
+    comparisons<- sum(temp[temp$statistic=="count_comparisons",]$value, na.rm=T)
+    dxy<- differences/comparisons
+    if(!is.na(dxy)){
+      print(c(species1, species2, dxy))
+    }
+  }
+}
+#repeat for chrZ
+for(species1 in populations){
+  for(species2 in populations){
+    temp<- pixy_df %>% dplyr::filter(pop1==species1) %>% dplyr::filter(pop2==species2) %>% dplyr::filter(chromosome %in% "chr_Z")
+    differences<- sum(temp[temp$statistic=="count_diffs",]$value, na.rm=T)
+    comparisons<- sum(temp[temp$statistic=="count_comparisons",]$value, na.rm=T)
+    dxy<- differences/comparisons
+    if(!is.na(dxy)){
+      print(c(species1, species2, dxy))
+    }
+  }
+}
+
+#compare the autosomal results to what it would have been to just take average dxy accross windows (autosomes). Similar?
+for(species1 in populations){
+  for(species2 in populations){
+    temp<- pixy_df %>% dplyr::filter(pop1==species1) %>% dplyr::filter(pop2==species2) %>% dplyr::filter(chromosome %in% chromosomes) %>% dplyr::filter(statistic=="avg_dxy")
+    dxy<- mean(temp$value, na.rm=T)
+    if(!is.na(dxy)){
+      print(c(species1, species2, dxy, "do not use this"))
+    }
+  }
+}
+
+#calculate genome-wide average fst from data not filtered for MAF
+print("calculating genome-wide fst per species")
+for(species1 in populations){
+  for(species2 in populations){
+    temp<- pixy_df %>% dplyr::filter(pop1==species1) %>% dplyr::filter(pop2==species2) %>% dplyr::filter(chromosome %in% chromosomes) %>% dplyr::filter(statistic=="avg_wc_fst")
+    fst<- mean(temp$value, na.rm=T)
+    if(!is.na(fst)){
+      print(c(species1, species2, fst))
+    }
+  }
+}
+#repeat for chrZ from data not filtered for MAF
+for(species1 in populations){
+  for(species2 in populations){
+    temp<- pixy_df %>% dplyr::filter(pop1==species1) %>% dplyr::filter(pop2==species2) %>% dplyr::filter(chromosome %in% "chr_Z") %>% dplyr::filter(statistic=="avg_wc_fst")
+    fst<- mean(temp$value, na.rm=T)
+    if(!is.na(fst)){
+      print(c(species1, species2, fst))
+    }
+  }
+}
+
+#repeat for filtered data with MAF>0.05. Compare to above; qualitatively similar. This is the dataset we will use in the publication.
+for(species1 in populations){
+  for(species2 in populations){
+    temp<- pixy_fstdf %>% dplyr::filter(pop1==species1) %>% dplyr::filter(pop2==species2) %>% dplyr::filter(chromosome %in% chromosomes) %>% dplyr::filter(statistic=="avg_wc_fst")
+    fst<- mean(temp$value, na.rm=T)
+    if(!is.na(fst)){
+      print(c(species1, species2, fst))
+    }
+  }
+}
+#repeat for chrZ with MAF>0.05. Compare to above; qualitatively similar. This is the dataset we will use in the publication.
+for(species1 in  populations){
+  for(species2 in  populations){
+    temp<- pixy_fstdf %>% dplyr::filter(pop1==species1) %>% dplyr::filter(pop2==species2) %>% dplyr::filter(chromosome %in% "chr_Z") %>% dplyr::filter(statistic=="avg_wc_fst")
+    fst<- mean(temp$value, na.rm=T)
+    if(!is.na(fst)){
+      print(c(species1, species2, fst))
+    }
+  }
+}
+
+
+```
+
+## Note to self about filtering the dataset and interpreting genetic diversity statistics  
+Generally, you will need to filter your dataset to remove false negatives and false positives, or you will obtain biased estimates of pi and dxy. Too many false positive variants will inflate pi and dxy; to many false negatives will decrease it. To achieve an accurate estimate, false negatives and false positives should be balanced out, AND the amount of missing data should be proportionally the same for invariant and variant sites. If you filter SNPs more heavily than your filter invariants, you will decrease pi and dxy, but if you don't filter enough then you will inflate it due to false positives! What to do? The task is to apply the same strength of filters to invariants as variants and ensure that the dataset is good quality. I have applied moderately stringent filters to both invariant and variant sites, avoiding filters that impact variants but not invariant sites (eg., genotype quality, Hardy Weinberg statistics). Instead, I focus on other statistics. For example, variant genotypes with low genotype quality may have low quality because they are low depth (making it hard to distinguish true variants from errors, or homozygotes from heterozygotes). Instead, we can filter for minimum depth, which affects variants and invariants the same way. Or, maybe a site has low genotype quality because it is a collapsed repeat. Instead, we can filter for maximum depth. These choices will not be perfect, but our goal is to strike a reasonable balance instead of avoiding all genotype errors at the cost of severe bias. One could easily bias genetic diversity estimates upwards or downwards by changing bioinformatic filters, so we should not take the exact numbers at their face value, and should be wary about comparing across different datasets.  
+
+
+## Plot graph
+
+Now I will plot a genome scan of Fst, pi, and dxy across the genome, for all population pairs. This will look a bit messy with so many populations plotted on top of each other, but might reveal some broad patterns.  
+```{r scan}
+#select which chromosomes to plot
+# plotting summary statistics across all chromosomes:
+#chromosomes<- c("chr_1", "chr_1A", "chr_2", "chr_3", "chr_4", "chr_4A", "chr_5", "chr_6", "chr_7", "chr_8", "chr_9", "chr_10", "chr_11", "chr_12", "chr_13", "chr_14", "chr_15", "chr_17", "chr_18", "chr_19", "chr_20", "chr_21", "chr_22", "chr_23", "chr_24", "chr_25", "chr_26", "chr_27", "chr_28", "chr_29") #Autosomes
+chromosomes<- c("chr_1", "chr_1A", "chr_2", "chr_3", "chr_4", "chr_4A", "chr_5", "chr_6", "chr_7", "chr_8", "chr_9", "chr_10", "chr_11", "chr_12", "chr_13", "chr_14", "chr_15", "chr_17", "chr_18", "chr_19", "chr_20", "chr_21", "chr_22", "chr_23", "chr_24", "chr_25", "chr_26", "chr_27", "chr_28", "chr_29", "chr_Z") #
+#chromosomes<- c("chr_Z") #chr Z
+
+#select which taxa to plot, if you only want a subset plotted. Otherwise, just list all taxa here.
+species2 <- c("AtlanticForest_Ibateguara", "AtlanticForest_Ilheus", "InambariE", "InambariW", "Rondonia", "RondoniaHeadwaters", "Tapajos", "TapajosHeadwaters", "XinguC", "XinguHeadwaters", "XinguN", "pi")
+species1 <- c("AtlanticForest_Ibateguara", "AtlanticForest_Ilheus", "InambariE", "InambariW", "Rondonia", "RondoniaHeadwaters", "Tapajos", "TapajosHeadwaters", "XinguC", "XinguHeadwaters", "XinguN")
+
+#"Error: Faceting variables must have at least one value" probably means you might have to switch which taxon is listed as species1 vs species2 
+
+#select which variables to plot
+statistics <- c("avg_pi", "avg_dxy", "avg_wc_fst")
+#statistics <- "avg_wc_fst"
+
+#plot the data
+pixy_df %>%
+  dplyr::filter(chromosome %in% chromosomes) %>%
+  mutate(pop2 = replace_na(pop2, "pi")) %>%
+  dplyr::filter(pop1 %in% species1) %>%  
+  dplyr::filter(pop2 %in% species2) %>%  
+  #mutate(chrom_color_group = case_when(as.numeric(chromosome) %% 2 != 0 ~ "even", chromosome == "X" ~ "even", TRUE ~ "odd" )) %>%
+  mutate(chromosome = factor(chromosome, levels = chromosomes)) %>%
+  filter(statistic %in% statistics) %>%
+  ggplot(aes(x = (window_pos_1 + window_pos_2)/2, y = value, color = interaction(pop2, pop1)))+
+  geom_point(size = 2, alpha = 1, stroke = 0)+
+  #geom_line()+
+  #geom_smooth(method=loess, span=1)+
+  #facet_grid(statistic ~ chromosome, scales = "free_y", switch = "x", space = "free_x",
+  facet_grid(statistic ~ chromosome, scales = "free", switch = "x", space="free_x", drop=T, shrink=T, #changed it so that chroms are proportional to their lengths
+             labeller = labeller(statistic = pixy_labeller,
+                                 value = label_value))+
+  xlab("Chromosome")+
+  ylab("Statistic Value")+
+  #scale_color_manual(values = c("grey50", "black"))+
+  theme_classic()+
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), panel.spacing = unit(0.1, "cm"), strip.background = element_blank(), strip.placement = "outside", axis.title.y = element_blank())+
+  theme(text=element_text(family="Times New Roman"), axis.title.x = element_text(size = 16), legend.text = element_text(size = 16)) +
+  theme(legend.position = "none")+ #I prefer to draw my own legend by hand
+  scale_colour_manual(values = c("blue", "purple", "red", "#00b300", "#ff781f", "#FFD700", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black")) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0,NA))
+
+#remove headwaters and repeat
+species2 <- c("AtlanticForest_Ibateguara", "AtlanticForest_Ilheus", "AtlanticForest", "Inambari", "InambariE", "InambariW", "Rondonia", "Tapajos", "XinguC", "XinguN", "XinguBelem", "pi")
+species1 <- c("AtlanticForest_Ibateguara", "AtlanticForest_Ilheus", "AtlanticForest", "Inambari", "InambariE", "InambariW", "Rondonia", "Tapajos", "XinguC", "XinguN", "XinguBelem")
+
+pixy_df %>%
+  dplyr::filter(chromosome %in% chromosomes) %>%
+  mutate(pop2 = replace_na(pop2, "pi")) %>%
+  dplyr::filter(pop1 %in% species1) %>%  
+  dplyr::filter(pop2 %in% species2) %>%  
+  #mutate(chrom_color_group = case_when(as.numeric(chromosome) %% 2 != 0 ~ "even", chromosome == "X" ~ "even", TRUE ~ "odd" )) %>%
+  mutate(chromosome = factor(chromosome, levels = chromosomes)) %>%
+  filter(statistic %in% statistics) %>%
+  ggplot(aes(x = (window_pos_1 + window_pos_2)/2, y = value, color = interaction(pop2, pop1)))+
+  geom_point(size = 2, alpha = 1, stroke = 0)+
+  #geom_line()+
+  #geom_smooth(method=loess, span=1)+
+  #facet_grid(statistic ~ chromosome, scales = "free_y", switch = "x", space = "free_x",
+  facet_grid(statistic ~ chromosome, scales = "free", switch = "x", space="free_x", drop=T, shrink=T, #changed it so that chroms are proportional to their lengths
+             labeller = labeller(statistic = pixy_labeller,
+                                 value = label_value))+
+  xlab("Chromosome")+
+  ylab("Statistic Value")+
+  #scale_color_manual(values = c("grey50", "black"))+
+  theme_classic()+
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), panel.spacing = unit(0.1, "cm"), strip.background = element_blank(), strip.placement = "outside", axis.title.y = element_blank())+
+  theme(text=element_text(family="Times New Roman"), axis.title.x = element_text(size = 16), legend.text = element_text(size = 16)) +
+  theme(legend.position = "none")+ #I prefer to draw my own legend by hand
+  scale_colour_manual(values = c("black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "#00b300", "#ff781f", "#FFD700", "blue", "purple", "red" )) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0,NA))
+
+
+#headwaters only. Note that Fst estimates will be particularly messy for these populations because they have very low sample size, precluding precise estimates of Fst
+species2 <- c("RondoniaHeadwaters", "TapajosHeadwaters", "XinguHeadwaters", "pi")
+species1 <- c("RondoniaHeadwaters", "TapajosHeadwaters", "XinguHeadwaters")
+pixy_df %>%
+  dplyr::filter(chromosome %in% chromosomes) %>%
+  mutate(pop2 = replace_na(pop2, "pi")) %>%
+  dplyr::filter(pop1 %in% species1) %>%  
+  dplyr::filter(pop2 %in% species2) %>%  
+  #mutate(chrom_color_group = case_when(as.numeric(chromosome) %% 2 != 0 ~ "even", chromosome == "X" ~ "even", TRUE ~ "odd" )) %>%
+  mutate(chromosome = factor(chromosome, levels = chromosomes)) %>%
+  filter(statistic %in% statistics) %>%
+  ggplot(aes(x = (window_pos_1 + window_pos_2)/2, y = value, color = interaction(pop2, pop1)))+
+  geom_point(size = 2, alpha = 1, stroke = 0)+
+  #geom_line()+
+  #geom_smooth(method=loess, span=1)+
+  #facet_grid(statistic ~ chromosome, scales = "free_y", switch = "x", space = "free_x",
+  facet_grid(statistic ~ chromosome, scales = "free", switch = "x", space="free_x", drop=T, shrink=T, #changed it so that chroms are proportional to their lengths
+             labeller = labeller(statistic = pixy_labeller,
+                                 value = label_value))+
+  xlab("Chromosome")+
+  ylab("Statistic Value")+
+  #scale_color_manual(values = c("grey50", "black"))+
+  theme_classic()+
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), panel.spacing = unit(0.1, "cm"), strip.background = element_blank(), strip.placement = "outside", axis.title.y = element_blank())+
+  theme(text=element_text(family="Times New Roman"), axis.title.x = element_text(size = 16), legend.text = element_text(size = 16)) +
+  theme(legend.position = "none")+ #I prefer to draw my own legend by hand
+  scale_colour_manual(values = c("#00b300", "#ff781f", "#FFD700", "blue", "purple", "red" )) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0,NA))
+```
+
+
+Now, we will make a nicer plot for the publication:  
+```{r publication}
+chromosomes<- c("chr_1", "chr_1A", "chr_2", "chr_3", "chr_4", "chr_4A", "chr_5", "chr_6", "chr_7", "chr_8", "chr_9", "chr_10", "chr_11", "chr_12", "chr_13", "chr_14", "chr_15", "chr_17", "chr_18", "chr_19", "chr_20", "chr_21", "chr_22", "chr_23", "chr_24", "chr_25", "chr_26", "chr_27", "chr_28", "chr_29", "chr_Z") #All chromosomes except W (well, and 16, and the GRC)
+
+#let's just look at three populations so that the figure is a bit cleaner and easier to read
+#species2 <- c("AtlanticForest_Ibateguara", "XinguN", "InambariW", "pi")
+#species1 <- c("AtlanticForest_Ibateguara", "XinguN", "InambariW")
+
+species2 <- c("AtlanticForest", "XinguBelem", "Inambari", "pi")
+species1 <- c("AtlanticForest", "XinguBelem", "Inambari")
+
+
+#plot Fst with MAF>0.05
+statistics <- "avg_wc_fst"
+pixy_fstdf %>%
+  dplyr::filter(chromosome %in% chromosomes) %>%
+  mutate(pop2 = replace_na(pop2, "pi")) %>%
+  dplyr::filter(pop1 %in% species1) %>%  
+  dplyr::filter(pop2 %in% species2) %>%  
+  #mutate(chrom_color_group = case_when(as.numeric(chromosome) %% 2 != 0 ~ "even", chromosome == "X" ~ "even", TRUE ~ "odd" )) %>%
+  mutate(chromosome = factor(chromosome, levels = chromosomes)) %>%
+  filter(statistic %in% statistics) %>%
+  ggplot(aes(x = (window_pos_1 + window_pos_2)/2, y = value, color = interaction(pop2, pop1)))+
+  geom_point(size = 2, alpha = 1, stroke = 0)+
+  #geom_line()+
+  #geom_smooth(method=loess, span=1)+
+  #facet_grid(statistic ~ chromosome, scales = "free_y", switch = "x", space = "free_x",
+  facet_grid(statistic ~ chromosome, scales = "free", switch = "x", space="free_x", drop=T, shrink=T, #changed it so that chroms are proportional to their lengths
+             labeller = labeller(statistic = pixy_labeller,
+                                 value = label_value))+
+   #scale_color_manual(values = c("grey50", "black"))+
+  theme_classic()+
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), axis.text.y = element_blank(), panel.spacing = unit(0.2, "cm"), strip.background = element_blank(), strip.placement = "outside", axis.title.y = element_blank(), axis.title.x=element_blank(), strip.text.x = element_blank(), strip.text.y = element_blank(), axis.line = element_line(colour = 'black', size = 1))+
+  #theme(text=element_text(family="Times New Roman"), axis.title.x = element_text(size = 16), legend.text = element_text(size = 16)) +
+  theme(legend.position = "none", panel.background = element_rect(fill='transparent'),plot.background = element_rect(fill='transparent', color=NA))+ #I prefer to draw my own legend by hand
+  scale_colour_manual(values = c("#a9cc54", "#000000", "#bd271c")) +
+  scale_x_continuous(expand = c(0, 0), limits=c(-1000000,NA)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0,1))
+ggsave("fst_maf5_window500k_rubrocapilla.png", bg='transparent', width = 60, height = 5, units = "cm")
+
+#plot dxy only
+statistics <- "avg_dxy"
+pixy_df %>%
+  dplyr::filter(chromosome %in% chromosomes) %>%
+  mutate(pop2 = replace_na(pop2, "pi")) %>%
+  dplyr::filter(pop1 %in% species1) %>%  
+  dplyr::filter(pop2 %in% species2) %>%  
+  #mutate(chrom_color_group = case_when(as.numeric(chromosome) %% 2 != 0 ~ "even", chromosome == "X" ~ "even", TRUE ~ "odd" )) %>%
+  mutate(chromosome = factor(chromosome, levels = chromosomes)) %>%
+  filter(statistic %in% statistics) %>%
+  ggplot(aes(x = (window_pos_1 + window_pos_2)/2, y = value, color = interaction(pop2, pop1)))+
+  geom_point(size = 2, alpha = 1, stroke = 0)+
+  #geom_line()+
+  #geom_smooth(method=loess, span=1)+
+  #facet_grid(statistic ~ chromosome, scales = "free_y", switch = "x", space = "free_x",
+  facet_grid(statistic ~ chromosome, scales = "free", switch = "x", space="free_x", drop=T, shrink=T, #changed it so that chroms are proportional to their lengths
+             labeller = labeller(statistic = pixy_labeller,
+                                 value = label_value))+
+   #scale_color_manual(values = c("grey50", "black"))+
+  theme_classic()+
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), axis.text.y = element_blank(), panel.spacing = unit(0.2, "cm"), strip.background = element_blank(), strip.placement = "outside", axis.title.y = element_blank(), axis.title.x=element_blank(), strip.text.x = element_blank(), strip.text.y = element_blank(), axis.line = element_line(colour = 'black', size = 1))+
+  #theme(text=element_text(family="Times New Roman"), axis.title.x = element_text(size = 16), legend.text = element_text(size = 16)) +
+  theme(legend.position = "none", panel.background = element_rect(fill='transparent'),plot.background = element_rect(fill='transparent', color=NA))+ #I prefer to draw my own legend by hand
+  scale_colour_manual(values = c("#a9cc54", "#000000", "#bd271c")) +
+  scale_x_continuous(expand = c(0, 0), limits=c(-1000000,NA)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0,NA))
+#ggsave("dxy_window500k_rubrocapilla.png", bg='transparent', width = 60, height = 5, units = "cm")
+
+#plot pi only
+statistics <- "avg_pi"
+pixy_df %>%
+  dplyr::filter(chromosome %in% chromosomes) %>%
+  mutate(pop2 = replace_na(pop2, "pi")) %>%
+  dplyr::filter(pop1 %in% species1) %>%  
+  dplyr::filter(pop2 %in% species2) %>%  
+  #mutate(chrom_color_group = case_when(as.numeric(chromosome) %% 2 != 0 ~ "even", chromosome == "X" ~ "even", TRUE ~ "odd" )) %>%
+  mutate(chromosome = factor(chromosome, levels = chromosomes)) %>%
+  filter(statistic %in% statistics) %>%
+  ggplot(aes(x = (window_pos_1 + window_pos_2)/2, y = value, color = interaction(pop2, pop1)))+
+  geom_point(size = 2, alpha = 1, stroke = 0)+
+  #geom_line()+
+  #geom_smooth(method=loess, span=1)+
+  #facet_grid(statistic ~ chromosome, scales = "free_y", switch = "x", space = "free_x",
+  facet_grid(statistic ~ chromosome, scales = "free", switch = "x", space="free_x", drop=T, shrink=T, #changed it so that chroms are proportional to their lengths
+             labeller = labeller(statistic = pixy_labeller,
+                                 value = label_value))+
+   #scale_color_manual(values = c("grey50", "black"))+
+  theme_classic()+
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), axis.text.y = element_blank(), panel.spacing = unit(0.2, "cm"), strip.background = element_blank(), strip.placement = "outside", axis.title.y = element_blank(), axis.title.x=element_blank(), strip.text.x = element_blank(), strip.text.y = element_blank(), axis.line = element_line(colour = 'black', size = 1))+
+  #theme(text=element_text(family="Times New Roman"), axis.title.x = element_text(size = 16), legend.text = element_text(size = 16)) +
+  theme(legend.position = "none", panel.background = element_rect(fill='transparent'),plot.background = element_rect(fill='transparent', color=NA))+ #I prefer to draw my own legend by hand
+  scale_colour_manual(values = c("#D55E00", "#CC79A7", "#FFD700")) +
+  scale_x_continuous(expand = c(0, 0), limits=c(-1000000,NA)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0,NA))
+#ggsave("pi_window500k_rubrocapilla.png", bg='transparent', width = 60, height = 5, units = "cm")
+
+#plot fst, dxy, and pi together
+statistics <- c("avg_pi", "avg_dxy", "avg_wc_fst")
+pixy_df %>%
+  dplyr::filter(chromosome %in% chromosomes) %>%
+  mutate(pop2 = replace_na(pop2, "pi")) %>%
+  dplyr::filter(pop1 %in% species1) %>%  
+  dplyr::filter(pop2 %in% species2) %>%  
+  #mutate(chrom_color_group = case_when(as.numeric(chromosome) %% 2 != 0 ~ "even", chromosome == "X" ~ "even", TRUE ~ "odd" )) %>%
+  mutate(chromosome = factor(chromosome, levels = chromosomes)) %>%
+  filter(statistic %in% statistics) %>%
+  ggplot(aes(x = (window_pos_1 + window_pos_2)/2, y = value, color = interaction(pop2, pop1)))+
+  geom_point(size = 2, alpha = 1, stroke = 0)+
+  #geom_line()+
+  #geom_smooth(method=loess, span=1)+
+  #facet_grid(statistic ~ chromosome, scales = "free_y", switch = "x", space = "free_x",
+  facet_grid(statistic ~ chromosome, scales = "free", switch = "x", space="free_x", drop=T, shrink=T, #changed it so that chroms are proportional to their lengths
+             labeller = labeller(statistic = pixy_labeller,
+                                 value = label_value))+
+  xlab("Chromosome")+
+  ylab("Statistic Value")+
+  #scale_color_manual(values = c("grey50", "black"))+
+  theme_classic()+
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), panel.spacing = unit(0.2, "cm"), strip.background = element_blank(), strip.placement = "outside", axis.title.y = element_blank())+
+  theme(text=element_text(family="Times New Roman"), axis.title.x = element_text(size = 16), legend.text = element_text(size = 16)) +
+  theme(legend.position = "none")+ #I prefer to draw my own legend by hand
+  #scale_colour_manual(values = c("#CC79A7", "#D55E00", "#FFD700", "#0072B2", "#56B4E9", "#009E73", "#E69F00")) + #palette from Okabe & Ito
+  #scale_colour_manual(values = c("#D81B60", "#D55E00", "#1E88E5", "#CC79A7", "#004D40", "#FFD700", "#E69F00")) + #palette from Okabe & Ito
+  scale_colour_manual(values = c("#000000", "#D55E00", "#a9cc54", "#CC79A7", "#bd271c", "#FFD700", "#ee3225", "#819b42")) + #using Ceratopipra themed colours for Fst/Dxy to not conflict with the population colour codes
+  scale_colour_manual(values = c("#a9cc54", "#D55E00", "#000000", "#CC79A7", "#bd271c", "#FFD700", "#ee3225", "#819b42")) + #using Ceratopipra themed colours for Fst/Dxy to not conflict with the population colour codes
+  #scale_colour_manual(values = c("#E69F00", "#D55E00", "#0072B2", "#56B4E9", "#009E73", "#FFD700", "#CC79A7")) +
+  scale_x_continuous(expand = c(0, 0), limits=c(-1000000,NA)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0,NA))
+#ggsave("fstdxypi_window500k_rubrocapilla.png", bg='transparent', width = 60, height = 15, units = "cm")
+
+```
+
+# Histograms
+Now let's look at the distribution of pi and dxy.
+
+```{r histos}
+#I want to look at the data without the Headwaters samples
+species2 <- c("AtlanticForest_Ibateguara", "AtlanticForest_Ilheus", "InambariE", "InambariW", "Rondonia", "Tapajos", "XinguC", "XinguN", "pi")
+species1 <- c("AtlanticForest_Ibateguara", "AtlanticForest_Ilheus", "InambariE", "InambariW", "Rondonia", "Tapajos", "XinguC", "XinguN")
+
+#I want to look at the data without the Headwaters samples
+temp <- pixy_fstdf %>%
+  dplyr::filter(pop1 %in% species1) %>%  
+  dplyr::filter(pop2 %in% species2)  
+
+#choose what you want to plot
+statistic_choice=c("avg_dxy", "avg_pi")
+#select which chromosomes to include (I want to exclude sex chromosomes)
+chromosomes<- c("chr_1", "chr_1A", "chr_2", "chr_3", "chr_4", "chr_4A", "chr_5", "chr_6", "chr_7", "chr_8", "chr_9", "chr_10", "chr_11", "chr_12", "chr_13", "chr_14", "chr_15", "chr_17", "chr_18", "chr_19", "chr_20", "chr_21", "chr_22", "chr_23", "chr_24", "chr_25", "chr_26", "chr_27", "chr_28", "chr_29") #Autosomes
+
+#plot histograms
+#species1 <- c("AtlanticForest", "XinguBelem", "Tapajos", "Rondonia", "Inambari")
+statistic_choice <- "avg_pi"
+pixy_df %>%
+  dplyr::filter(chromosome %in% chromosomes) %>%
+  dplyr::filter(statistic %in% statistic_choice) %>%
+  dplyr::filter(pop1 %in% species1) %>%  
+  #dplyr::filter(pop2 %in% species2) %>%  
+  mutate(pop2 = replace_na(pop2, "pi")) %>%
+  mutate(chromosome = factor(chromosome, levels = chromosomes)) %>%
+  ggplot(aes(x = value, color = interaction(pop2, pop1), fill = interaction(pop2, pop1)))+
+  geom_density(alpha=0.1)+
+  theme_classic()+
+  #scale_colour_manual(values = c("blue", "purple", "red", "#00b300", "#ff781f", "#FFD700"))+
+  #scale_fill_manual(values = c("blue", "purple", "red", "#00b300", "#ff781f", "#FFD700"))+
+  xlim(c(0,0.025))
+
+statistic_choice <- "avg_dxy"
+pixy_df %>%
+  dplyr::filter(chromosome %in% chromosomes) %>%
+  dplyr::filter(statistic %in% statistic_choice) %>%
+  dplyr::filter(pop1 %in% species1) %>%  
+  dplyr::filter(pop2 %in% species2) %>%  
+  mutate(pop2 = replace_na(pop2, "pi")) %>%
+  mutate(chromosome = factor(chromosome, levels = chromosomes)) %>%
+  ggplot(aes(x = value, color = interaction(pop2, pop1), fill = interaction(pop2, pop1)))+
+  geom_density(alpha=0.1)+
+  theme_classic()+
+  #scale_colour_manual(values = c("blue", "purple", "red", "#00b300", "#ff781f", "#FFD700"))+
+  #scale_fill_manual(values = c("blue", "purple", "red", "#00b300", "#ff781f", "#FFD700"))+
+  scale_x_continuous(expand = c(0, 0), limits = c(0,0.015))
+
+pixy_df2 %>%
+  dplyr::filter(no_sites.x>100) %>%
+  ggplot()+
+  geom_density(aes(x = AtlanticForest_Ibateguara), color="#00b300", alpha=0.1)+
+  geom_density(aes(x = XinguC), color="#ff781f", alpha=0.1)+
+  geom_density(aes(x = AtlanticForest_Ibateguara_XinguC), color="#FFD700", alpha=0.1)+
+  geom_density(aes(x = InambariW), color="#47683b", alpha=0.1)+
+  geom_density(aes(x = Rondonia), color="dodgerblue", alpha=0.1)+
+  geom_density(aes(x = AtlanticForest_Ibateguara_InambariW), color="black", alpha=0.1)+
+  theme_classic()+
+  scale_x_continuous(expand = c(0, 0), limits = c(0,0.02))
+
+#how many sites are in each window
+pixy_df2 %>%
+  #dplyr::filter(no_sites.x>90) %>%
+  ggplot()+
+  #geom_density(aes(x = no_sites.x), alpha=0.1)+
+  geom_density(aes(x = no_snps), alpha=0.1)+
+  theme_classic()
+
+median(pixy_df2$no_snps, na.rm=T) # for 100k windows, 126 for 500k,  for 1Mb
+# old data: 21 for 100k windows, 107 for 500k, 225 for 1Mb
+median(pixy_df2$no_sites.x, na.rm=T) # for 100k windows, 1582 for 500K,  for 1Mb
+#old data: 236 for 100k windows, 1339.5 for 500K, 2811 for 1Mb
+
+
+```
+
+
+Look how tightly dxy and pi correspond.
+```{r correlation}
+#choose the max value for the axes, to ensure that all plots have the same axis scales
+xlimit=0.015
+ylimit=0.015
+
+#plot pi vs pi
+pixy_df2 %>%
+  ggplot(aes(x = XinguC, y = AtlanticForest_Ibateguara))+
+  geom_point(alpha=0.1)+
+  coord_cartesian(xlim=c(0,xlimit), ylim=c(0,ylimit), expand=F)+
+  geom_abline(slope=1)
+
+
+#plot dxy vs pi 
+pixy_df2 %>%
+  ggplot(aes(x = AtlanticForest_Ibateguara_XinguC, y = AtlanticForest_Ibateguara))+
+  geom_point(alpha=0.1)+
+  coord_cartesian(xlim=c(0,xlimit), ylim=c(0,ylimit), expand=F)+
+  geom_abline(slope=1)
+
+pixy_df2 %>%
+  ggplot(aes(x = AtlanticForest_Ibateguara_InambariW, y = AtlanticForest_Ibateguara))+
+  geom_point(alpha=0.1)+
+  coord_cartesian(xlim=c(0,xlimit), ylim=c(0,ylimit), expand=F)+
+  geom_abline(slope=1)
+
+pixy_df2 %>%
+  ggplot(aes(x = AtlanticForest_Ibateguara_XinguC, y = AtlanticForest_Ibateguara_InambariW))+
+  geom_point(alpha=0.1)+
+  coord_cartesian(xlim=c(0,xlimit), ylim=c(0,ylimit), expand=F)+
+  geom_abline(slope=1)
+pixy_df2 %>%
+  ggplot(aes(x = AtlanticForest_Ibateguara_XinguHeadwaters, y = Tapajos_XinguHeadwaters))+
+  geom_point(alpha=0.1)+
+  coord_cartesian(xlim=c(0,xlimit), ylim=c(0,ylimit), expand=F)+
+  geom_abline(slope=1)
+
+
+
+xlimit=1
+ylimit=0.03
+
+#plot fst vs dxy
+pixy_df2 %>%
+  ggplot(aes(x = Tapajos_Fst_XinguHeadwaters, y = AtlanticForest_Ibateguara_XinguHeadwaters))+
+  geom_point(alpha=0.05)+
+  coord_cartesian(xlim=c(0,xlimit), ylim=c(0,ylimit), expand=F)
+pixy_df2 %>%
+  ggplot(aes(x = AtlanticForest_Ibateguara_Fst_XinguC, y = AtlanticForest_Ibateguara_XinguC))+
+  geom_point(alpha=0.05)+
+  coord_cartesian(xlim=c(0,xlimit), ylim=c(0,ylimit), expand=F)
+
+
+```
+
+
+```{r scraps, eval = FALSE, echo=FALSE}
+#for the poster
+
+pixy_df %>%
+  dplyr::filter(chromosome %in% chromosomes) %>%
+  mutate(pop2 = replace_na(pop2, "pi")) %>%
+  mutate(chromosome = factor(chromosome, levels = chromosomes)) %>%
+  filter(statistic %in% c("avg_wc_fst")) %>%
+  ggplot(aes(x = (window_pos_1 + window_pos_2)/2, y = value, color = interaction(pop2, pop1)))+
+  geom_point(size = 0.9, alpha = 1, stroke = 0)+
+  facet_grid(statistic ~ chromosome, scales = "free", switch = "x", space="free_x", drop=T, shrink=T, #changed it so that chroms are proportional to their lengths
+             labeller = labeller(statistic = pixy_labeller,
+                                 value = label_value))+
+  xlab("Chromsome")+
+  ylab("Statistic Value")+
+  #scale_color_manual(values = c("grey50", "black"))+
+  theme_classic()+
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), panel.spacing = unit(0.1, "cm"), strip.background = element_blank(), strip.placement = "outside", axis.title.y = element_blank())+
+  theme(text=element_text(family="Times New Roman"), axis.title.x = element_text(size = 16), legend.text = element_text(size = 16)) +
+  scale_colour_manual(values = c("#648FFF", "#DC267F", "#FFB000")) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0,NA))
+```
+
+can we find any iris-specific fst peaks?
+
+```{r specific}
+#plot the data!
+pixy_df2 %>%
+  dplyr::filter(chromosome %in% chromosomes) %>%
+  mutate(chromosome = factor(chromosome, levels = chromosomes)) %>%
+  ggplot(aes(x = (window_pos_1 + window_pos_2)/2, y = (Inambari-AtlanticForest_XinguBelem)))+
+  geom_point(size = 0.9, alpha = 1, stroke = 0)+
+  facet_grid( ~ chromosome, scales = "free", switch = "x", space="free_x", drop=T, shrink=T, #changed it so that chroms are proportional to their lengths
+             labeller = labeller(statistic = pixy_labeller,
+                                 value = label_value))+
+  xlab("Chromosome")+
+  ylab("Positive: Inambari more diverse Negative: AtlanticForest more diverse")+
+  theme_classic()+
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), panel.spacing = unit(0.1, "cm"), strip.background = element_blank(), strip.placement = "outside")+
+  theme(text=element_text(family="Times New Roman"), axis.title.x = element_text(size = 16), legend.text = element_text(size = 16)) +
+  scale_colour_manual(values = c("blue", "purple", "red", "#00b300", "#ff781f", "#FFD700")) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(NA,NA))
+
+pixy_df2 %>%
+  dplyr::filter(chromosome %in% chromosomes) %>%
+  mutate(chromosome = factor(chromosome, levels = chromosomes)) %>%
+  ggplot(aes(x = (window_pos_1 + window_pos_2)/2, y = (vilasboasi_Fst_nattereri-iris_Fst_nattereri)))+
+  geom_point(size = 0.9, alpha = 1, stroke = 0)+
+  facet_grid( ~ chromosome, scales = "free", switch = "x", space="free_x", drop=T, shrink=T, #changed it so that chroms are proportional to their lengths
+             labeller = labeller(statistic = pixy_labeller,
+                                 value = label_value))+
+  xlab("Chromosome")+
+  ylab("Positive: vilasboasi more different. Negative: iris more different")+
+  theme_classic()+
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), panel.spacing = unit(0.1, "cm"), strip.background = element_blank(), strip.placement = "outside")+
+  theme(text=element_text(family="Times New Roman"), axis.title.x = element_text(size = 16), legend.text = element_text(size = 16)) +
+  scale_colour_manual(values = c("blue", "purple", "red", "#00b300", "#ff781f", "#FFD700")) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(NA,NA))
+
+pixy_df2 %>%
+  dplyr::filter(chromosome %in% chromosomes) %>%
+  mutate(chromosome = factor(chromosome, levels = chromosomes)) %>%
+  #filter(statistic %in% c("avg_pi", "avg_dxy", "avg_wc_fst")) %>%
+  ggplot(aes(x = (window_pos_1 + window_pos_2)/2, y = (vilasboasi_Fst_iris-vilasboasi_Fst_nattereri)))+
+  geom_point(size = 0.9, alpha = 1, stroke = 0)+
+  facet_grid( ~ chromosome, scales = "free", switch = "x", space="free_x", drop=T, shrink=T, #changed it so that chroms are proportional to their lengths
+             labeller = labeller(statistic = pixy_labeller,
+                                 value = label_value))+
+  xlab("Chromosome")+
+  ylab("Positive: iris more different. Negative: nattereri more different")+
+  theme_classic()+
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), panel.spacing = unit(0.1, "cm"), strip.background = element_blank(), strip.placement = "outside")+
+  theme(text=element_text(family="Times New Roman"), axis.title.x = element_text(size = 16), legend.text = element_text(size = 16)) +
+  scale_colour_manual(values = c("blue", "purple", "red", "#00b300", "#ff781f", "#FFD700")) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(NA,NA))
+
+```
+
+# Plot pi per species
+I would like to compare the sequence diversity within each lineage
+```{r picomp}
+#firstly, can decode to filter to look at only some chromosomes (eg, exclude sex chromosomes). I am selecting only the autosomes.
+chromosomes<-c("chr_1", "chr_1A", "chr_2", "chr_3", "chr_4", "chr_4A", "chr_5", "chr_6", "chr_7", "chr_8", "chr_9", "chr_10", "chr_11", "chr_12", "chr_13", "chr_14", "chr_15", "chr_17", "chr_18", "chr_19", "chr_20", "chr_21", "chr_22", "chr_23", "chr_24", "chr_25", "chr_26", "chr_27", "chr_28", "chr_29")
+
+#look at just the average per population
+avg_pis<- pixy_df %>%
+  dplyr::filter(chromosome %in% chromosomes) %>%
+  dplyr::filter(is.na(pop2)) %>% 
+  spread(key=statistic, value=value) %>%
+  group_by(pop1) %>%
+  summarise(pi=sum(count_diffs, na.rm=T)/sum(count_comparisons, na.rm=T), 
+            stdev=stats::sd(avg_pi, na.rm=T))
+
+#calculate boxplot around values
+pi_df<- pixy_df %>%
+  dplyr::filter(chromosome %in% chromosomes) %>%
+  dplyr::filter(is.na(pop2)) %>% 
+  spread(key=statistic, value=value)
+
+#plot the pi
+pi_df %>%
+  filter(pop1 %in% c("AtlanticForest_Ibateguara", "AtlanticForest_Ilheus", "InambariE", "InambariW", "Rondonia", "RondoniaHeadwaters", "Tapajos", "TapajosHeadwaters", "XinguC", "XinguHeadwaters", "XinguN")) %>%
+  ggplot(aes(x = pop1, y = pi, colour=pi))+
+    geom_boxplot(aes(x = pop1, y = avg_pi), colour="black")+
+    ylim(0,NA)+
+  theme_classic()
+
+```
+
+# chrZ investigation  
+This investigation is to visualize Fst between males and females to identify the area around the pseudoautosomal region where chrW reads likely map in females.  
+```{r chrZinv}
+#plot fst between Males and Females
+statistics <- c("avg_wc_fst")
+pixy_chrZ_investigation_fstdf %>%
+  mutate(pop2 = replace_na(pop2, "pi")) %>%
+  filter(statistic %in% statistics) %>%
+  ggplot(aes(x = (window_pos_1 + window_pos_2)/2, y = value, color = interaction(pop2, pop1)))+
+  geom_point(size = 2, alpha = 1, stroke = 0)+
+  xlab("Chromosome Z")+
+  ylab("Fst (Male vs Females Ceratopipra rubrocapilla)")+
+  theme_classic()+
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), panel.spacing = unit(0.2, "cm"), strip.background = element_blank(), strip.placement = "outside")+
+  theme(text=element_text(family="Times New Roman"), axis.title.x = element_text(size = 16), legend.text = element_text(size = 16)) +
+  theme(legend.position = "none")+ #I prefer to draw my own legend by hand
+  scale_colour_manual(values = c("#D55E00")) + #using Ceratopipra themed colours 
+  scale_x_continuous(expand = c(0, 0), limits=c(-1000000,NA)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0,NA))
+ggsave("fst_MalevsFemale_individualSNPs_Ceratopiprarubrocapilla.png", bg='transparent', width = 60, height = 15, units = "cm")
+
+
+
+```
+There is a large peak of high Fst near the 5' end of the chromosome, which is where the pseudoautosomal region seems to be in some other manakins as well. However, there are scattered peaks of high Fst in other areas as well, so we should still implement another filter: removing sites where females are called as heterozygous.
+
