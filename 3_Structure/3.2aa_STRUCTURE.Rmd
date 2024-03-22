@@ -1,0 +1,644 @@
+---
+title: "*Ceratopipra rubrocapilla* STRUCTURE"
+author: "Else Mikkelsen"
+date: "09/01/2023"
+output: html_document
+---
+
+This page describes plotting the STRUCTURE plots generated for *Ceratopipra rubrocapilla*. This dataset has 69 samples, and STRUCTURE was run on a dataset of 7865 SNPs.  
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(cache = TRUE, cache.lazy = FALSE)
+knitr::opts_knit$set(root.dir = '~/Documents/GitHub/Ceratopipra_rubrocapilla_Phylogeography/3_Structure/3.2aa_STRUCTURE/Ceratopipra_rubrocapilla')
+
+#load required packages
+library(tidyverse)
+library(ggthemes) #for colour themes
+library(ggpubr)
+```
+
+First, I will load some functions to make it more compact to load a lot of data. These functions are custom for loading the q matrices output by STRUCTURE for my dataset: they load the data and then combine it with my sample metadata. I also have functions for reading the outfiles from clumpp, and a function for plotting the results.  
+
+```{r functions_load}
+load_Ceratopiprak2 <- function(species, Dataset, dataset=paste(Dataset, ".", sep=""), folder, subfolder="run_1"){
+  CerySTRUCTURE_data_k2 <- read_delim(col_names=c("col1"), file=paste("../", species, "/", dataset, folder, "/", subfolder, "/", Dataset, ".res_q", sep=""), delim="\t", trim_ws=TRUE, show_col_types = FALSE) %>%
+  separate(., col1, into = c("Code", "p1", "p2"), sep = " ")
+  CerySTRUCTURE_data_k2 <- merge(CerySTRUCTURE_data_k2, rubrocapilla_metadata, by="Code")
+  CerySTRUCTURE_data_k2_long <- CerySTRUCTURE_data_k2 %>%
+  arrange(Longitude) %>%
+  arrange(Population)%>%
+   mutate(Code=factor(Code, levels=Code)) %>%
+  gather(key=pop, value=assignment_p, p1:p2) %>%
+    group_by(pop) %>%
+    mutate(avg_assignment=mean(as.numeric(assignment_p))) %>%
+    ungroup() %>%
+    mutate(pop=fct_reorder(pop,avg_assignment))
+  return(CerySTRUCTURE_data_k2_long)
+}
+load_Ceratopiprak3 <- function(species, Dataset, dataset=paste(Dataset, ".", sep=""), folder, subfolder="run_1"){
+  CerySTRUCTURE_data_k3 <- read_delim(col_names=c("col1"), file=paste("../", species, "/", dataset, folder, "/", subfolder, "/", Dataset, ".res_q", sep=""), delim="\t", trim_ws=TRUE, show_col_types = FALSE) %>%
+  separate(., col1, into = c("Code", "p1", "p2", "p3"), sep = " ")
+  CerySTRUCTURE_data_k3 <- merge(CerySTRUCTURE_data_k3, rubrocapilla_metadata, by="Code")
+  CerySTRUCTURE_data_k3_long <- CerySTRUCTURE_data_k3 %>%
+  arrange(Longitude) %>%
+   mutate(Code=factor(Code, levels=Code)) %>%
+  gather(key=pop, value=assignment_p, p1:p3) %>%
+    group_by(pop) %>%
+    mutate(avg_assignment=mean(as.numeric(assignment_p))) %>%
+    ungroup() %>%
+    mutate(pop=fct_reorder(pop,avg_assignment))
+  return(CerySTRUCTURE_data_k3_long)
+}
+load_Ceratopiprak4 <- function(species, Dataset, dataset=paste(Dataset, ".", sep=""), folder, subfolder="run_1"){
+  CerySTRUCTURE_data_k4 <- read_delim(col_names=c("col1"), file=paste("../", species, "/", dataset, folder, "/", subfolder, "/", Dataset, ".res_q", sep=""), delim="\t", trim_ws=TRUE, show_col_types = FALSE) %>%
+  separate(., col1, into = c("Code", "p1", "p2", "p3", "p4"), sep = " ")
+  CerySTRUCTURE_data_k4 <- merge(CerySTRUCTURE_data_k4, rubrocapilla_metadata, by="Code")
+  CerySTRUCTURE_data_k4_long <- CerySTRUCTURE_data_k4 %>%
+  arrange(Longitude) %>%
+   mutate(Code=factor(Code, levels=Code)) %>%
+  gather(key=pop, value=assignment_p, p1:p4) %>%
+    group_by(pop) %>%
+    mutate(avg_assignment=mean(as.numeric(assignment_p))) %>%
+    ungroup() %>%
+    mutate(pop=fct_reorder(pop,avg_assignment))
+  return(CerySTRUCTURE_data_k4_long)
+}
+load_Ceratopiprak5 <- function(species, Dataset, dataset=paste(Dataset, ".", sep=""), folder, subfolder="run_1"){
+  CerySTRUCTURE_data_k5 <- read_delim(col_names=c("col1"), file=paste("../", species, "/", dataset, folder, "/", subfolder, "/", Dataset, ".res_q", sep=""), delim="\t", trim_ws=TRUE, show_col_types = FALSE) %>%
+  separate(., col1, into = c("Code", "p1", "p2", "p3", "p4", "p5"), sep = " ")
+  CerySTRUCTURE_data_k5 <- merge(CerySTRUCTURE_data_k5, rubrocapilla_metadata, by="Code")
+  CerySTRUCTURE_data_k5_long <- CerySTRUCTURE_data_k5 %>%
+  arrange(Longitude) %>%
+   mutate(Code=factor(Code, levels=Code)) %>%
+  gather(key=pop, value=assignment_p, p1:p5) %>%
+    group_by(pop) %>%
+    mutate(avg_assignment=mean(as.numeric(assignment_p))) %>%
+    ungroup() %>%
+    mutate(pop=fct_reorder(pop,avg_assignment))
+  return(CerySTRUCTURE_data_k5_long)
+}
+load_Ceratopiprak6 <- function(species, Dataset, dataset=paste(Dataset, ".", sep=""), folder, subfolder="run_1"){
+  CerySTRUCTURE_data_k6 <- read_delim(col_names=c("col1"), file=paste("../", species, "/", dataset, folder, "/", subfolder, "/", Dataset, ".res_q", sep=""), delim="\t", trim_ws=TRUE, show_col_types = FALSE) %>%
+  separate(., col1, into = c("Code", "p1", "p2", "p3", "p4", "p5", "p6"), sep = " ")
+  CerySTRUCTURE_data_k6 <- merge(CerySTRUCTURE_data_k6, rubrocapilla_metadata, by="Code")
+  CerySTRUCTURE_data_k6_long <- CerySTRUCTURE_data_k6 %>%
+  arrange(Longitude) %>%
+   mutate(Code=factor(Code, levels=Code)) %>%
+  gather(key=pop, value=assignment_p, p1:p6) %>%
+    group_by(pop) %>%
+    mutate(avg_assignment=mean(as.numeric(assignment_p))) %>%
+    ungroup() %>%
+    mutate(pop=fct_reorder(pop,avg_assignment))
+  return(CerySTRUCTURE_data_k6_long)
+}
+
+load_Ceratopiprak7 <- function(species, Dataset, dataset=paste(Dataset, ".", sep=""), folder, subfolder="run_1"){
+  CerySTRUCTURE_data_k7 <- read_delim(col_names=c("col1"), file=paste("../", species, "/", dataset, folder, "/", subfolder, "/", Dataset, ".res_q", sep=""), delim="\t", trim_ws=TRUE, show_col_types = FALSE) %>%
+  separate(., col1, into = c("Code", "p1", "p2", "p3", "p4", "p5", "p6", "p7"), sep = " ")
+  CerySTRUCTURE_data_k7 <- merge(CerySTRUCTURE_data_k7, rubrocapilla_metadata, by="Code")
+  CerySTRUCTURE_data_k7_long <- CerySTRUCTURE_data_k7 %>%
+  arrange(Longitude) %>%
+   mutate(Code=factor(Code, levels=Code)) %>%
+  gather(key=pop, value=assignment_p, p1:p7) %>%
+    group_by(pop) %>%
+    mutate(avg_assignment=mean(as.numeric(assignment_p))) %>%
+    ungroup() %>%
+    mutate(pop=fct_reorder(pop,avg_assignment))
+  return(CerySTRUCTURE_data_k7_long)
+}
+
+load_Ceratopiprak8 <- function(species, Dataset, dataset=paste(Dataset, ".", sep=""), folder, subfolder="run_1"){
+  CerySTRUCTURE_data_k8 <- read_delim(col_names=c("col1"), file=paste("../", species, "/", dataset, folder, "/", subfolder, "/", Dataset, ".res_q", sep=""), delim="\t", trim_ws=TRUE, show_col_types = FALSE) %>%
+  separate(., col1, into = c("Code", "p1", "p2", "p3", "p4", "p5", "p6", "p7", "p8"), sep = " ")
+  CerySTRUCTURE_data_k8 <- merge(CerySTRUCTURE_data_k8, rubrocapilla_metadata, by="Code")
+  CerySTRUCTURE_data_k8_long <- CerySTRUCTURE_data_k8 %>%
+  arrange(Longitude) %>%
+   mutate(Code=factor(Code, levels=Code)) %>%
+  gather(key=pop, value=assignment_p, p1:p8) %>%
+    group_by(pop) %>%
+    mutate(avg_assignment=mean(as.numeric(assignment_p))) %>%
+    ungroup() %>%
+    mutate(pop=fct_reorder(pop,avg_assignment))
+  return(CerySTRUCTURE_data_k8_long)
+}
+
+plot_Ceratopipra <- function(CerySTRUCTURE_data, title="STRUCTURE plot"){
+  ggplot(CerySTRUCTURE_data, aes(factor(Code), as.numeric(assignment_p), fill = factor(pop))) +
+  geom_col(color = "gray", size = 0.1) +
+  theme_minimal() + labs(x = "Individuals", title = title, y = "Ancestry") +
+  scale_y_continuous(expand = c(0, 0)) +
+  scale_x_discrete(expand = expand_scale(add = 1)) +
+  theme(panel.spacing.x = unit(0.1, "lines"), panel.grid = element_blank()) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+  #theme(axis.text.x = element_blank())+
+  scale_fill_gdocs(guide = FALSE)+
+  facet_grid(~factor(Population, levels=c("cornuta","mentalis","Trinidad","Guiana","Jaú","Panama","Imeri","Napo","chloromeros","Inambari","Rondonia","Tapajos","Xingu/Belém","AtlanticForest")), scales = "free")
+}
+
+plot_Ceratopipra2 <- function(CerySTRUCTURE_data, title="STRUCTURE plot"){
+  ggplot(CerySTRUCTURE_data, aes(factor(Code), as.numeric(assignment_p), fill = factor(pop))) +
+  geom_col(color = "gray", size = 0.1) +
+  theme_minimal() + labs(x = "Individuals", title = title, y = "Ancestry") +
+  scale_y_continuous(expand = c(0, 0)) +
+  scale_x_discrete(expand = expand_scale(add = 1)) +
+  theme(panel.spacing.x = unit(0.1, "lines"), panel.grid = element_blank()) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+  #theme(axis.text.x = element_blank())+
+  scale_fill_gdocs(guide = FALSE)+
+  facet_grid(. ~factor(Population, levels=c("cornuta","mentalis","Trinidad","Guiana","Jaú","Panama","Imeri","Napo","chloromeros","Inambari","Rondonia","Tapajos","Xingu/Belém","AtlanticForest")), scales = "free", space = "free")
+}
+
+load_clumppk2 <- function(species, Dataset, folder="100k100k_POPALPHAS", greedy, latlon="latitude"){
+  if (greedy==FALSE) {
+      CerySTRUCTURE_data_k2 <- read.table(file=paste("../", species, "/", Dataset, "_", folder, "/clumpp_out/k2.outfile", sep=""), col.names=c("c1", "sampleID", "missingness", "c4", "c5", "p1", "p2"))
+  clumppnames <- read.table(file=paste("../", species, "/", Dataset, "_", folder, "/clumpp_out/sample_names", sep=""))
+  } else {
+      CerySTRUCTURE_data_k2 <- read.table(file=paste("../", species, "/", Dataset, "_", folder, "/clumpp_out_greedy/k2.outfile", sep=""), col.names=c("c1", "sampleID", "missingness", "c4", "c5", "p1", "p2"))
+  clumppnames <- read.table(file=paste("../", species, "/", Dataset, "_", folder, "/clumpp_out_greedy/sample_names", sep=""))
+  }
+  CerySTRUCTURE_data_k2$Code <- clumppnames[,1]
+  CerySTRUCTURE_data_k2 <- merge(CerySTRUCTURE_data_k2, rubrocapilla_metadata, by="Code")
+  if (latlon=="latitude") {
+    CerySTRUCTURE_data_k2_long <- CerySTRUCTURE_data_k2 %>%
+      arrange(Latitude) %>%
+      arrange(Population) %>%
+      mutate(Code=factor(Code, levels=Code)) %>%
+      gather(key=pop, value=assignment_p, p1:p2) %>%
+      group_by(pop) %>%
+      mutate(avg_assignment=mean(as.numeric(assignment_p))) %>%
+      ungroup() %>%
+      mutate(pop=fct_reorder(pop,avg_assignment))
+  } else {
+    CerySTRUCTURE_data_k2_long <- CerySTRUCTURE_data_k2 %>%
+      arrange(Longitude) %>%
+      arrange(Population) %>%
+      mutate(Code=factor(Code, levels=Code)) %>%
+      gather(key=pop, value=assignment_p, p1:p2) %>%
+      group_by(pop) %>%
+      mutate(avg_assignment=mean(as.numeric(assignment_p))) %>%
+      ungroup() %>%
+      mutate(pop=fct_reorder(pop,avg_assignment))
+  }
+  return(CerySTRUCTURE_data_k2_long)
+}
+
+load_clumppk3 <- function(species, Dataset, folder="100k100k_POPALPHAS", greedy, latlon="latitude"){
+  if (greedy==FALSE) {
+  CerySTRUCTURE_data_k3 <- read.table(file=paste("../", species, "/", Dataset, "_", folder, "/clumpp_out/k3.outfile", sep=""), col.names=c("c1", "sampleID", "missingness", "c4", "c5", "p1", "p2", "p3"))
+  clumppnames <- read.table(file=paste("../", species, "/", Dataset, "_", folder, "/clumpp_out/sample_names", sep=""))
+  } else {
+      CerySTRUCTURE_data_k3 <- read.table(file=paste("../", species, "/", Dataset, "_", folder, "/clumpp_out_greedy/k3.outfile", sep=""), col.names=c("c1", "sampleID", "missingness", "c4", "c5", "p1", "p2", "p3"))
+  clumppnames <- read.table(file=paste("../", species, "/", Dataset, "_", folder, "/clumpp_out_greedy/sample_names", sep=""))
+  }
+  CerySTRUCTURE_data_k3$Code <- clumppnames[,1]
+  CerySTRUCTURE_data_k3 <- merge(CerySTRUCTURE_data_k3, rubrocapilla_metadata, by="Code")
+  if (latlon=="latitude") {
+    CerySTRUCTURE_data_k3_long <- CerySTRUCTURE_data_k3 %>%
+      arrange(Latitude) %>%
+      arrange(Population) %>%
+      mutate(Code=factor(Code, levels=Code)) %>%
+      gather(key=pop, value=assignment_p, p1:p3) %>%
+      group_by(pop) %>%
+      mutate(avg_assignment=mean(as.numeric(assignment_p))) %>%
+      ungroup() %>%
+      mutate(pop=fct_reorder(pop,avg_assignment))
+  } else {
+    CerySTRUCTURE_data_k3_long <- CerySTRUCTURE_data_k3 %>%
+      arrange(Longitude) %>%
+      arrange(Population) %>%
+      mutate(Code=factor(Code, levels=Code)) %>%
+      gather(key=pop, value=assignment_p, p1:p3) %>%
+      group_by(pop) %>%
+      mutate(avg_assignment=mean(as.numeric(assignment_p))) %>%
+      ungroup() %>%
+      mutate(pop=fct_reorder(pop,avg_assignment))
+  }
+  return(CerySTRUCTURE_data_k3_long)
+}
+
+load_clumppk4 <- function(species, Dataset, folder="100k100k_POPALPHAS", greedy, latlon="latitude"){
+  if (greedy==FALSE) {
+  CerySTRUCTURE_data_k4 <- read.table(file=paste("../", species, "/", Dataset, "_", folder, "/clumpp_out/k4.outfile", sep=""), col.names=c("c1", "sampleID", "missingness", "c4", "c5", "p1", "p2", "p3", "p4"))
+  clumppnames <- read.table(file=paste("../", species, "/", Dataset, "_", folder, "/clumpp_out/sample_names", sep=""))
+  } else {
+      CerySTRUCTURE_data_k4 <- read.table(file=paste("../", species, "/", Dataset, "_", folder, "/clumpp_out_greedy/k4.outfile", sep=""), col.names=c("c1", "sampleID", "missingness", "c4", "c5", "p1", "p2", "p3", "p4"))
+  clumppnames <- read.table(file=paste("../", species, "/", Dataset, "_", folder, "/clumpp_out_greedy/sample_names", sep=""))
+  }
+  CerySTRUCTURE_data_k4$Code <- clumppnames[,1]
+  CerySTRUCTURE_data_k4 <- merge(CerySTRUCTURE_data_k4, rubrocapilla_metadata, by="Code")
+  if (latlon=="latitude") {
+    CerySTRUCTURE_data_k4_long <- CerySTRUCTURE_data_k4 %>%
+      arrange(Latitude) %>%
+      arrange(Population) %>%
+      mutate(Code=factor(Code, levels=Code)) %>%
+      gather(key=pop, value=assignment_p, p1:p4) %>%
+      group_by(pop) %>%
+      mutate(avg_assignment=mean(as.numeric(assignment_p))) %>%
+      ungroup() %>%
+      mutate(pop=fct_reorder(pop,avg_assignment))
+  } else {
+    CerySTRUCTURE_data_k4_long <- CerySTRUCTURE_data_k4 %>%
+      arrange(Longitude) %>%
+      arrange(Population) %>%
+      mutate(Code=factor(Code, levels=Code)) %>%
+      gather(key=pop, value=assignment_p, p1:p4) %>%
+      group_by(pop) %>%
+      mutate(avg_assignment=mean(as.numeric(assignment_p))) %>%
+      ungroup() %>%
+      mutate(pop=fct_reorder(pop,avg_assignment))
+  }
+}
+
+load_clumppk5 <- function(species, Dataset, folder="100k100k_POPALPHAS", greedy, latlon="latitude"){
+  if (greedy==FALSE) {
+  CerySTRUCTURE_data_k5 <- read.table(file=paste("../", species, "/", Dataset, "_", folder, "/clumpp_out/k5.outfile", sep=""), col.names=c("c1", "sampleID", "missingness", "c4", "c5", "p1", "p2", "p3", "p4", "p5"))
+  clumppnames <- read.table(file=paste("../", species, "/", Dataset, "_", folder, "/clumpp_out/sample_names", sep=""))
+  } else {
+      CerySTRUCTURE_data_k5 <- read.table(file=paste("../", species, "/", Dataset, "_", folder, "/clumpp_out_greedy/k5.outfile", sep=""), col.names=c("c1", "sampleID", "missingness", "c4", "c5", "p1", "p2", "p3", "p4", "p5"))
+  clumppnames <- read.table(file=paste("../", species, "/", Dataset, "_", folder, "/clumpp_out_greedy/sample_names", sep=""))
+  }
+  CerySTRUCTURE_data_k5$Code <- clumppnames[,1]
+  CerySTRUCTURE_data_k5 <- merge(CerySTRUCTURE_data_k5, rubrocapilla_metadata, by="Code")
+  if (latlon=="latitude") {
+    CerySTRUCTURE_data_k5_long <- CerySTRUCTURE_data_k5 %>%
+      arrange(Latitude) %>%
+      arrange(Population) %>%
+      mutate(Code=factor(Code, levels=Code)) %>%
+      gather(key=pop, value=assignment_p, p1:p5) %>%
+      group_by(pop) %>%
+      mutate(avg_assignment=mean(as.numeric(assignment_p))) %>%
+      ungroup() %>%
+      mutate(pop=fct_reorder(pop,avg_assignment))
+  } else {
+    CerySTRUCTURE_data_k5_long <- CerySTRUCTURE_data_k5 %>%
+      arrange(Longitude) %>%
+      arrange(Population) %>%
+      mutate(Code=factor(Code, levels=Code)) %>%
+      gather(key=pop, value=assignment_p, p1:p5) %>%
+      group_by(pop) %>%
+      mutate(avg_assignment=mean(as.numeric(assignment_p))) %>%
+      ungroup() %>%
+      mutate(pop=fct_reorder(pop,avg_assignment))
+  }
+  return(CerySTRUCTURE_data_k5_long)
+}
+
+load_clumppk6 <- function(species, Dataset, folder, greedy, latlon="latitude"){
+  if (greedy==FALSE) {
+  CerySTRUCTURE_data_k6 <- read.table(file=paste("../", species, "/", Dataset, "_", folder, "/clumpp_out/k6.outfile", sep=""), col.names=c("c1", "sampleID", "missingness", "c4", "c5", "p1", "p2", "p3", "p4", "p5", "p6"))
+  clumppnames <- read.table(file=paste("../", species, "/", Dataset, "_", folder, "/clumpp_out/sample_names", sep=""))
+  } else {
+      CerySTRUCTURE_data_k6 <- read.table(file=paste("../", species, "/", Dataset, "_", folder, "/clumpp_out_greedy/k6.outfile", sep=""), col.names=c("c1", "sampleID", "missingness", "c4", "c5", "p1", "p2", "p3", "p4", "p5", "p6"))
+  clumppnames <- read.table(file=paste("../", species, "/", Dataset, "_", folder, "/clumpp_out_greedy/sample_names", sep=""))
+  }
+  CerySTRUCTURE_data_k6$Code <- clumppnames[,1]
+  CerySTRUCTURE_data_k6 <- merge(CerySTRUCTURE_data_k6, rubrocapilla_metadata, by="Code")
+  if (latlon=="latitude") {
+    CerySTRUCTURE_data_k6_long <- CerySTRUCTURE_data_k6 %>%
+      arrange(Latitude) %>%
+      arrange(Population) %>%
+      mutate(Code=factor(Code, levels=Code)) %>%
+      gather(key=pop, value=assignment_p, p1:p6) %>%
+      group_by(pop) %>%
+      mutate(avg_assignment=mean(as.numeric(assignment_p))) %>%
+      ungroup() %>%
+      mutate(pop=fct_reorder(pop,avg_assignment))
+  } else {
+    CerySTRUCTURE_data_k6_long <- CerySTRUCTURE_data_k6 %>%
+      arrange(Longitude) %>%
+      arrange(Population) %>%
+      mutate(Code=factor(Code, levels=Code)) %>%
+      gather(key=pop, value=assignment_p, p1:p6) %>%
+      group_by(pop) %>%
+      mutate(avg_assignment=mean(as.numeric(assignment_p))) %>%
+      ungroup() %>%
+      mutate(pop=fct_reorder(pop,avg_assignment))
+  }
+
+  return(CerySTRUCTURE_data_k6_long)
+}
+
+load_clumppk7 <- function(species, Dataset, folder, greedy, latlon="latitude"){
+  if (greedy==FALSE) {
+  CerySTRUCTURE_data_k7 <- read.table(file=paste("../", species, "/", Dataset, "_", folder, "/clumpp_out/k7.outfile", sep=""), col.names=c("c1", "sampleID", "missingness", "c4", "c5", "p1", "p2", "p3", "p4", "p5", "p6", "p7"))
+  clumppnames <- read.table(file=paste("../", species, "/", Dataset, "_", folder, "/clumpp_out/sample_names", sep=""))
+  } else {
+      CerySTRUCTURE_data_k7 <- read.table(file=paste("../", species, "/", Dataset, "_", folder, "/clumpp_out_greedy/k7.outfile", sep=""), col.names=c("c1", "sampleID", "missingness", "c4", "c5", "p1", "p2", "p3", "p4", "p5", "p6", "p7"))
+  clumppnames <- read.table(file=paste("../", species, "/", Dataset, "_", folder, "/clumpp_out_greedy/sample_names", sep=""))
+  }
+  CerySTRUCTURE_data_k7$Code <- clumppnames[,1]
+  CerySTRUCTURE_data_k7 <- merge(CerySTRUCTURE_data_k7, rubrocapilla_metadata, by="Code")
+  if (latlon=="latitude") {
+    CerySTRUCTURE_data_k7_long <- CerySTRUCTURE_data_k7 %>%
+      arrange(Latitude) %>%
+      arrange(Population) %>%
+      mutate(Code=factor(Code, levels=Code)) %>%
+      gather(key=pop, value=assignment_p, p1:p7) %>%
+      group_by(pop) %>%
+      mutate(avg_assignment=mean(as.numeric(assignment_p))) %>%
+      ungroup() %>%
+      mutate(pop=fct_reorder(pop,avg_assignment))
+  } else {
+    CerySTRUCTURE_data_k7_long <- CerySTRUCTURE_data_k7 %>%
+      arrange(Longitude) %>%
+      arrange(Population) %>%
+      mutate(Code=factor(Code, levels=Code)) %>%
+      gather(key=pop, value=assignment_p, p1:p7) %>%
+      group_by(pop) %>%
+      mutate(avg_assignment=mean(as.numeric(assignment_p))) %>%
+      ungroup() %>%
+      mutate(pop=fct_reorder(pop,avg_assignment))
+  }
+  return(CerySTRUCTURE_data_k7_long)
+}
+
+load_clumppk8 <- function(species, Dataset, folder="100k100k_POPALPHAS", greedy, latlon="latitude"){
+  if (greedy==FALSE) {
+  CerySTRUCTURE_data_k8 <- read.table(file=paste("../", species, "/", Dataset, "_", folder, "/clumpp_out/k8.outfile", sep=""), col.names=c("c1", "sampleID", "missingness", "c4", "c5", "p1", "p2", "p3", "p4", "p5", "p6", "p7", "p8"))
+  clumppnames <- read.table(file=paste("../", species, "/", Dataset, "_", folder, "/clumpp_out/sample_names", sep=""))
+  } else {
+      CerySTRUCTURE_data_k8 <- read.table(file=paste("../", species, "/", Dataset, "_", folder, "/clumpp_out_greedy/k8.outfile", sep=""), col.names=c("c1", "sampleID", "missingness", "c4", "c5", "p1", "p2", "p3", "p4", "p5", "p6", "p7", "p8"))
+  clumppnames <- read.table(file=paste("../", species, "/", Dataset, "_", folder, "/clumpp_out_greedy/sample_names", sep=""))
+  }
+  CerySTRUCTURE_data_k8$Code <- clumppnames[,1]
+  CerySTRUCTURE_data_k8 <- merge(CerySTRUCTURE_data_k8, rubrocapilla_metadata, by="Code")
+  if (latlon=="latitude") {
+    CerySTRUCTURE_data_k8_long <- CerySTRUCTURE_data_k8 %>%
+      arrange(Latitude) %>%
+      arrange(Population) %>%
+      mutate(Code=factor(Code, levels=Code)) %>%
+      gather(key=pop, value=assignment_p, p1:p8) %>%
+      group_by(pop) %>%
+      mutate(avg_assignment=mean(as.numeric(assignment_p))) %>%
+      ungroup() %>%
+      mutate(pop=fct_reorder(pop,avg_assignment))
+  } else {
+    CerySTRUCTURE_data_k8_long <- CerySTRUCTURE_data_k8 %>%
+      arrange(Longitude) %>%
+      arrange(Population) %>%
+      mutate(Code=factor(Code, levels=Code)) %>%
+      gather(key=pop, value=assignment_p, p1:p8) %>%
+      group_by(pop) %>%
+      mutate(avg_assignment=mean(as.numeric(assignment_p))) %>%
+      ungroup() %>%
+      mutate(pop=fct_reorder(pop,avg_assignment))
+  }
+  return(CerySTRUCTURE_data_k8_long)
+}
+
+```
+
+Next I need to load the metadata for my samples. This is stored in a text file.
+
+```{r load_metatdata}
+#read in the metadata
+rubrocapilla_metadata <- read.delim(file="~/Documents/GitHub/Ceratopipra_rubrocapilla_Phylogeography/3_Structure/3.1aa_PCA/Ceratopipra_rubrocapilla_extendedmetadata.txt", sep="\t", header=TRUE)
+
+```
+
+
+With these functions, load the data and generate plots.
+```{r load_structuredata}
+rk2.1<-plot_Ceratopipra(load_Ceratopiprak2("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k2_200k1000k_POPALPHAS", subfolder="run_1"), title="K=2: AC4.37_0.2_5_20.0 #1")
+rk2.2<-plot_Ceratopipra(load_Ceratopiprak2("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k2_200k1000k_POPALPHAS", subfolder="run_2"), title="K=2: AC4.37_0.2_5_20.0 #2")
+rk2.3<-plot_Ceratopipra(load_Ceratopiprak2("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k2_200k1000k_POPALPHAS", subfolder="run_3"), title="K=2: AC4.37_0.2_5_20.0 #3")
+rk2.4<-plot_Ceratopipra(load_Ceratopiprak2("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k2_200k1000k_POPALPHAS", subfolder="run_4"), title="K=2: AC4.37_0.2_5_20.0 #4")
+rk2.5<-plot_Ceratopipra(load_Ceratopiprak2("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k2_200k1000k_POPALPHAS", subfolder="run_5"), title="K=2: AC4.37_0.2_5_20.0 #5")
+rk2.6<-plot_Ceratopipra(load_Ceratopiprak2("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k2_200k1000k_POPALPHAS", subfolder="run_6"), title="K=2: AC4.37_0.2_5_20.0 #6")
+rk2.7<-plot_Ceratopipra(load_Ceratopiprak2("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k2_200k1000k_POPALPHAS", subfolder="run_7"), title="K=2: AC4.37_0.2_5_20.0 #7")
+rk2.8<-plot_Ceratopipra(load_Ceratopiprak2("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k2_200k1000k_POPALPHAS", subfolder="run_8"), title="K=2: AC4.37_0.2_5_20.0 #8")
+rk2.9<-plot_Ceratopipra(load_Ceratopiprak2("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k2_200k1000k_POPALPHAS", subfolder="run_9"), title="K=2: AC4.37_0.2_5_20.0 #9")
+rk2.10<-plot_Ceratopipra(load_Ceratopiprak2("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k2_200k1000k_POPALPHAS", subfolder="run_10"), title="K=2: AC4.37_0.2_5_20.0 #10")
+
+rk3.1<-plot_Ceratopipra(load_Ceratopiprak3("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k3_200k1000k_POPALPHAS", subfolder="run_1"), title="K=3: AC4.37_0.2_5_20.0 #1")
+rk3.2<-plot_Ceratopipra(load_Ceratopiprak3("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k3_200k1000k_POPALPHAS", subfolder="run_2"), title="K=3: AC4.37_0.2_5_20.0 #2")
+rk3.3<-plot_Ceratopipra(load_Ceratopiprak3("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k3_200k1000k_POPALPHAS", subfolder="run_3"), title="K=3: AC4.37_0.2_5_20.0 #3")
+rk3.4<-plot_Ceratopipra(load_Ceratopiprak3("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k3_200k1000k_POPALPHAS", subfolder="run_4"), title="K=3: AC4.37_0.2_5_20.0 #4")
+rk3.5<-plot_Ceratopipra(load_Ceratopiprak3("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k3_200k1000k_POPALPHAS", subfolder="run_5"), title="K=3: AC4.37_0.2_5_20.0 #5")
+rk3.6<-plot_Ceratopipra(load_Ceratopiprak3("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k3_200k1000k_POPALPHAS", subfolder="run_6"), title="K=3: AC4.37_0.2_5_20.0 #6")
+rk3.7<-plot_Ceratopipra(load_Ceratopiprak3("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k3_200k1000k_POPALPHAS", subfolder="run_7"), title="K=3: AC4.37_0.2_5_20.0 #7")
+rk3.8<-plot_Ceratopipra(load_Ceratopiprak3("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k3_200k1000k_POPALPHAS", subfolder="run_8"), title="K=3: AC4.37_0.2_5_20.0 #8")
+rk3.9<-plot_Ceratopipra(load_Ceratopiprak3("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k3_200k1000k_POPALPHAS", subfolder="run_9"), title="K=3: AC4.37_0.2_5_20.0 #9")
+rk3.10<-plot_Ceratopipra(load_Ceratopiprak3("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k3_200k1000k_POPALPHAS", subfolder="run_10"), title="K=3: AC4.37_0.2_5_20.0 #10")
+
+rk4.1<-plot_Ceratopipra(load_Ceratopiprak4("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k4_200k1000k_POPALPHAS", subfolder="run_1"), title="K=4: AC4.37_0.2_5_20.0 #1")
+rk4.2<-plot_Ceratopipra(load_Ceratopiprak4("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k4_200k1000k_POPALPHAS", subfolder="run_2"), title="K=4: AC4.37_0.2_5_20.0 #2")
+rk4.3<-plot_Ceratopipra(load_Ceratopiprak4("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k4_200k1000k_POPALPHAS", subfolder="run_3"), title="K=4: AC4.37_0.2_5_20.0 #3")
+rk4.4<-plot_Ceratopipra(load_Ceratopiprak4("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k4_200k1000k_POPALPHAS", subfolder="run_4"), title="K=4: AC4.37_0.2_5_20.0 #4")
+rk4.5<-plot_Ceratopipra(load_Ceratopiprak4("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k4_200k1000k_POPALPHAS", subfolder="run_5"), title="K=4: AC4.37_0.2_5_20.0 #5")
+rk4.6<-plot_Ceratopipra(load_Ceratopiprak4("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k4_200k1000k_POPALPHAS", subfolder="run_6"), title="K=4: AC4.37_0.2_5_20.0 #6")
+rk4.7<-plot_Ceratopipra(load_Ceratopiprak4("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k4_200k1000k_POPALPHAS", subfolder="run_7"), title="K=4: AC4.37_0.2_5_20.0 #7")
+rk4.8<-plot_Ceratopipra(load_Ceratopiprak4("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k4_200k1000k_POPALPHAS", subfolder="run_8"), title="K=4: AC4.37_0.2_5_20.0 #8")
+rk4.9<-plot_Ceratopipra(load_Ceratopiprak4("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k4_200k1000k_POPALPHAS", subfolder="run_9"), title="K=4: AC4.37_0.2_5_20.0 #9")
+rk4.10<-plot_Ceratopipra(load_Ceratopiprak4("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k4_200k1000k_POPALPHAS", subfolder="run_10"), title="K=4: AC4.37_0.2_5_20.0 #10")
+
+rk5.1<-plot_Ceratopipra(load_Ceratopiprak5("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k5_200k1000k_POPALPHAS", subfolder="run_1"), title="K=5: AC4.37_0.2_5_20.0 #1")
+rk5.2<-plot_Ceratopipra(load_Ceratopiprak5("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k5_200k1000k_POPALPHAS", subfolder="run_2"), title="K=5: AC4.37_0.2_5_20.0 #2")
+rk5.3<-plot_Ceratopipra(load_Ceratopiprak5("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k5_200k1000k_POPALPHAS", subfolder="run_3"), title="K=5: AC4.37_0.2_5_20.0 #3")
+rk5.4<-plot_Ceratopipra(load_Ceratopiprak5("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k5_200k1000k_POPALPHAS", subfolder="run_4"), title="K=5: AC4.37_0.2_5_20.0 #4")
+rk5.5<-plot_Ceratopipra(load_Ceratopiprak5("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k5_200k1000k_POPALPHAS", subfolder="run_5"), title="K=5: AC4.37_0.2_5_20.0 #5")
+rk5.6<-plot_Ceratopipra(load_Ceratopiprak5("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k5_200k1000k_POPALPHAS", subfolder="run_6"), title="K=5: AC4.37_0.2_5_20.0 #6")
+rk5.7<-plot_Ceratopipra(load_Ceratopiprak5("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k5_200k1000k_POPALPHAS", subfolder="run_7"), title="K=5: AC4.37_0.2_5_20.0 #7")
+rk5.8<-plot_Ceratopipra(load_Ceratopiprak5("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k5_200k1000k_POPALPHAS", subfolder="run_8"), title="K=5: AC4.37_0.2_5_20.0 #8")
+rk5.9<-plot_Ceratopipra(load_Ceratopiprak5("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k5_200k1000k_POPALPHAS", subfolder="run_9"), title="K=5: AC4.37_0.2_5_20.0 #9")
+rk5.10<-plot_Ceratopipra(load_Ceratopiprak5("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k5_200k1000k_POPALPHAS", subfolder="run_10"), title="K=5: AC4.37_0.2_5_20.0 #10")
+
+rk6.1<-plot_Ceratopipra(load_Ceratopiprak6("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k6_200k1000k_POPALPHAS", subfolder="run_1"), title="K=6: AC4.37_0.2_5_20.0 #1")
+rk6.2<-plot_Ceratopipra(load_Ceratopiprak6("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k6_200k1000k_POPALPHAS", subfolder="run_2"), title="K=6: AC4.37_0.2_5_20.0 #2")
+rk6.3<-plot_Ceratopipra(load_Ceratopiprak6("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k6_200k1000k_POPALPHAS", subfolder="run_3"), title="K=6: AC4.37_0.2_5_20.0 #3")
+rk6.4<-plot_Ceratopipra(load_Ceratopiprak6("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k6_200k1000k_POPALPHAS", subfolder="run_4"), title="K=6: AC4.37_0.2_5_20.0 #4")
+rk6.5<-plot_Ceratopipra(load_Ceratopiprak6("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k6_200k1000k_POPALPHAS", subfolder="run_5"), title="K=6: AC4.37_0.2_5_20.0 #5")
+rk6.6<-plot_Ceratopipra(load_Ceratopiprak6("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k6_200k1000k_POPALPHAS", subfolder="run_6"), title="K=6: AC4.37_0.2_5_20.0 #6")
+rk6.7<-plot_Ceratopipra(load_Ceratopiprak6("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k6_200k1000k_POPALPHAS", subfolder="run_7"), title="K=6: AC4.37_0.2_5_20.0 #7")
+rk6.8<-plot_Ceratopipra(load_Ceratopiprak6("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k6_200k1000k_POPALPHAS", subfolder="run_8"), title="K=6: AC4.37_0.2_5_20.0 #8")
+rk6.9<-plot_Ceratopipra(load_Ceratopiprak6("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k6_200k1000k_POPALPHAS", subfolder="run_9"), title="K=6: AC4.37_0.2_5_20.0 #9")
+rk6.10<-plot_Ceratopipra(load_Ceratopiprak6("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k6_200k1000k_POPALPHAS", subfolder="run_10"), title="K=6: AC4.37_0.2_5_20.0 #10")
+
+rk7.1<-plot_Ceratopipra(load_Ceratopiprak7("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k7_200k1000k_POPALPHAS", subfolder="run_1"), title="K=7: AC4.37_0.2_5_20.0 #1")
+rk7.2<-plot_Ceratopipra(load_Ceratopiprak7("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k7_200k1000k_POPALPHAS", subfolder="run_2"), title="K=7: AC4.37_0.2_5_20.0 #2")
+rk7.3<-plot_Ceratopipra(load_Ceratopiprak7("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k7_200k1000k_POPALPHAS", subfolder="run_3"), title="K=7: AC4.37_0.2_5_20.0 #3")
+rk7.4<-plot_Ceratopipra(load_Ceratopiprak7("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k7_200k1000k_POPALPHAS", subfolder="run_4"), title="K=7: AC4.37_0.2_5_20.0 #4")
+rk7.5<-plot_Ceratopipra(load_Ceratopiprak7("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k7_200k1000k_POPALPHAS", subfolder="run_5"), title="K=7: AC4.37_0.2_5_20.0 #5")
+rk7.6<-plot_Ceratopipra(load_Ceratopiprak7("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k7_200k1000k_POPALPHAS", subfolder="run_6"), title="K=7: AC4.37_0.2_5_20.0 #6")
+rk7.7<-plot_Ceratopipra(load_Ceratopiprak7("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k7_200k1000k_POPALPHAS", subfolder="run_7"), title="K=7: AC4.37_0.2_5_20.0 #7")
+rk7.8<-plot_Ceratopipra(load_Ceratopiprak7("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k7_200k1000k_POPALPHAS", subfolder="run_8"), title="K=7: AC4.37_0.2_5_20.0 #8")
+rk7.9<-plot_Ceratopipra(load_Ceratopiprak7("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k7_200k1000k_POPALPHAS", subfolder="run_9"), title="K=7: AC4.37_0.2_5_20.0 #9")
+rk7.10<-plot_Ceratopipra(load_Ceratopiprak7("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k7_200k1000k_POPALPHAS", subfolder="run_10"), title="K=7: AC4.37_0.2_5_20.0 #10")
+
+rk8.1<-plot_Ceratopipra(load_Ceratopiprak8("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k8_200k1000k_POPALPHAS", subfolder="run_1"), title="K=8: AC4.37_0.2_5_20.0 #1")
+rk8.2<-plot_Ceratopipra(load_Ceratopiprak8("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k8_200k1000k_POPALPHAS", subfolder="run_2"), title="K=8: AC4.37_0.2_5_20.0 #2")
+rk8.3<-plot_Ceratopipra(load_Ceratopiprak8("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k8_200k1000k_POPALPHAS", subfolder="run_3"), title="K=8: AC4.37_0.2_5_20.0 #3")
+rk8.4<-plot_Ceratopipra(load_Ceratopiprak8("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k8_200k1000k_POPALPHAS", subfolder="run_4"), title="K=8: AC4.37_0.2_5_20.0 #4")
+rk8.5<-plot_Ceratopipra(load_Ceratopiprak8("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k8_200k1000k_POPALPHAS", subfolder="run_5"), title="K=8: AC4.37_0.2_5_20.0 #5")
+rk8.6<-plot_Ceratopipra(load_Ceratopiprak8("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k8_200k1000k_POPALPHAS", subfolder="run_6"), title="K=8: AC4.37_0.2_5_20.0 #6")
+rk8.7<-plot_Ceratopipra(load_Ceratopiprak8("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k8_200k1000k_POPALPHAS", subfolder="run_7"), title="K=8: AC4.37_0.2_5_20.0 #7")
+rk8.8<-plot_Ceratopipra(load_Ceratopiprak8("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k8_200k1000k_POPALPHAS", subfolder="run_8"), title="K=8: AC4.37_0.2_5_20.0 #8")
+rk8.9<-plot_Ceratopipra(load_Ceratopiprak8("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k8_200k1000k_POPALPHAS", subfolder="run_9"), title="K=8: AC4.37_0.2_5_20.0 #9")
+rk8.10<-plot_Ceratopipra(load_Ceratopiprak8("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k8_200k1000k_POPALPHAS", subfolder="run_10"), title="K=8: AC4.37_0.2_5_20.0 #10")
+
+#load clumpp results with fullsearch algorithm
+rc2 <- plot_Ceratopipra(load_clumppk2(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=FALSE), title="K=2: AC4.37_0.2_5_20.0 CLUMPP")
+rc3<-plot_Ceratopipra(load_clumppk3(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=FALSE), title="K=3: AC4.37_0.2_5_20.0 CLUMPP")
+
+#greedy algorithm of clumpp is needed to process K larger than 3
+rcg2 <- plot_Ceratopipra(load_clumppk2(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=TRUE), title="K=2: AC4.37_0.2_5_20.0 CLUMPP")
+rcg3 <- plot_Ceratopipra(load_clumppk3(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=TRUE), title="K=3: AC4.37_0.2_5_20.0 CLUMPP")
+rcg4 <- plot_Ceratopipra(load_clumppk4(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=TRUE), title="K=4: AC4.37_0.2_5_20.0 CLUMPP")
+rcg5 <- plot_Ceratopipra(load_clumppk5(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=TRUE), title="K=5: AC4.37_0.2_5_20.0 CLUMPP")
+rcg6 <- plot_Ceratopipra(load_clumppk6(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=TRUE), title="K=6: AC4.37_0.2_5_20.0 CLUMPP")
+rcg7 <- plot_Ceratopipra(load_clumppk7(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=TRUE), title="K=7: AC4.37_0.2_5_20.0 CLUMPP")
+rcg8 <- plot_Ceratopipra(load_clumppk8(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=TRUE), title="K=8: AC4.37_0.2_5_20.0 CLUMPP")
+
+#plot clumpp results from fullsearch algorithm
+ggarrange(rc2+theme(axis.text.x=element_blank()), rc3+theme(axis.text.x=element_blank()), labels=c("1", "2", "3", "4"), ncol = 2, nrow = 2)
+#plot clumpp results from greedy algorithm
+ggarrange(rcg2+theme(axis.text.x=element_blank()), rcg3+theme(axis.text.x=element_blank()), rcg4+theme(axis.text.x=element_blank()), rcg5+theme(axis.text.x=element_blank()), rcg6+theme(axis.text.x=element_blank()), rcg7+theme(axis.text.x=element_blank()), rcg8+theme(axis.text.x=element_blank()), labels=c("1", "2", "3", "4", "5", "6", "7" ,"8"), ncol = 2, nrow = 4)
+
+#plot all ten iterations for each value of K
+ggarrange(rk2.1+theme(axis.text.x=element_blank()), rk2.2+theme(axis.text.x=element_blank()), rk2.3+theme(axis.text.x=element_blank()), rk2.4+theme(axis.text.x=element_blank()), rk2.5+theme(axis.text.x=element_blank()), rk2.6+theme(axis.text.x=element_blank()), rk2.7+theme(axis.text.x=element_blank()), rk2.8+theme(axis.text.x=element_blank()), rk2.9+theme(axis.text.x=element_blank()), rk2.10+theme(axis.text.x=element_blank()), rc2+theme(axis.text.x=element_blank()), labels=c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "clumpp"), ncol = 3, nrow = 4)
+
+ggarrange(rk3.1+theme(axis.text.x=element_blank()), rk3.2+theme(axis.text.x=element_blank()), rk3.3+theme(axis.text.x=element_blank()), rk3.4+theme(axis.text.x=element_blank()), rk3.5+theme(axis.text.x=element_blank()), rk3.6+theme(axis.text.x=element_blank()), rk3.7+theme(axis.text.x=element_blank()), rk3.8+theme(axis.text.x=element_blank()), rk3.9+theme(axis.text.x=element_blank()), rk3.10+theme(axis.text.x=element_blank()), rc3+theme(axis.text.x=element_blank()), labels=c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "clumpp"), ncol = 3, nrow = 4)
+
+ggarrange(rk4.1+theme(axis.text.x=element_blank()), rk4.2+theme(axis.text.x=element_blank()), rk4.3+theme(axis.text.x=element_blank()), rk4.4+theme(axis.text.x=element_blank()), rk4.5+theme(axis.text.x=element_blank()), rk4.6+theme(axis.text.x=element_blank()), rk4.7+theme(axis.text.x=element_blank()), rk4.8+theme(axis.text.x=element_blank()), rk4.9+theme(axis.text.x=element_blank()), rk4.10+theme(axis.text.x=element_blank()), labels=c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), ncol = 3, nrow = 4)
+
+ggarrange(rk5.1+theme(axis.text.x=element_blank()), rk5.2+theme(axis.text.x=element_blank()), rk5.3+theme(axis.text.x=element_blank()), rk5.4+theme(axis.text.x=element_blank()), rk5.5+theme(axis.text.x=element_blank()), rk5.6+theme(axis.text.x=element_blank()), rk5.7+theme(axis.text.x=element_blank()), rk5.8+theme(axis.text.x=element_blank()), rk5.9+theme(axis.text.x=element_blank()), rk5.10+theme(axis.text.x=element_blank()), labels=c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), ncol = 3, nrow = 4)
+
+ggarrange(rk6.1+theme(axis.text.x=element_blank()), rk6.2+theme(axis.text.x=element_blank()), rk6.3+theme(axis.text.x=element_blank()), rk6.4+theme(axis.text.x=element_blank()), rk6.5+theme(axis.text.x=element_blank()), rk6.6+theme(axis.text.x=element_blank()), rk6.7+theme(axis.text.x=element_blank()), rk6.8+theme(axis.text.x=element_blank()), rk6.9+theme(axis.text.x=element_blank()), rk6.10+theme(axis.text.x=element_blank()), labels=c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), ncol = 3, nrow = 4)
+
+ggarrange(rk7.1+theme(axis.text.x=element_blank()), rk7.2+theme(axis.text.x=element_blank()), rk7.3+theme(axis.text.x=element_blank()), rk7.4+theme(axis.text.x=element_blank()), rk7.5+theme(axis.text.x=element_blank()), rk7.6+theme(axis.text.x=element_blank()), rk7.7+theme(axis.text.x=element_blank()), rk7.8+theme(axis.text.x=element_blank()), rk7.9+theme(axis.text.x=element_blank()), rk7.10+theme(axis.text.x=element_blank()), labels=c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), ncol = 3, nrow = 4)
+
+ggarrange(rk8.1+theme(axis.text.x=element_blank()), rk8.2+theme(axis.text.x=element_blank()), rk8.3+theme(axis.text.x=element_blank()), rk8.4+theme(axis.text.x=element_blank()), rk8.5+theme(axis.text.x=element_blank()), rk8.6+theme(axis.text.x=element_blank()), rk8.7+theme(axis.text.x=element_blank()), rk8.8+theme(axis.text.x=element_blank()), rk8.9+theme(axis.text.x=element_blank()), rk8.10+theme(axis.text.x=element_blank()), labels=c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), ncol = 3, nrow = 4)
+
+```
+
+*Results*:  
+* The ten runs for K=2 look qualitatively indistinguishable (quantitatively, the numbers are ever-so-slightly different, so they are not just accidental duplicates of the exact same run).  
+* The ten runs for K=3 look qualitatively indistinguishable (quantitatively, the numbers are ever-so-slightly different, so they are not just accidental duplicates of the exact same run).  
+* The ten runs for K=4 look qualitatively indistinguishable (quantitatively, the numbers are ever-so-slightly different, so they are not just accidental duplicates of the exact same run).  
+* K=5-8 did not converge; there are qualitative differences amongst the ten runs. 1,000,000 generations may have been insufficient length of the MCMC chain, or the data may not have a single good fit to models with that many populations (either because the data lacks sufficient signal or there is no realistic biological signal to be found).  
+* The greedy and fullsearch algorithm gave identical results for K=2 and K=3 (fullsearch could not complete for higher K due to computational limitations - would have taken many days). 
+
+## Evaluate best K
+
+After viewing the results, we can evaluate the best K to report. Looking at the results, K=2-4 converged, and the clusters seem to correspond to geographic groupings that we would expect to be differentiated. K=5-8 did not converge, and most replicates contain "ghost" populations (clusters in which no sample had more than 50% assignment to that cluster).  
+
+One metric to help choose the best K to report is MedMedK. To use this metric, we need to count how many clusters correspond to reasonable populations based on prior knowledge of the samples (eg., geography). We need to determine whether any population has a median of more than 50% assignment to a given cluster for a given iterations. This can be done by eye for most of them, but a few are on the edge, so we should look at the exact values.    
+```{r medmedK}
+#This loads the data for a given run, excludes the Xingu headwaters, and calculates the median and mean assignment to each cluster for each a priori population
+load_Ceratopiprak4("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k4_200k1000k_POPALPHAS", subfolder="run_10") %>%
+  filter(!SampleID=="Ceratopipra_rubrocapilla_MT087") %>% #for Xingu clusters, we should exclude the two headwater samples, which likely spread east from a Rondonia origin.
+  filter(!SampleID=="Ceratopipra_rubrocapilla_MT123") %>%
+  group_by(Population, pop) %>%
+  summarise(mean=mean(as.numeric(assignment_p)), median=median(as.numeric(assignment_p))) %>%
+  arrange(desc(median))
+
+#Xingu samples from Araguaina seem to be have different assignment values than other Xingu locations.
+load_Ceratopiprak4("Ceratopipra_rubrocapilla", "Cerrub.AC4.37_0.2_5_20.0", folder="k4_200k1000k_POPALPHAS", subfolder="run_10") %>%
+  filter(Locality=="Araguaina") %>% 
+  group_by(Population, pop) %>%
+  summarise(mean=mean(as.numeric(assignment_p)), median=median(as.numeric(assignment_p))) %>%
+  arrange(desc(median))
+
+```
+For example, iteration 10 of K=4 shows that Atlantic Forest has more than 50% median assignment to p1, so that is a valid cluster. Inambari and Rondonia have more than 50% median assignment to p3, so that is a valid cluster. Tapajos has more than 50% median assignment to p2, so that is a valid cluster. Araguaina has more than 50% median assignment to p4, so that is a valid cluster. This process repeats for each of ten iterations for each K, and then we take the median of those values for each K (note that there is no variation amongst K=2-4, so taking the median vs mean makes no difference).   
+
+# save figures
+
+Now we can save some images to use as figures in the manuscript and to keep a record.  
+```{r figures_structure}
+#Save K=2 and 3 with the fullsearch algorithm of CLUMPP (fullsearch could not completefor K=4)
+cbbPalette <- c("#E69F00", "#0072B2", "#F0E442", "#009E73", "#E69F00", "#56B4E9", "#CC79A7")
+plot_Ceratopipra2(load_clumppk2(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=FALSE), title="K=2: AC4.37_0.2_5_20.0 CLUMPP")+
+  theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.title.x = element_blank(), legend.position = "none")+
+  scale_fill_manual(values=cbbPalette)
+ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K2.200k1000k_POPALPHAS.fullsearch.pdf", bg='transparent', width = 30, height = 10, units = "cm")
+
+cbbPalette <- c("#F0E442", "#E69F00", "#0072B2", "#009E73", "#E69F00", "#56B4E9", "#CC79A7")
+plot_Ceratopipra2(load_clumppk3(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=FALSE), title="K=3: AC4.37_0.2_5_20.0 CLUMPP")+
+  theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.title.x = element_blank(), legend.position = "none")+
+  scale_fill_manual(values=cbbPalette)
+ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K3.200k1000k_POPALPHAS.fullsearch.pdf", bg='transparent', width = 30, height = 10, units = "cm")
+
+
+#Save K=2-8 with the greedy algorithm of CLUMPP (fullsearch could not completefor K=4+)
+cbbPalette <- c("#E69F00", "#0072B2", "#F0E442", "#009E73", "#E69F00", "#56B4E9", "#CC79A7")
+plot_Ceratopipra2(load_clumppk2(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=TRUE), title="K=2: AC4.37_0.2_5_20.0 CLUMPP")+
+  theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.title.x = element_blank(), legend.position = "none")+
+  scale_fill_manual(values=cbbPalette)
+ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K2.200k1000k_POPALPHAS.pdf", bg='transparent', width = 30, height = 10, units = "cm")
+plot_Ceratopipra2(load_clumppk2(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=TRUE, latlon="longitude"), title="K=2: AC4.37_0.2_5_20.0 CLUMPP")+
+  theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.title.x = element_blank(), legend.position = "none")+
+  scale_fill_manual(values=cbbPalette)
+ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K2.200k1000k_POPALPHAS.longitude.pdf", bg='transparent', width = 30, height = 10, units = "cm")
+
+
+cbbPalette <- c("#F0E442", "#E69F00", "#0072B2", "#009E73", "#E69F00", "#56B4E9", "#CC79A7")
+plot_Ceratopipra2(load_clumppk3(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=TRUE), title="K=3: AC4.37_0.2_5_20.0 CLUMPP")+
+  theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.title.x = element_blank(), legend.position = "none")+
+  scale_fill_manual(values=cbbPalette)
+ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K3.200k1000k_POPALPHAS.pdf", bg='transparent', width = 30, height = 10, units = "cm")
+plot_Ceratopipra2(load_clumppk3(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=TRUE, latlon="longitude"), title="K=3: AC4.37_0.2_5_20.0 CLUMPP")+
+  theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.title.x = element_blank(), legend.position = "none")+
+  scale_fill_manual(values=cbbPalette)
+ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K3.200k1000k_POPALPHAS.longitude.pdf", bg='transparent', width = 30, height = 10, units = "cm")
+
+cbbPalette <- c("#F0E442", "#E69F00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#CC79A7")
+plot_Ceratopipra2(load_clumppk4(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=TRUE), title="K=4: AC4.37_0.2_5_20.0 CLUMPP")+
+  theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.title.x = element_blank(), legend.position = "none")+
+  scale_fill_manual(values=cbbPalette)
+ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K4.200k1000k_POPALPHAS.pdf", bg='transparent', width = 30, height = 10, units = "cm")
+plot_Ceratopipra2(load_clumppk4(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=TRUE, latlon="longitude"), title="K=4: AC4.37_0.2_5_20.0 CLUMPP")+
+  theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.title.x = element_blank(), legend.position = "none")+
+  scale_fill_manual(values=cbbPalette)
+ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K4.200k1000k_POPALPHAS.longitude.pdf", bg='transparent', width = 30, height = 10, units = "cm")
+
+
+cbbPalette <- c("#F0E442", "#E69F00", "#CC79A7", "#009E73", "#000000", "#56B4E9", "#CC79A7")
+plot_Ceratopipra2(load_clumppk5(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=TRUE), title="K=5: AC4.37_0.2_5_20.0 CLUMPP")+
+  theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.title.x = element_blank(), legend.position = "none")+
+  scale_fill_manual(values=cbbPalette)
+ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K5.200k1000k_POPALPHAS.pdf", bg='transparent', width = 30, height = 10, units = "cm")
+
+cbbPalette <- c("#F0E442", "#0072B2", "#E69F00", "#CC79A7", "#009E73", "#000000", "#56B4E9", "#CC79A7")
+plot_Ceratopipra2(load_clumppk6(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=TRUE), title="K=6: AC4.37_0.2_5_20.0 CLUMPP")+
+  theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.title.x = element_blank(), legend.position = "none")+
+  scale_fill_manual(values=cbbPalette)
+ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K6.200k1000k_POPALPHAS.pdf", bg='transparent', width = 30, height = 10, units = "cm")
+
+cbbPalette <- c("#0072B2", "#F0E442", "#56B4E9", "#E69F00", "#CC79A7", "#009E73", "#000000")
+plot_Ceratopipra2(load_clumppk7(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=TRUE), title="K=7: AC4.37_0.2_5_20.0 CLUMPP")+
+  theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.title.x = element_blank(), legend.position = "none")+
+  scale_fill_manual(values=cbbPalette)
+ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K7.200k1000k_POPALPHAS.pdf", bg='transparent', width = 30, height = 10, units = "cm")
+
+cbbPalette <- c("brown", "#0072B2", "#F0E442", "#56B4E9", "#E69F00", "#CC79A7", "#009E73", "#000000")
+plot_Ceratopipra2(load_clumppk8(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=TRUE), title="K=8: AC4.37_0.2_5_20.0 CLUMPP")+
+  theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.title.x = element_blank(), legend.position = "none")+
+  scale_fill_manual(values=cbbPalette)
+ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K8.200k1000k_POPALPHAS.pdf", bg='transparent', width = 30, height = 10, units = "cm")
+
+```
+# Evanno Figure
+
+```{r evanno}
+Evanno <- NULL
+Evanno$K_values <- 1:8
+Evanno$delta_K <- as.numeric(c("NA", "999.100254", "79.851556", "117.21132", "1.078186", "61.797488", "1.909957", "NA"))
+Evanno$LnPK <- as.numeric(c("-275915.79", "-266991.56", "-265950.9", "-266507.28", "-306063.34", "-267299.72", "-269712.03", "-271162.85"))
+
+ggplot(as.data.frame(Evanno), aes(x=K_values, y=delta_K))+
+  geom_point()+
+  geom_line()+
+  xlab("K")+
+  ylab("Delta K")+
+  theme_classic()
+ggsave("Evanno.pdf", bg='transparent', width = 30, height = 10, units = "cm")
+
+ggplot(as.data.frame(Evanno), aes(x=K_values, y=LnPK))+
+  geom_point()+
+  geom_line()+
+  xlab("K")+
+  ylab("Delta K")+
+  theme_classic()
+```

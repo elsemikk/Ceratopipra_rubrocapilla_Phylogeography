@@ -1,0 +1,150 @@
+SampleID	RADseq	IQtree2	PCoA	Species	Population	Locality	Latitude	Longitude	Code	Haplogroup
+Ceratopipra_rubrocapilla_CPE012	1	1	1	rubrocapilla	AtlanticForest	Ibateguara	-8.976	-35.930	CPE012	2
+Ceratopipra_rubrocapilla_CPE025	1	1	1	rubrocapilla	AtlanticForest	Ibateguara	-8.976	-35.930	CPE025	2
+Ceratopipra_rubrocapilla_CPE049	1	1	1	rubrocapilla	AtlanticForest	Ibateguara	-8.976	-35.930	CPE049	2
+Ceratopipra_rubrocapilla_CPE066	1	0	0	rubrocapilla	AtlanticForest	Ibateguara	-8.976	-35.930	CPE066	2
+Ceratopipra_rubrocapilla_CPE067	1	0	0	rubrocapilla	AtlanticForest	Ibateguara	-8.976	-35.930	CPE067	2
+Ceratopipra_rubrocapilla_CPE069	1	1	1	rubrocapilla	AtlanticForest	Ibateguara	-8.976	-35.930	CPE069	2
+Ceratopipra_rubrocapilla_CPE071	1	0	0	rubrocapilla	AtlanticForest	Ibateguara	-8.976	-35.930	CPE071	2
+Ceratopipra_rubrocapilla_CPEII008	1	1	1	rubrocapilla	AtlanticForest	Ibateguara	-8.976	-35.930	CPEII008	2
+Ceratopipra_rubrocapilla_UNA002	1	1	1	rubrocapilla	AtlanticForest	Ilheus   	-14.780	-39.040	UNA002	2
+Ceratopipra_rubrocapilla_UNA018	1	1	1	rubrocapilla	AtlanticForest	Ilheus   	-14.780	-39.040	UNA018	2
+Ceratopipra_rubrocapilla_UNA088	1	1	1	rubrocapilla	AtlanticForest	Ilheus   	-14.780	-39.040	UNA088	2
+Ceratopipra_rubrocapilla_UNA110	1	1	1	rubrocapilla	AtlanticForest	Ilheus   	-14.780	-39.040	UNA110	2
+Ceratopipra_rubrocapilla_UNA124	1	1	1	rubrocapilla	AtlanticForest	Ilheus   	-14.780	-39.040	UNA124	2
+Ceratopipra_rubrocapilla_AMA340	1	1	1	rubrocapilla	Inambari	Atalaia do Norte	-4.530277	-71.61625	AMA340	1
+Ceratopipra_rubrocapilla_AMA601	1	1	1	rubrocapilla	Inambari	Atalaia do Norte	-4.530277	-71.61625	AMA601	1
+Ceratopipra_rubrocapilla_AMA656	1	1	1	rubrocapilla	Inambari	Atalaia do Norte	-4.530277	-71.61625	AMA656	3
+Ceratopipra_rubrocapilla_BR36440	1	0	1	rubrocapilla	Inambari	FortdoABUNÃ     	-9.76838	-65.52375	BR36440	1
+Ceratopipra_rubrocapilla_CAM117	1	1	1	rubrocapilla	Inambari	Guajará-AM	-7.570556	-72.74444	CAM117	1
+Ceratopipra_rubrocapilla_CAM039   	0	0	0	rubrocapilla	Inambari	Guajará-AM	-7.570556	-72.74444	CAM039   	1
+Ceratopipra_rubrocapilla_CAM087   	0	0	0	rubrocapilla	Inambari	Guajará-AM	-7.570556	-72.74444	CAM087   	1
+Ceratopipra_rubrocapilla_CAM097   	0	0	0	rubrocapilla	Inambari	Guajará-AM	-7.570556	-72.74444	CAM097   	1
+Ceratopipra_rubrocapilla_CAM107   	0	0	0	rubrocapilla	Inambari	Guajará-AM	-7.570556	-72.74444	CAM107   	1
+Ceratopipra_rubrocapilla_CAM009	0	0	0	rubrocapilla	Inambari	Guajará-AM	-7.570556	-72.74444	CAM009	3
+Ceratopipra_rubrocapilla_OM022	1	1	1	rubrocapilla	Inambari	Humaitá   	-7.518333	-63.33777	OM022	1
+Ceratopipra_rubrocapilla_OM112	1	1	1	rubrocapilla	Inambari	Humaitá   	-7.518333	-63.33777	OM112	1
+Ceratopipra_rubrocapilla_OM172	1	1	1	rubrocapilla	Inambari	Humaitá   	-7.518333	-63.33777	OM172	NA
+Ceratopipra_rubrocapilla_JUT094   	0	0	0	rubrocapilla	Inambari	Jutai     	-3.27	-67.31	JUT094   	1
+Ceratopipra_rubrocapilla_JUT237   	0	0	0	rubrocapilla	Inambari	Jutai     	-3.27	-67.31	JUT237   	1
+Ceratopipra_rubrocapilla_B4615	1	1	1	rubrocapilla	Inambari	Loreto	-4.15	-74.15	B4615	NA
+Ceratopipra_rubrocapilla_B5082	1	1	1	rubrocapilla	Inambari	Loreto	-4.15	-74.15	B5082	NA
+Ceratopipra_rubrocapilla_UFAC095  	0	0	0	rubrocapilla	Inambari	PORTOACRE     	-9.756694	-67.67058	UFAC095  	1
+Ceratopipra_rubrocapilla_UFAC1007	1	1	1	rubrocapilla	Inambari	PORTOWALTER  	-8.34325	-72.60547	UFAC1007	1
+Ceratopipra_rubrocapilla_CUJ072	1	1	1	rubrocapilla	Inambari	RDSCujubim1	-5.638611	-69.18306	CUJ072	1
+Ceratopipra_rubrocapilla_CUJ079	0	0	0	rubrocapilla	Inambari	RDSCujubim1	-5.638611	-69.18306	CUJ079	1
+Ceratopipra_rubrocapilla_CUJ027	1	1	1	rubrocapilla	Inambari	RDSCujubim2	-5.219722	-68.31667	CUJ027	1
+Ceratopipra_rubrocapilla_UFAC1687	1	0	0	rubrocapilla	Inambari	SENADORGUIOMARD	-9.8	-67.2	UFAC1687	1
+Ceratopipra_rubrocapilla_UFAC305	1	1	1	rubrocapilla	Inambari	SENADORGUIOMARD	-9.8	-67.2	UFAC305	1
+Ceratopipra_rubrocapilla_UFAC476	1	1	1	rubrocapilla	Inambari	TARAUACÁ	-7.892389	-71.66239	UFAC476	1
+Ceratopipra_rubrocapilla_PUC007	1	1	0	rubrocapilla	Inambari	Tefe	-4.85	-65.06667	PUC007	1
+Ceratopipra_rubrocapilla_PUC008	1	1	1	rubrocapilla	Inambari	Tefe	-4.85	-65.06667	PUC008	1
+Ceratopipra_rubrocapilla_PUC023   	0	0	0	rubrocapilla	Inambari	Tefe	-4.85	-65.06667	PUC023   	1
+Ceratopipra_rubrocapilla_PUC174   	0	0	0	rubrocapilla	Inambari	Tefe	-4.85	-65.06667	PUC174   	1
+Ceratopipra_rubrocapilla_RUR038	0	0	0	rubrocapilla	Inambari	Tefe	-4.85	-65.06667	RUR038	1
+Ceratopipra_rubrocapilla_MAM010	1	1	1	rubrocapilla	Rondonia	AVEIRO   	-3.327917	-56.36353	MAM010	1
+Ceratopipra_rubrocapilla_MAM011	0	0	0	rubrocapilla	Rondonia	AVEIRO   	-3.327917	-56.36353	MAM011	1
+Ceratopipra_rubrocapilla_OP077	0	0	0	rubrocapilla	Rondonia	Guajará-Mirim	-10.83333	-64.76	OP077	1
+Ceratopipra_rubrocapilla_OP100	1	1	1	rubrocapilla	Rondonia	Guajará-Mirim	-10.83333	-64.76	OP100	1
+Ceratopipra_rubrocapilla_MPDS608	0	0	0	rubrocapilla	Rondonia	HUMAITÁ1	-7.47	-61.9	MPDS608	1
+Ceratopipra_rubrocapilla_MPDS628	1	1	1	rubrocapilla	Rondonia	HUMAITÁ1	-7.47	-61.9	MPDS628	1
+Ceratopipra_rubrocapilla_MPDS672	0	0	0	rubrocapilla	Rondonia	HUMAITÁ1	-7.47	-61.9	MPDS672	1
+Ceratopipra_rubrocapilla_MPDS776	1	0	0	rubrocapilla	Rondonia	HUMAITÁ2 	-6.55	-61.05	MPDS776	1
+Ceratopipra_rubrocapilla_PIME062	1	1	1	rubrocapilla	Rondonia	Itaituba1	-4.70	-56.50	PIME062	1
+Ceratopipra_rubrocapilla_PIME079	1	1	1	rubrocapilla	Rondonia	Itaituba1	-4.70	-56.50	PIME079	1
+Ceratopipra_rubrocapilla_AMANA034	1	0	1	rubrocapilla	Rondonia	Itaituba2	-5.25	-57.5355	AMANA034	1
+Ceratopipra_rubrocapilla_JATA145	0	0	0	rubrocapilla	Rondonia	Itaituba_JATA	-5.62576	-57.27928	JATA145	1
+Ceratopipra_rubrocapilla_JATA201	0	0	0	rubrocapilla	Rondonia	Itaituba_JATA	-5.62576	-57.27928	JATA201	1
+Ceratopipra_rubrocapilla_JATC147	0	0	0	rubrocapilla	Rondonia	Itaituba_JATC	-5.07325	-56.8559	JATC147	1
+Ceratopipra_rubrocapilla_JATC148	0	0	0	rubrocapilla	Rondonia	Itaituba_JATC	-5.07325	-56.8559	JATC148	1
+Ceratopipra_rubrocapilla_JATC149	0	0	0	rubrocapilla	Rondonia	Itaituba_JATC	-5.07325	-56.8559	JATC149	1
+Ceratopipra_rubrocapilla_PIME169	1	1	1	rubrocapilla	Rondonia	Jacareacanga1	-5.9	-57.7	PIME169	1
+Ceratopipra_rubrocapilla_AMANA137	1	0	1	rubrocapilla	Rondonia	Jacareacanga1	-5.9	-57.7	AMANA137	1
+Ceratopipra_rubrocapilla_PIME450	0	0	0	rubrocapilla	Rondonia	Jacareacanga2	-5.611167	-57.588	PIME450	1
+Ceratopipra_rubrocapilla_PIME460	1	1	1	rubrocapilla	Rondonia	Jacareacanga2	-5.611167	-57.588	PIME460	1
+Ceratopipra_rubrocapilla_MPDS496	0	0	0	rubrocapilla	Rondonia	JIPARANÁ     	-10.43333	-61.65	MPDS496	1
+Ceratopipra_rubrocapilla_JRT021	1	0	0	rubrocapilla	Rondonia	JURUTI 	-2.60	-56.18333	JRT021	1
+Ceratopipra_rubrocapilla_JRT022	0	0	0	rubrocapilla	Rondonia	JURUTI 	-2.60	-56.18333	JRT022	1
+Ceratopipra_rubrocapilla_OM215	1	0	0	rubrocapilla	Rondonia	MachaDOESTE   	-8.90913	-62	OM215	1
+Ceratopipra_rubrocapilla_MAR021	0	0	0	rubrocapilla	Rondonia	Manicoré     	-8.69	-61.4	MAR021	1
+Ceratopipra_rubrocapilla_MAR092	1	1	1	rubrocapilla	Rondonia	Manicoré     	-8.69	-61.4	MAR092	1
+Ceratopipra_rubrocapilla_FPR006	1	1	1	rubrocapilla	Rondonia	Maués  	-4.027111	-58.43489	FPR006	1
+Ceratopipra_rubrocapilla_FPR015	1	1	1	rubrocapilla	Rondonia	Maués  	-4.027111	-58.43489	FPR015	1
+Ceratopipra_rubrocapilla_FPR021	1	1	1	rubrocapilla	Rondonia	Maués  	-4.027111	-58.43489	FPR021	1
+Ceratopipra_rubrocapilla_AMZ551	1	1	1	rubrocapilla	Rondonia	Nova Bandeirantes	-10.38	-58.33	AMZ551	NA
+Ceratopipra_rubrocapilla_AMZ610	1	1	1	rubrocapilla	Rondonia	Nova Bandeirantes	-10.38	-58.33	AMZ610	1
+Ceratopipra_rubrocapilla_ARA010	0	0	0	rubrocapilla	Rondonia	Santarém2	-3.1	-55.6	ARA010	1
+Ceratopipra_rubrocapilla_ARA109	0	0	0	rubrocapilla	Rondonia	Santarém4	-2.783333	-55.6	ARA109	1
+Ceratopipra_rubrocapilla_ARAII010	0	0	0	rubrocapilla	Rondonia	Santarém2	-3.1	-55.6	ARAII010	1
+Ceratopipra_rubrocapilla_ARAII026	0	0	0	rubrocapilla	Rondonia	Santarém2	-3.1	-55.6	ARAII026	1
+Ceratopipra_rubrocapilla_ARAII031	0	0	0	rubrocapilla	Rondonia	Santarém2	-3.1	-55.6	ARAII031	1
+Ceratopipra_rubrocapilla_ARAII033	0	0	0	rubrocapilla	Rondonia	Santarém2	-3.1	-55.6	ARAII033	1
+Ceratopipra_rubrocapilla_ARAII062	0	0	0	rubrocapilla	Rondonia	Santarém3	-2.586833	-55.19516	ARAII062	1
+Ceratopipra_rubrocapilla_ARAII069	0	0	0	rubrocapilla	Rondonia	Santarém1	-2.39825	-55.78836	ARAII069	1
+Ceratopipra_rubrocapilla_PIME024	1	1	1	rubrocapilla	Rondonia	Santarém1	-2.39825	-55.78836	PIME024	1
+Ceratopipra_rubrocapilla_BR033	1	1	1	rubrocapilla	Tapajos	Castelo dos Sonhos	-8.13	-54.93	BR033	NA
+Ceratopipra_rubrocapilla_BR036	1	1	1	rubrocapilla	Tapajos	Serra do Cachimbo	-8.50	-55.50	BR036	NA
+Ceratopipra_rubrocapilla_MSF107	1	0	1	rubrocapilla	Tapajos	Altamira	-9.26211	-54.47129	MSF107	1
+Ceratopipra_rubrocapilla_PPS174	1	1	1	rubrocapilla	Tapajos	Altamira	-9.26211	-54.47129	PPS174	1
+Ceratopipra_rubrocapilla_WM281	1	0	1	rubrocapilla	Tapajos	Belterra 	-3.356111	-54.94917	WM281	1
+Ceratopipra_rubrocapilla_WM293	1	1	1	rubrocapilla	Tapajos	Belterra 	-3.356111	-54.94917	WM293	1
+Ceratopipra_rubrocapilla_WM294	0	0	0	rubrocapilla	Tapajos	Belterra 	-3.356111	-54.94917	WM294	1
+Ceratopipra_rubrocapilla_WM345	0	0	0	rubrocapilla	Tapajos	Belterra 	-3.356111	-54.94917	WM345	1
+Ceratopipra_rubrocapilla_PPS145	0	0	0	rubrocapilla	Tapajos	Guarantã do Norte 	-9.94184	-54.34259	PPS145	1
+Ceratopipra_rubrocapilla_PPS221	1	1	1	rubrocapilla	Tapajos	Guarantã do Norte 	-9.94184	-54.34259	PPS221	NA
+Ceratopipra_rubrocapilla_JATB060	0	0	0	rubrocapilla	Tapajos	Itaituba_JATB	-5.43055	-56.904444	JATB060	1
+Ceratopipra_rubrocapilla_MPDS1220	0	0	0	rubrocapilla	Tapajos	JacareacangaE	-6.518953	-56.44456	MPDS1220	1
+Ceratopipra_rubrocapilla_PIME482	1	1	1	rubrocapilla	Tapajos	JacareacangaE	-6.518953	-56.44456	PIME482	1
+Ceratopipra_rubrocapilla_JTW1135	0	0	0	rubrocapilla	Tapajos	Marcelândia     	-11.0832	-54.32844	JTW1135	1
+Ceratopipra_rubrocapilla_PPS041	1	1	1	rubrocapilla	Tapajos	Marcelândia     	-11.0832	-54.32844	PPS041	NA
+Ceratopipra_rubrocapilla_JTW1220	0	0	0	rubrocapilla	Tapajos	Matupa    	-10.34521	-54.73592	JTW1220	1
+Ceratopipra_rubrocapilla_JTW1230	0	0	0	rubrocapilla	Tapajos	Matupa    	-10.34521	-54.73592	JTW1230	1
+Ceratopipra_rubrocapilla_PPS081	0	0	0	rubrocapilla	Tapajos	Matupa    	-10.34521	-54.73592	PPS081	NA
+Ceratopipra_rubrocapilla_BR163177	0	0	0	rubrocapilla	Tapajos	Novo Progresso_Cachimbo	-7.16	-55.6	BR163177	1
+Ceratopipra_rubrocapilla_CH288	0	0	0	rubrocapilla	Tapajos	Novo Progresso_Cachimbo	-7.16	-55.6	CH288	1
+Ceratopipra_rubrocapilla_CH289	0	0	0	rubrocapilla	Tapajos	Novo Progresso_Cachimbo	-7.16	-55.6	CH289	1
+Ceratopipra_rubrocapilla_CH290	0	0	0	rubrocapilla	Tapajos	Novo Progresso_Cachimbo	-7.16	-55.6	CH290	1
+Ceratopipra_rubrocapilla_FLJA001	0	0	0	rubrocapilla	Tapajos	Novo Progresso (FLONA )	-6.535056	-55.66283	FLJA001	1
+Ceratopipra_rubrocapilla_FLJA085	0	0	0	rubrocapilla	Tapajos	Novo Progresso (FLONA )	-6.535056	-55.66283	FLJA085	1
+Ceratopipra_rubrocapilla_PIME521	1	0	1	rubrocapilla	Tapajos	Novo Progresso_Cachimbo	-7.16	-55.6	PIME521	1
+Ceratopipra_rubrocapilla_PIME522	1	1	1	rubrocapilla	Tapajos	Novo Progresso_Cachimbo	-7.16	-55.6	PIME522	1
+Ceratopipra_rubrocapilla_TLP025	1	1	1	rubrocapilla	Tapajos	Paranaíta1	-9.4	-56.5	TLP025	1
+Ceratopipra_rubrocapilla_TLP123	1	1	1	rubrocapilla	Tapajos	Paranaíta2	-9.56	-56.7	TLP123	1
+Ceratopipra_rubrocapilla_TLPA267	0	0	0	rubrocapilla	Tapajos	Paranaíta1	-9.4	-56.5	TLPA267	1
+Ceratopipra_rubrocapilla_TLPA360	0	0	0	rubrocapilla	Tapajos	Paranaíta2	-9.56	-56.7	TLPA360	1
+Ceratopipra_rubrocapilla_TLPB026	0	0	0	rubrocapilla	Tapajos	Paranaíta1	-9.4	-56.5	TLPB026	1
+Ceratopipra_rubrocapilla_TLPB027	0	0	0	rubrocapilla	Tapajos	Paranaíta1	-9.4	-56.5	TLPB027	1
+Ceratopipra_rubrocapilla_TLPB221	0	0	0	rubrocapilla	Tapajos	Paranaíta2	-9.56	-56.7	TLPB221	1
+Ceratopipra_rubrocapilla_TLPC022	0	0	0	rubrocapilla	Tapajos	Paranaíta7	-9.304333	-57.59214	TLPC022	1
+Ceratopipra_rubrocapilla_TLPC036	0	0	0	rubrocapilla	Tapajos	Paranaíta8	-9.3	-56.78	TLPC036	1
+Ceratopipra_rubrocapilla_TLPC040	0	0	0	rubrocapilla	Tapajos	Paranaíta8	-9.3	-56.78	TLPC040	1
+Ceratopipra_rubrocapilla_TLPC041	0	0	0	rubrocapilla	Tapajos	Paranaíta8	-9.3	-56.78	TLPC041	1
+Ceratopipra_rubrocapilla_TLPC068	0	0	0	rubrocapilla	Tapajos	Paranaíta8	-9.3	-56.78	TLPC068	1
+Ceratopipra_rubrocapilla_TLPC077	0	0	0	rubrocapilla	Tapajos	Paranaíta8	-9.3	-56.78	TLPC077	1
+Ceratopipra_rubrocapilla_TLPC184	0	0	0	rubrocapilla	Tapajos	Paranaíta8	-9.3	-56.78	TLPC184	1
+Ceratopipra_rubrocapilla_TLPC185	0	0	0	rubrocapilla	Tapajos	Paranaíta8	-9.3	-56.78	TLPC185	1
+Ceratopipra_rubrocapilla_MSF052	0	0	0	rubrocapilla	Tapajos	Peixoto Azevedo  	-10.52072	-54.41344	MSF052	1
+Ceratopipra_rubrocapilla_PPS072	0	0	0	rubrocapilla	Tapajos	Peixoto Azevedo  	-10.52072	-54.41344	PPS072	1
+Ceratopipra_rubrocapilla_PIME134	1	1	1	rubrocapilla	Tapajos	Placas   	-3.7915	-54.9485	PIME134	1
+Ceratopipra_rubrocapilla_PIME135	1	1	1	rubrocapilla	Tapajos	Placas   	-3.7915	-54.9485	PIME135	1
+Ceratopipra_rubrocapilla_MSF162	0	0	0	rubrocapilla	Tapajos	Santiago Do Norte 	-13.12606	-54.42907	MSF162	1
+Ceratopipra_rubrocapilla_MF005	1	1	1	rubrocapilla	Tapajos	Trairão	-4.468861	-55.85031	MF005	1
+Ceratopipra_rubrocapilla_MSF198	0	0	0	rubrocapilla	Tapajos	União Do Sul	-11.33302	-54.14937	MSF198	1
+Ceratopipra_rubrocapilla_PPS352	1	0	1	rubrocapilla	Tapajos	União Do Sul	-11.33302	-54.14937	PPS352	1
+Ceratopipra_rubrocapilla_GAPTO140	1	0	0	rubrocapilla	Xingu/Belém	Araguaina	-7.617	-49.374	GAPTO140	2
+Ceratopipra_rubrocapilla_GAPTO259	1	1	1	rubrocapilla	Xingu/Belém	Araguaina	-7.617	-49.374	GAPTO259	1
+Ceratopipra_rubrocapilla_GAPTO268	1	1	1	rubrocapilla	Xingu/Belém	Araguaina	-7.617	-49.374	GAPTO268	2
+Ceratopipra_rubrocapilla_GAPTO277	1	1	1	rubrocapilla	Xingu/Belém	Araguaina	-7.617	-49.374	GAPTO277	1
+Ceratopipra_rubrocapilla_GAPTO289	1	0	0	rubrocapilla	Xingu/Belém	Araguaina	-7.617	-49.374	GAPTO289	2
+Ceratopipra_rubrocapilla_GAPTO327	1	1	1	rubrocapilla	Xingu/Belém	Araguaina	-7.617	-49.374	GAPTO327	1
+Ceratopipra_rubrocapilla_MTMA033	0	0	0	rubrocapilla	Xingu/Belém	Querencia	-12.9	-52.4	MTMA033	1
+Ceratopipra_rubrocapilla_MTMA035	0	0	0	rubrocapilla	Xingu/Belém	Querencia	-12.9	-52.4	MTMA035	1
+Ceratopipra_rubrocapilla_PPBIO221	1	1	1	rubrocapilla	Xingu/Belém	Portel	-1.950	-51.600	PPBIO221	2
+Ceratopipra_rubrocapilla_PPBIO305	1	1	1	rubrocapilla	Xingu/Belém	Portel	-1.950	-51.600	PPBIO305	2
+Ceratopipra_rubrocapilla_PPBIO312	1	0	0	rubrocapilla	Xingu/Belém	Portel	-1.950	-51.600	PPBIO312	2
+Ceratopipra_rubrocapilla_MT087	1	1	1	rubrocapilla	Xingu/Belém	Querencia	-12.9	-52.4	MT087	1
+Ceratopipra_rubrocapilla_MT123	1	1	1	rubrocapilla	Xingu/Belém	Querencia	-12.9	-52.4	MT123	1
+Ceratopipra_rubrocapilla_RDO007	1	1	1	rubrocapilla	Xingu/Belém	Rondon do Pará	-4.769	-48.077	RDO007	NA
+Ceratopipra_rubrocapilla_UHE442	1	1	1	rubrocapilla	Xingu/Belém	Sen. José Porf.	-3.530	-51.720	UHE442	2
+Ceratopipra_rubrocapilla_CAR005	0	0	0	rubrocapilla	Xingu/Belém	Serra dos Carajás	-6.583	-50.400	CAR005	2
+Ceratopipra_rubrocapilla_MFNC067	0	0	0	rubrocapilla	Xingu/Belém	Serra dos Carajás	-6.583	-50.400	MFNC067	1

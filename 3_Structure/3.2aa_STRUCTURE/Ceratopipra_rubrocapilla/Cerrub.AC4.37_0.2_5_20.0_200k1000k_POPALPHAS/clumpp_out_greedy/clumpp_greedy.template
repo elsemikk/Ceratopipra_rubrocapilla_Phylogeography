@@ -1,0 +1,22 @@
+DATATYPE 0 #0 means that the input samples are individuals (vs populations)                         
+INDFILE template.indfile
+POPFILE template.popfile
+OUTFILE template.outfile
+MISCFILE template.miscfile                
+K 100 #value of K
+C 100 #number of samples
+R 100 #number of runs
+M 2 #1 for fullsearch algorithm
+W 1
+S 2
+GREEDY_OPTION 2
+REPEATS 10000
+PERMUTATIONFILE template.permutationfile
+PRINT_PERMUTED_DATA 0                  
+PERMUTED_DATAFILE template.perm_datafile  
+PRINT_EVERY_PERM 0
+EVERY_PERMFILE template.every_permfile
+PRINT_RANDOM_INPUTORDER 0               
+RANDOM_INPUTORDERFILE template.random_inputorderfile
+OVERRIDE_WARNINGS 0
+ORDER_BY_RUN 1

@@ -1,0 +1,9 @@
+TrimmomaticSE: Started with arguments:
+ -phred33 rawdata/C50W3ACXX_7/Ceratopipraipra_rubrocapilla_AMZ610.fq.gz fltrd_adptrlss/fltrd_adptrlss.C50W3ACXX_7_Ceratopipraipra_rubrocapilla_AMZ610.fastq.gz ILLUMINACLIP:adapters.fa:2:7:7 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:40
+Automatically using 1 threads
+Using Long Clipping Sequence: 'AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTA'
+Using Long Clipping Sequence: 'AGATCGGAAGAGCGGTTCAGCAGGAATGCCGAGACCGATCTCGTATGCCGTCTTCTGCTTG'
+Using Long Clipping Sequence: 'AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC'
+ILLUMINACLIP: Using 0 prefix pairs, 3 forward/reverse sequences, 0 forward only sequences, 0 reverse only sequences
+Input Reads: 355212 Surviving: 245411 (69.09%) Dropped: 109801 (30.91%)
+TrimmomaticSE: Completed successfully

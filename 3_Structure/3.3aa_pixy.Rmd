@@ -90,7 +90,7 @@ folder <- "window_500k_37_0.2_5_20.0_subpops" #This sample has Xingu, Tapajos, a
 
 #get a list of chromosomes to read. I have each chromosome in a separate file. This is just the prefix of the pixy files. If you have a single prefix, just define "chroms" as whatever that prefix is.
 #files<-c("chr_1", "chr_1A", "chr_2", "chr_3", "chr_4", "chr_4A", "chr_5", "chr_6", "chr_7", "chr_8", "chr_9", "chr_10", "chr_11", "chr_12", "chr_13", "chr_14", "chr_15", "chr_17", "chr_18", "chr_19", "chr_20", "chr_21", "chr_22", "chr_23", "chr_24", "chr_25", "chr_26", "chr_27", "chr_28", "chr_29") #All autosomes
-files<-c("chr_1", "chr_1A", "chr_2", "chr_3", "chr_4", "chr_4A", "chr_5", "chr_6", "chr_7", "chr_8", "chr_9", "chr_10", "chr_11", "chr_12", "chr_13", "chr_14", "chr_15", "chr_17", "chr_18", "chr_19", "chr_20", "chr_21", "chr_22", "chr_23", "chr_24", "chr_25", "chr_26", "chr_27", "chr_28", "chr_29", "chr_Znopseudo_2het_trimmed") #All chromosomes including chrZ
+files<-c("chr_1", "chr_1A", "chr_2", "chr_3", "chr_4", "chr_4A", "chr_5", "chr_6", "chr_7", "chr_8", "chr_9", "chr_10", "chr_11", "chr_12", "chr_13", "chr_14", "chr_15", "chr_17", "chr_18", "chr_19", "chr_20", "chr_21", "chr_22", "chr_23", "chr_24", "chr_25", "chr_26", "chr_27", "chr_28", "chr_29", "chr_Znopseudo_2het_trimmedP0") #All chromosomes including chrZ
 
 #there are a couple comparisons available to test bioinformatic filters on the Z chromosome, used to test robustness of results (results are qualitatively very similar, but removing the pseudoautosomal region does decrease estimates of diversity quite a bit - not surprising and likely a combination of a real biological difference across the chromosome and increased error rate due to mismapped reads)
 #files<-c("chr_Z") #chrZ without filters to remove pseudoautosomal/chrW region
@@ -789,26 +789,28 @@ pi_df %>%
 # chrZ investigation  
 This investigation is to visualize Fst between males and females to identify the area around the pseudoautosomal region where chrW reads likely map in females.  
 ```{r chrZinv}
+my_y_title <- expression(paste(italic("F")[ST], "  ", "(Male vs. Female ", italic("Ceratopipra rubrocapilla"), ")"))
+
 #plot fst between Males and Females
 statistics <- c("avg_wc_fst")
 pixy_chrZ_investigation_fstdf %>%
   mutate(pop2 = replace_na(pop2, "pi")) %>%
   filter(statistic %in% statistics) %>%
   ggplot(aes(x = (window_pos_1 + window_pos_2)/2, y = value, color = interaction(pop2, pop1)))+
-  geom_point(size = 2, alpha = 1, stroke = 0)+
-  xlab("Chromosome Z")+
-  ylab("Fst (Male vs Females Ceratopipra rubrocapilla)")+
+  geom_point(size = 2, alpha = 0.5, stroke = 0)+
+  #ylab("Fst (Male vs Female Ceratopipra rubrocapilla)")+
+  labs(y=my_y_title, x="Position on Chromosome Z")+
   theme_classic()+
-  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), panel.spacing = unit(0.2, "cm"), strip.background = element_blank(), strip.placement = "outside")+
-  theme(text=element_text(family="Times New Roman"), axis.title.x = element_text(size = 16), legend.text = element_text(size = 16)) +
+  theme(panel.spacing = unit(0.2, "cm"), strip.background = element_blank(), strip.placement = "outside")+
+  theme(text=element_text(family="Times New Roman"), axis.title.x = element_text(size = 12), axis.title.y = element_text(size = 12), legend.text = element_text(size = 16)) +
   theme(legend.position = "none")+ #I prefer to draw my own legend by hand
   scale_colour_manual(values = c("#D55E00")) + #using Ceratopipra themed colours 
-  scale_x_continuous(expand = c(0, 0), limits=c(-1000000,NA)) +
-  scale_y_continuous(expand = c(0, 0), limits = c(0,NA))
-ggsave("fst_MalevsFemale_individualSNPs_Ceratopiprarubrocapilla.png", bg='transparent', width = 60, height = 15, units = "cm")
+  scale_x_continuous(expand = c(0, 0), limits=c(NA,NA)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0,1.05))
+ggsave("Fst_MalevsFemale_individualSNPs_Ceratopiprarubrocapilla.png", bg='transparent', width = 20, height = 10, units = "cm")
 
 
 
 ```
-There is a large peak of high Fst near the 5' end of the chromosome, which is where the pseudoautosomal region seems to be in some other manakins as well. However, there are scattered peaks of high Fst in other areas as well, so we should still implement another filter: removing sites where females are called as heterozygous.
+There is a large peak of high Fst near the 5' end of the chromosome, which is where the pseudoautosomal region seems to be in some other manakins as well. We can exclude this region from downstream analyses. However, there are scattered peaks of high Fst in other areas as well, so we should still implement another filter: removing sites where females are called as heterozygous.
 

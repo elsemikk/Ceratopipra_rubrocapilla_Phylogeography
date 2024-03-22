@@ -1,0 +1,66 @@
+
+Using the parameter settings in the file: 
+''../clumpp_out_greedy/clumpp_greedy.template''
+
+Parameter settings
+----------------------- Main parameters -------------------------
+DATATYPE = 0
+INDFILE = K8.indfile
+POPFILE = 
+OUTFILE = ../clumpp_out_greedy/k8.outfile
+MISCFILE = ../clumpp_out_greedy/k8.miscfile
+K = 8
+C = 69
+R = 10
+M = 2
+W = 1
+S = 2
+- Additional options for the Greedy and LargeKGreedy algorithms -
+GREEDY_OPTION = 2
+REPEATS = 10000
+PERMUTATIONFILE = 
+----------------------- Optional outputs ------------------------
+PRINT_PERMUTED_DATA = 0
+PERMUTED_DATAFILE = 
+PRINT_EVERY_PERM = 0
+EVERY_PERMFILE = 
+PRINT_RANDOM_INPUTORDER = 0
+RANDOM_INPUTORDERFILE = 
+----------------------- Advanced options ------------------------
+OVERRIDE_WARNINGS = 0
+ORDER_BY_RUN = 1
+
+
+In total, 10000 configurations of runs and clusters will be tested.
+
+Results
+------------------------------
+The highest value of H' is: 0.94087315901373
+
+The list of permutations of the clusters that produces that
+H' value is (runs are listed sequentially on separate rows)
+
+1 2 3 4 5 6 7 8 
+7 1 2 3 5 8 6 4 
+2 5 1 7 3 4 8 6 
+1 2 3 5 6 4 8 7 
+6 4 1 8 7 3 5 2 
+3 6 8 1 5 7 4 2 
+3 8 5 7 4 6 2 1 
+1 8 5 2 4 6 3 7 
+1 6 8 3 2 5 4 7 
+6 3 4 8 1 7 5 2 
+
+The pairwise G' values for each pair of runs where the clusters
+of each run are permuted according to the list of permutations above
+
+1.0000 0.9342 0.9939 0.9211 0.9249 0.9343 0.9565 0.9520 0.9322 0.8979 
+0.9342 1.0000 0.9307 0.9374 0.9377 0.9334 0.9471 0.9517 0.9313 0.9107 
+0.9939 0.9307 1.0000 0.9188 0.9215 0.9300 0.9519 0.9475 0.9280 0.8947 
+0.9211 0.9374 0.9188 1.0000 0.9465 0.9380 0.9463 0.9308 0.9379 0.9199 
+0.9249 0.9377 0.9215 0.9465 1.0000 0.9664 0.9571 0.9505 0.9665 0.9340 
+0.9343 0.9334 0.9300 0.9380 0.9664 1.0000 0.9679 0.9619 0.9957 0.9323 
+0.9565 0.9471 0.9519 0.9463 0.9571 0.9679 1.0000 0.9670 0.9665 0.9267 
+0.9520 0.9517 0.9475 0.9308 0.9505 0.9619 0.9670 1.0000 0.9583 0.9168 
+0.9322 0.9313 0.9280 0.9379 0.9665 0.9957 0.9665 0.9583 1.0000 0.9329 
+0.8979 0.9107 0.8947 0.9199 0.9340 0.9323 0.9267 0.9168 0.9329 1.0000 

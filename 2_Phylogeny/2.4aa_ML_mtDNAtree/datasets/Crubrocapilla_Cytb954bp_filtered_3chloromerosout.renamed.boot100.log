@@ -1,0 +1,442 @@
+IQ-TREE multicore version 2.1.3 COVID-edition for Linux 64-bit built Apr 21 2021
+Developed by Bui Quang Minh, James Barbetti, Nguyen Lam Tung,
+Olga Chernomor, Heiko Schmidt, Dominik Schrempf, Michael Woodhams.
+
+Host:    weirlab60 (AVX, 503 GB RAM)
+Command: /home/0_PROGRAMS/iqtree-2.1.3-Linux/bin/iqtree2 -s datasets/Crubrocapilla_Cytb954bp_filtered_3chloromerosout.renamed.fasta -nt AUTO -B 1000 --prefix datasets/Crubrocapilla_Cytb954bp_filtered_3chloromerosout.renamed.boot100
+Seed:    127616 (Using SPRNG - Scalable Parallel Random Number Generator)
+Time:    Fri Nov  3 16:50:42 2023
+Kernel:  AVX - auto-detect threads (120 CPU cores detected)
+
+Reading alignment file datasets/Crubrocapilla_Cytb954bp_filtered_3chloromerosout.renamed.fasta ... Fasta format detected
+Alignment most likely contains DNA/RNA sequences
+Alignment has 142 sequences with 954 columns, 141 distinct patterns
+63 parsimony-informative, 55 singleton sites, 836 constant sites
+              Gap/Ambiguity  Composition  p-value
+   1  B27638_Cchl     0.00%    passed     99.27%
+   2  B9014_Cchl      0.00%    passed     99.13%
+   3  B106768_Cchl    0.00%    passed     98.51%
+   4  CAM107_In      26.83%    passed     95.17%
+   5  CAM009_In       5.24%    passed     95.46%
+   6  UNA018_At       0.00%    passed     99.30%
+   7  UNA002_At       0.00%    passed     99.77%
+   8  UNA110_At       0.00%    passed     99.77%
+   9  UNA088_At       0.00%    passed     99.87%
+  10  UNA124_At       0.00%    passed     99.77%
+  11  CPEII008_At     0.00%    passed     99.77%
+  12  CPE066_At       0.42%    passed     99.90%
+  13  CPE012_At       0.42%    passed     99.94%
+  14  CPE025_At       0.52%    passed     98.97%
+  15  CPE049_At       0.42%    passed     99.32%
+  16  CPE067_At       0.42%    passed     99.32%
+  17  CPE069_At       0.00%    passed     99.72%
+  18  CPE071_At       0.00%    passed     99.72%
+  19  UHE442_Xi       0.00%    passed     99.72%
+  20  PPBIO312_Xi     0.00%    passed     99.52%
+  21  PPBIO221_Xi     0.00%    passed     99.99%
+  22  PPBIO305_Xi     0.00%    passed     99.71%
+  23  GAPTO140_Xi     0.00%    passed     99.52%
+  24  GAPTO268_Xi     0.00%    passed     99.72%
+  25  CAR005_Xi       0.00%    passed     99.99%
+  26  GAPTO289_Xi     0.00%    passed     99.72%
+  27  MFNC067_Xi      0.00%    passed     99.98%
+  28  GAPTO259_Xi     0.00%    passed    100.00%
+  29  GAPTO277_Xi     0.00%    passed    100.00%
+  30  GAPTO327_Xi     0.00%    passed    100.00%
+  31  MT087_Xi        0.00%    passed     99.98%
+  32  MT123_Xi        0.00%    passed     99.94%
+  33  MTMA033_Xi      0.00%    passed    100.00%
+  34  MTMA035_Xi      0.00%    passed     99.98%
+  35  WM281_Ta        0.00%    passed     99.98%
+  36  WM293_Ta        0.00%    passed     99.73%
+  37  WM345_Ta        0.00%    passed     99.98%
+  38  WM294_Ta        0.00%    passed     98.97%
+  39  PIME134_Ta      0.00%    passed     99.67%
+  40  PIME135_Ta      0.00%    passed    100.00%
+  41  PIME062_Ro      0.00%    passed    100.00%
+  42  PIME079_Ro      0.00%    passed    100.00%
+  43  MF005_Ta        0.00%    passed     99.98%
+  44  PIME482_Ta      0.00%    passed     99.40%
+  45  PIME169_Ro      0.00%    passed     99.98%
+  46  MPDS1220_Ta     0.00%    passed     99.98%
+  47  FLJA001_Ta      0.00%    passed     99.97%
+  48  FLJA085_Ta      0.00%    passed     99.94%
+  49  PIME521_Ta      0.00%    passed     99.98%
+  50  PIME522_Ta      0.00%    passed     99.92%
+  51  BR163177_Ta     0.00%    passed     99.98%
+  52  MSF107_Ta       0.00%    passed     99.91%
+  53  PPS174_Ta       0.00%    passed    100.00%
+  54  CH289_Ta        0.94%    passed     99.96%
+  55  CH290_Ta        0.42%    passed     99.99%
+  56  CH288_Ta        0.00%    passed    100.00%
+  57  TLPC036_Ta      0.00%    passed    100.00%
+  58  TLPC040_Ta      0.00%    passed     99.98%
+  59  PPS145_Ta       0.00%    passed     99.98%
+  60  JTW1230_Ta      0.00%    passed     99.98%
+  61  JTW1220_Ta      0.00%    passed     99.98%
+  62  PPS072_Ta       0.00%    passed     99.98%
+  63  MSF052_Ta       0.00%    passed    100.00%
+  64  JTW1135_Ta      0.00%    passed    100.00%
+  65  MSF198_Ta       0.00%    passed     99.83%
+  66  PPS352_Ta       0.00%    passed    100.00%
+  67  MSF162_Ta       0.00%    passed    100.00%
+  68  TLPC022_Ta      0.00%    passed    100.00%
+  69  TLPB221_Ta      0.00%    passed     99.98%
+  70  TLP025_Ta       0.00%    passed     99.95%
+  71  TLP123_Ta       0.00%    passed     99.98%
+  72  TLPB026_Ta      7.76%    passed     97.50%
+  73  TLPB027_Ta      0.00%    passed     99.97%
+  74  TLPA267_Ta      0.00%    passed    100.00%
+  75  TLPC068_Ta      0.00%    passed     99.76%
+  76  TLPC077_Ta     18.76%    passed     98.69%
+  77  TLPA360_Ta      0.00%    passed    100.00%
+  78  TLPC041_Ta      0.00%    passed     99.98%
+  79  TLPC184_Ta      0.00%    passed     99.98%
+  80  TLPC185_Ta      0.00%    passed     99.98%
+  81  ARAII062_Ro     0.00%    passed     99.98%
+  82  ARAII069_Ro     0.00%    passed     99.94%
+  83  PIME024_Ro      0.00%    passed    100.00%
+  84  JRT021_Ro       0.00%    passed     99.70%
+  85  JRT022_Ro       0.00%    passed     99.76%
+  86  ARA109_Ro       0.52%    passed     99.94%
+  87  ARAII010_Ro     0.00%    passed    100.00%
+  88  ARAII026_Ro     0.00%    passed     99.94%
+  89  ARAII033_Ro     0.00%    passed     99.98%
+  90  ARAII031_Ro     0.00%    passed     99.97%
+  91  ARA010_Ro       0.00%    passed     99.98%
+  92  MAM010_Ro      13.94%    passed     99.59%
+  93  MAM011_Ro       0.00%    passed    100.00%
+  94  FPR006_Ro       0.00%    passed     99.91%
+  95  FPR015_Ro       0.00%    passed     99.94%
+  96  FPR021_Ro       0.00%    passed     99.97%
+  97  AMZ610_Ro      16.25%    passed     99.72%
+  98  JATC149_Ro      0.00%    passed     99.95%
+  99  JATC148_Ro      0.00%    passed    100.00%
+ 100  JATC147_Ro      0.00%    passed     99.97%
+ 101  AMANA034_Ro     0.00%    passed     99.97%
+ 102  PIME460_Ro      0.00%    passed     99.99%
+ 103  PIME450_Ro      0.00%    passed     99.88%
+ 104  JATA145_Ro      0.00%    passed     99.75%
+ 105  JATA201_Ro      0.00%    passed     99.76%
+ 106  AMANA137_Ro     0.00%    passed     99.97%
+ 107  MPDS608_Ro      0.00%    passed    100.00%
+ 108  MPDS628_Ro      0.00%    passed    100.00%
+ 109  MPDS672_Ro      0.00%    passed     99.98%
+ 110  MAR021_Ro       0.00%    passed     99.91%
+ 111  MAR092_Ro       0.00%    passed     99.97%
+ 112  JATB060_Ta      0.00%    passed     99.87%
+ 113  MPDS496_Ro      0.00%    passed    100.00%
+ 114  OP077_Ro        0.00%    passed     99.97%
+ 115  OP100_Ro        0.00%    passed     99.98%
+ 116  AMA340_In       0.00%    passed     99.98%
+ 117  AMA601_In       0.00%    passed     99.98%
+ 118  AMA656_In       0.00%    passed     99.91%
+ 119  PUC008_In       0.00%    passed     99.98%
+ 120  PUC007_In       0.00%    passed     99.92%
+ 121  PUC174_In       0.00%    passed     99.72%
+ 122  PUC023_In       0.00%    passed     99.58%
+ 123  RUR038_In       0.00%    passed     99.92%
+ 124  MPDS776_Ro      0.00%    passed     99.67%
+ 125  JUT237_In       0.00%    passed     99.91%
+ 126  JUT094_In       0.00%    passed    100.00%
+ 127  CUJ027_In       0.00%    passed     99.69%
+ 128  CUJ079_In       0.00%    passed     99.87%
+ 129  CUJ072_In       0.00%    passed    100.00%
+ 130  OM112_In        0.00%    passed    100.00%
+ 131  CAM039_In       0.00%    passed    100.00%
+ 132  CAM087_In       0.00%    passed    100.00%
+ 133  CAM097_In       0.00%    passed     99.98%
+ 134  CAM117_In       8.49%    passed     98.60%
+ 135  UFAC476_In      0.00%    passed     99.97%
+ 136  UFAC1007_In     0.00%    passed    100.00%
+ 137  UFAC305_In      0.00%    passed    100.00%
+ 138  UFAC1687_In     0.00%    passed     99.97%
+ 139  OM022_In        0.00%    passed     99.95%
+ 140  OM215_Ro        0.00%    passed     99.95%
+ 141  BR36440_In      0.00%    passed     99.52%
+ 142  UFAC095_In      0.00%    passed     99.98%
+****  TOTAL           0.71%  0 sequences failed composition chi2 test (p-value<5%; df=3)
+NOTE: UNA110_At is identical to UNA002_At but kept for subsequent analysis
+NOTE: CPE067_At is identical to CPE049_At but kept for subsequent analysis
+NOTE: CPE071_At is identical to CPE069_At but kept for subsequent analysis
+NOTE: MTMA035_Xi is identical to MFNC067_Xi but kept for subsequent analysis
+NOTE: GAPTO277_Xi is identical to GAPTO259_Xi but kept for subsequent analysis
+NOTE: PPS145_Ta is identical to MT087_Xi but kept for subsequent analysis
+NOTE: PPS174_Ta is identical to PIME079_Ro but kept for subsequent analysis
+NOTE: MPDS1220_Ta is identical to MF005_Ta but kept for subsequent analysis
+NOTE: ARAII031_Ro is identical to FLJA001_Ta but kept for subsequent analysis
+NOTE: OP077_Ro is identical to TLPB027_Ta but kept for subsequent analysis
+NOTE: JUT094_In is identical to TLPA360_Ta but kept for subsequent analysis
+NOTE: FPR015_Ro is identical to ARAII069_Ro but kept for subsequent analysis
+NOTE: JATA201_Ro is identical to JRT022_Ro but kept for subsequent analysis
+NOTE: AMANA137_Ro is identical to JATC147_Ro but kept for subsequent analysis
+NOTE: 40 identical sequences (see below) will be ignored for subsequent analysis
+NOTE: UNA124_At (identical to UNA002_At) is ignored but added at the end
+NOTE: CPEII008_At (identical to UNA002_At) is ignored but added at the end
+NOTE: GAPTO268_Xi (identical to CPE069_At) is ignored but added at the end
+NOTE: GAPTO289_Xi (identical to CPE069_At) is ignored but added at the end
+NOTE: PIME169_Ro (identical to MFNC067_Xi) is ignored but added at the end
+NOTE: PIME521_Ta (identical to MFNC067_Xi) is ignored but added at the end
+NOTE: TLPC184_Ta (identical to MFNC067_Xi) is ignored but added at the end
+NOTE: TLPC185_Ta (identical to MFNC067_Xi) is ignored but added at the end
+NOTE: ARAII062_Ro (identical to MFNC067_Xi) is ignored but added at the end
+NOTE: MPDS672_Ro (identical to MFNC067_Xi) is ignored but added at the end
+NOTE: AMA601_In (identical to MFNC067_Xi) is ignored but added at the end
+NOTE: CAM097_In (identical to MFNC067_Xi) is ignored but added at the end
+NOTE: GAPTO327_Xi (identical to GAPTO259_Xi) is ignored but added at the end
+NOTE: CH288_Ta (identical to GAPTO259_Xi) is ignored but added at the end
+NOTE: MSF052_Ta (identical to GAPTO259_Xi) is ignored but added at the end
+NOTE: TLPC022_Ta (identical to GAPTO259_Xi) is ignored but added at the end
+NOTE: TLPA267_Ta (identical to GAPTO259_Xi) is ignored but added at the end
+NOTE: PIME024_Ro (identical to GAPTO259_Xi) is ignored but added at the end
+NOTE: JTW1230_Ta (identical to MT087_Xi) is ignored but added at the end
+NOTE: JTW1220_Ta (identical to MT087_Xi) is ignored but added at the end
+NOTE: TLPB221_Ta (identical to MT087_Xi) is ignored but added at the end
+NOTE: TLP123_Ta (identical to MT087_Xi) is ignored but added at the end
+NOTE: TLPC036_Ta (identical to PIME079_Ro) is ignored but added at the end
+NOTE: PPS352_Ta (identical to PIME079_Ro) is ignored but added at the end
+NOTE: MSF162_Ta (identical to PIME079_Ro) is ignored but added at the end
+NOTE: ARAII010_Ro (identical to PIME079_Ro) is ignored but added at the end
+NOTE: MAM011_Ro (identical to PIME079_Ro) is ignored but added at the end
+NOTE: JATC148_Ro (identical to PIME079_Ro) is ignored but added at the end
+NOTE: MPDS628_Ro (identical to PIME079_Ro) is ignored but added at the end
+NOTE: CUJ072_In (identical to PIME079_Ro) is ignored but added at the end
+NOTE: OM112_In (identical to PIME079_Ro) is ignored but added at the end
+NOTE: CAM039_In (identical to PIME079_Ro) is ignored but added at the end
+NOTE: CAM087_In (identical to PIME079_Ro) is ignored but added at the end
+NOTE: UFAC1007_In (identical to PIME079_Ro) is ignored but added at the end
+NOTE: UFAC305_In (identical to PIME079_Ro) is ignored but added at the end
+NOTE: ARAII033_Ro (identical to MF005_Ta) is ignored but added at the end
+NOTE: OP100_Ro (identical to MF005_Ta) is ignored but added at the end
+NOTE: PUC008_In (identical to MF005_Ta) is ignored but added at the end
+NOTE: FPR021_Ro (identical to FLJA001_Ta) is ignored but added at the end
+NOTE: MAR092_Ro (identical to FLJA001_Ta) is ignored but added at the end
+Alignment was printed to datasets/Crubrocapilla_Cytb954bp_filtered_3chloromerosout.renamed.boot100.uniqueseq.phy
+
+For your convenience alignment with unique sequences printed to datasets/Crubrocapilla_Cytb954bp_filtered_3chloromerosout.renamed.boot100.uniqueseq.phy
+
+
+Create initial parsimony tree by phylogenetic likelihood library (PLL)... 0.007 seconds
+Measuring multi-threading efficiency up to 120 CPU cores
+Increase to 10 rounds for branch lengths
+3262 trees examined
+Threads: 1 / Time: 120.021 sec / Speedup: 1.000 / Efficiency: 100% / LogL: -3723
+Threads: 2 / Time: 156.877 sec / Speedup: 0.765 / Efficiency: 38% / LogL: -3723
+BEST NUMBER OF THREADS: 1
+
+Perform fast likelihood tree search using GTR+I+G model...
+Estimate model parameters (epsilon = 5.000)
+Perform nearest neighbor interchange...
+Estimate model parameters (epsilon = 1.000)
+1. Initial log-likelihood: -2358.138
+Optimal log-likelihood: -2358.137
+Rate parameters:  A-C: 2.19017  A-G: 62.22239  A-T: 2.38516  C-G: 0.00010  C-T: 38.16472  G-T: 1.00000
+Base frequencies:  A: 0.273  C: 0.308  G: 0.126  T: 0.293
+Proportion of invariable sites: 0.438
+Gamma shape alpha: 0.591
+Parameters optimization took 1 rounds (0.033 sec)
+Time for fast ML tree search: 0.196 seconds
+
+NOTE: ModelFinder requires 5 MB RAM!
+ModelFinder will test up to 286 DNA models (sample size: 954) ...
+ No. Model         -LnL         df  AIC          AICc         BIC
+  1  GTR+F         2383.925     209 5185.850     5303.834     6201.729
+  2  GTR+F+I       2359.658     210 5139.316     5258.589     6160.055
+  3  GTR+F+G4      2359.098     210 5138.196     5257.470     6158.936
+  4  GTR+F+I+G4    2358.137     211 5138.274     5258.845     6163.874
+  5  GTR+F+R2      2357.806     211 5137.612     5258.184     6163.212
+  6  GTR+F+R3      2357.804     213 5141.609     5264.803     6176.930
+ 15  SYM+I         2409.387     207 5232.774     5348.205     6238.931
+ 16  SYM+G4        2408.802     207 5231.603     5347.035     6237.760
+ 17  SYM+I+G4      2407.618     208 5231.236     5347.939     6242.254
+ 18  SYM+R2        2407.043     208 5230.086     5346.789     6241.104
+ 28  TVM+F+I       2362.549     209 5143.099     5261.082     6158.977
+ 29  TVM+F+G4      2361.948     209 5141.897     5259.880     6157.775
+ 30  TVM+F+I+G4    2360.834     210 5141.668     5260.941     6162.408
+ 31  TVM+F+R2      2360.323     210 5140.646     5259.919     6161.385
+ 41  TVMe+I        2409.468     206 5230.936     5345.105     6232.233
+ 42  TVMe+G4       2408.894     206 5229.787     5343.956     6231.084
+ 43  TVMe+I+G4     2407.715     207 5229.429     5344.861     6235.587
+ 44  TVMe+R2       2407.187     207 5228.373     5343.805     6234.531
+ 54  TIM3+F+I      2361.770     208 5139.540     5256.243     6150.558
+ 55  TIM3+F+G4     2361.199     208 5138.399     5255.102     6149.417
+ 56  TIM3+F+I+G4   2360.249     209 5138.497     5256.481     6154.376
+ 57  TIM3+F+R2     2359.914     209 5137.828     5255.811     6153.706
+ 67  TIM3e+I       2413.172     205 5236.344     5349.259     6232.780
+ 68  TIM3e+G4      2412.588     205 5235.177     5348.091     6231.613
+ 69  TIM3e+I+G4    2411.438     206 5234.876     5349.045     6236.173
+ 70  TIM3e+R2      2410.996     206 5233.992     5348.161     6235.289
+ 80  TIM2+F+I      2360.408     208 5136.815     5253.519     6147.833
+ 81  TIM2+F+G4     2359.846     208 5135.693     5252.396     6146.711
+ 82  TIM2+F+I+G4   2358.886     209 5135.772     5253.756     6151.651
+ 83  TIM2+F+R2     2358.554     209 5135.107     5253.091     6150.986
+ 93  TIM2e+I       2410.130     205 5230.260     5343.175     6226.696
+ 94  TIM2e+G4      2409.543     205 5229.085     5342.000     6225.521
+ 95  TIM2e+I+G4    2408.356     206 5228.711     5342.880     6230.008
+ 96  TIM2e+R2      2407.790     206 5227.579     5341.748     6228.876
+106  TIM+F+I       2361.832     208 5139.663     5256.367     6150.682
+107  TIM+F+G4      2361.271     208 5138.542     5255.245     6149.560
+108  TIM+F+I+G4    2360.318     209 5138.636     5256.620     6154.515
+109  TIM+F+R2      2359.983     209 5137.966     5255.950     6153.845
+119  TIMe+I        2413.223     205 5236.446     5349.360     6232.882
+120  TIMe+G4       2412.634     205 5235.268     5348.183     6231.704
+121  TIMe+I+G4     2411.482     206 5234.963     5349.132     6236.260
+122  TIMe+R2       2411.037     206 5234.073     5348.242     6235.370
+132  TPM3u+F+I     2364.694     207 5143.388     5258.820     6149.546
+133  TPM3u+F+G4    2364.098     207 5142.197     5257.628     6148.354
+134  TPM3u+F+I+G4  2362.998     208 5141.996     5258.699     6153.014
+135  TPM3u+F+R2    2362.488     208 5140.976     5257.679     6151.994
+145  TPM3+F+I      2364.694     207 5143.388     5258.820     6149.546
+146  TPM3+F+G4     2364.098     207 5142.197     5257.628     6148.354
+147  TPM3+F+I+G4   2362.998     208 5141.996     5258.699     6153.014
+148  TPM3+F+R2     2362.488     208 5140.976     5257.679     6151.994
+158  TPM2u+F+I     2363.282     207 5140.564     5255.996     6146.722
+159  TPM2u+F+G4    2362.679     207 5139.358     5254.789     6145.515
+160  TPM2u+F+I+G4  2361.565     208 5139.131     5255.834     6150.149
+161  TPM2u+F+R2    2361.055     208 5138.110     5254.813     6149.128
+171  TPM2+F+I      2363.282     207 5140.564     5255.996     6146.722
+172  TPM2+F+G4     2362.679     207 5139.357     5254.789     6145.515
+173  TPM2+F+I+G4   2361.565     208 5139.131     5255.834     6150.149
+174  TPM2+F+R2     2361.055     208 5138.110     5254.813     6149.128
+184  K3Pu+F+I      2364.774     207 5143.547     5258.979     6149.705
+185  K3Pu+F+G4     2364.172     207 5142.344     5257.776     6148.502
+186  K3Pu+F+I+G4   2363.069     208 5142.137     5258.841     6153.155
+187  K3Pu+F+R2     2362.558     208 5141.115     5257.819     6152.133
+197  K3P+I         2413.312     204 5234.624     5346.293     6226.200
+198  K3P+G4        2412.734     204 5233.468     5345.137     6225.043
+199  K3P+I+G4      2411.589     205 5233.177     5346.092     6229.613
+200  K3P+R2        2411.181     205 5232.363     5345.277     6228.799
+210  TN+F+I        2361.858     207 5137.717     5253.148     6143.874
+211  TN+F+G4       2361.299     207 5136.598     5252.030     6142.755
+212  TN+F+I+G4     2360.346     208 5136.692     5253.395     6147.710
+213  TN+F+R2       2360.011     208 5136.021     5252.724     6147.039
+223  TNe+I         2413.261     204 5234.522     5346.191     6226.097
+224  TNe+G4        2412.673     204 5233.346     5345.015     6224.921
+225  TNe+I+G4      2411.520     205 5233.041     5345.955     6229.477
+226  TNe+R2        2411.077     205 5232.155     5345.069     6228.591
+236  HKY+F+I       2364.801     206 5141.603     5255.772     6142.900
+237  HKY+F+G4      2364.201     206 5140.403     5254.571     6141.699
+238  HKY+F+I+G4    2363.097     207 5140.194     5255.626     6146.352
+239  HKY+F+R2      2362.587     207 5139.173     5254.605     6145.331
+249  K2P+I         2413.351     203 5232.703     5343.135     6219.418
+250  K2P+G4        2412.774     203 5231.548     5341.980     6218.262
+251  K2P+I+G4      2411.629     204 5231.258     5342.927     6222.833
+252  K2P+R2        2411.224     204 5230.447     5342.116     6222.023
+262  F81+F+I       2484.527     205 5379.054     5491.969     6375.490
+263  F81+F+G4      2483.948     205 5377.896     5490.811     6374.332
+264  F81+F+I+G4    2482.954     206 5377.908     5492.076     6379.204
+265  F81+F+R2      2482.666     206 5377.332     5491.501     6378.629
+275  JC+I          2535.933     202 5475.867     5585.071     6457.721
+276  JC+G4         2535.335     202 5474.670     5583.874     6456.524
+277  JC+I+G4       2534.269     203 5474.538     5584.970     6461.253
+278  JC+R2         2533.935     203 5473.869     5584.301     6460.584
+Akaike Information Criterion:           TIM2+F+R2
+Corrected Akaike Information Criterion: TN+F+G4
+Bayesian Information Criterion:         HKY+F+G4
+Best-fit model: HKY+F+G4 chosen according to BIC
+
+All model information printed to datasets/Crubrocapilla_Cytb954bp_filtered_3chloromerosout.renamed.boot100.model.gz
+CPU time for ModelFinder: 453.773 seconds (0h:7m:33s)
+Wall-clock time for ModelFinder: 291.853 seconds (0h:4m:51s)
+Generating 1000 samples for ultrafast bootstrap (seed: 127616)...
+
+NOTE: 2 MB RAM (0 GB) is required!
+Estimate model parameters (epsilon = 0.100)
+1. Initial log-likelihood: -2364.201
+Optimal log-likelihood: -2364.201
+Rate parameters:  A-C: 1.00000  A-G: 25.87764  A-T: 1.00000  C-G: 1.00000  C-T: 25.87764  G-T: 1.00000
+Base frequencies:  A: 0.273  C: 0.308  G: 0.126  T: 0.293
+Gamma shape alpha: 0.164
+Parameters optimization took 1 rounds (0.013 sec)
+Computing ML distances based on estimated model parameters...
+Computing ML distances took 0.160177 sec (of wall-clock time) 0.160185 sec(of CPU time)
+Computing RapidNJ tree took 0.001730 sec (of wall-clock time) 0.001729 sec (of CPU time)
+Log-likelihood of RapidNJ tree: -2373.406
+--------------------------------------------------------------------
+|             INITIALIZING CANDIDATE TREE SET                      |
+--------------------------------------------------------------------
+Generating 98 parsimony trees... 0.366 second
+Computing log-likelihood of 98 initial trees ... 0.450 seconds
+Current best score: -2360.569
+
+Do NNI search on 20 best initial trees
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 1: -2360.557
+BETTER TREE FOUND at iteration 5: -2360.554
+Iteration 10 / LogL: -2362.884 / Time: 0h:0m:2s
+Iteration 20 / LogL: -2364.559 / Time: 0h:0m:3s
+Finish initializing candidate tree set (20)
+Current best tree score: -2360.554 / CPU time: 3.230
+Number of iterations: 20
+--------------------------------------------------------------------
+|               OPTIMIZING CANDIDATE TREE SET                      |
+--------------------------------------------------------------------
+Iteration 30 / LogL: -2378.811 / Time: 0h:0m:5s (0h:0m:14s left)
+Iteration 40 / LogL: -2360.574 / Time: 0h:0m:7s (0h:0m:12s left)
+Iteration 50 / LogL: -2360.579 / Time: 0h:0m:9s (0h:0m:10s left)
+Log-likelihood cutoff on original alignment: -2386.617
+Iteration 60 / LogL: -2360.577 / Time: 0h:0m:11s (0h:0m:9s left)
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 62: -2360.523
+Iteration 70 / LogL: -2360.534 / Time: 0h:0m:14s (0h:0m:18s left)
+Iteration 80 / LogL: -2360.540 / Time: 0h:0m:16s (0h:0m:16s left)
+Iteration 90 / LogL: -2360.526 / Time: 0h:0m:18s (0h:0m:14s left)
+Iteration 100 / LogL: -2360.531 / Time: 0h:0m:20s (0h:0m:12s left)
+Log-likelihood cutoff on original alignment: -2386.617
+NOTE: Bootstrap correlation coefficient of split occurrence frequencies: 0.989
+NOTE: UFBoot does not converge, continue at least 100 more iterations
+Iteration 110 / LogL: -2365.138 / Time: 0h:0m:22s (0h:0m:18s left)
+Iteration 120 / LogL: -2360.533 / Time: 0h:0m:25s (0h:0m:16s left)
+Iteration 130 / LogL: -2360.529 / Time: 0h:0m:27s (0h:0m:14s left)
+Iteration 140 / LogL: -2360.537 / Time: 0h:0m:29s (0h:0m:12s left)
+Iteration 150 / LogL: -2366.322 / Time: 0h:0m:31s (0h:0m:10s left)
+Log-likelihood cutoff on original alignment: -2387.222
+Iteration 160 / LogL: -2360.537 / Time: 0h:0m:34s (0h:0m:8s left)
+Iteration 170 / LogL: -2360.534 / Time: 0h:0m:36s (0h:0m:6s left)
+Iteration 180 / LogL: -2360.529 / Time: 0h:0m:39s (0h:0m:4s left)
+Iteration 190 / LogL: -2365.706 / Time: 0h:0m:41s (0h:0m:2s left)
+Iteration 200 / LogL: -2360.598 / Time: 0h:0m:43s (0h:0m:0s left)
+Log-likelihood cutoff on original alignment: -2387.034
+NOTE: Bootstrap correlation coefficient of split occurrence frequencies: 0.996
+TREE SEARCH COMPLETED AFTER 200 ITERATIONS / Time: 0h:0m:44s
+
+--------------------------------------------------------------------
+|                    FINALIZING TREE SEARCH                        |
+--------------------------------------------------------------------
+Performs final model parameters optimization
+Estimate model parameters (epsilon = 0.010)
+1. Initial log-likelihood: -2360.523
+Optimal log-likelihood: -2360.523
+Rate parameters:  A-C: 1.00000  A-G: 25.88128  A-T: 1.00000  C-G: 1.00000  C-T: 25.88128  G-T: 1.00000
+Base frequencies:  A: 0.273  C: 0.308  G: 0.126  T: 0.293
+Gamma shape alpha: 0.181
+Parameters optimization took 1 rounds (0.013 sec)
+BEST SCORE FOUND : -2360.523
+Creating bootstrap support values...
+Split supports printed to NEXUS file datasets/Crubrocapilla_Cytb954bp_filtered_3chloromerosout.renamed.boot100.splits.nex
+Total tree length: 0.169
+
+Total number of iterations: 200
+CPU time used for tree search: 44.078 sec (0h:0m:44s)
+Wall-clock time used for tree search: 43.950 sec (0h:0m:43s)
+Total CPU time used: 44.598 sec (0h:0m:44s)
+Total wall-clock time used: 44.456 sec (0h:0m:44s)
+
+Computing bootstrap consensus tree...
+Reading input file datasets/Crubrocapilla_Cytb954bp_filtered_3chloromerosout.renamed.boot100.splits.nex...
+102 taxa and 3360 splits.
+Consensus tree written to datasets/Crubrocapilla_Cytb954bp_filtered_3chloromerosout.renamed.boot100.contree
+Reading input trees file datasets/Crubrocapilla_Cytb954bp_filtered_3chloromerosout.renamed.boot100.contree
+Log-likelihood of consensus tree: -2363.554
+
+Analysis results written to: 
+  IQ-TREE report:                datasets/Crubrocapilla_Cytb954bp_filtered_3chloromerosout.renamed.boot100.iqtree
+  Maximum-likelihood tree:       datasets/Crubrocapilla_Cytb954bp_filtered_3chloromerosout.renamed.boot100.treefile
+  Likelihood distances:          datasets/Crubrocapilla_Cytb954bp_filtered_3chloromerosout.renamed.boot100.mldist
+
+Ultrafast bootstrap approximation results written to:
+  Split support values:          datasets/Crubrocapilla_Cytb954bp_filtered_3chloromerosout.renamed.boot100.splits.nex
+  Consensus tree:                datasets/Crubrocapilla_Cytb954bp_filtered_3chloromerosout.renamed.boot100.contree
+  Screen log file:               datasets/Crubrocapilla_Cytb954bp_filtered_3chloromerosout.renamed.boot100.log
+
+Date and Time: Fri Nov  3 16:56:18 2023

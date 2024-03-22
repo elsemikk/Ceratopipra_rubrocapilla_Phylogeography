@@ -1,0 +1,472 @@
+---
+title: "PCoA of Ceratopipra rubrocapilla"
+author: "Else Mikkelsen"
+date: "2023-05-09"
+output: html_document
+---
+
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(cache = TRUE, cache.lazy = FALSE)
+knitr::opts_knit$set(root.dir = '~/Documents/GitHub/Ceratopipra_rubrocapilla_Phylogeography/3_Structure/3.1aa_PCA')
+
+library(tidyverse)
+library(ggrepel)
+library(dartR)
+```
+
+This page is the code used to perform Principal Coordinates Analysis of GBS data from *Ceratopipra rubrocapilla*.
+
+Before loading the PCoA data, I will load some metadata that includes information on which population each sample belongs to.
+```{r load_metatdata}
+#read in the metadata
+rubrocapilla_metadata <- read.delim(file="Ceratopipra_rubrocapilla_metadata.txt", sep="\t", header=FALSE)
+#colnames(rubrocapilla_metadata)<-c("SampleID", "Species", "Population", "Locality", "Latitude", "Longitude", "Code", "Haplogroup") 
+colnames(rubrocapilla_metadata)<-c("SampleID", "Code", "Species", "Population", "Locality", "Latitude", "Longitude") 
+```
+
+The first step is to import the data from a VCF.gz file, generate a matrix of Euclidean distances using the dartR package, and then perform PCoA on the matrix.
+```{r pcoa}
+#import the VCF data into R
+#this is the dataset to be used in the publication for rubrocapilla
+vcf <- vcfR::read.vcfR(file = "Input_data/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.thinned10k.forSVD.AC4.37_0.2_5_20.0.vcf.gz", verbose = 5)
+
+#convert the VCF data to a genlight object that can be used by dartR
+gl <- vcfR::vcfR2genlight(vcf)
+#generate a matrix of Euclidean distances between each sample. make sure to scale it to account for missing data
+D <- gl.dist.ind(gl, method="Euclidean", scale=TRUE)
+#perform a PCoA on the distance matrix
+pc <- gl.pcoa(D)
+
+#format into a dataframe that we can save, and later plot
+PcoAdf<-NULL
+PcoAdf$PC1<-pc$scores[,1]
+PcoAdf$PC2<-pc$scores[,2]
+PcoAdf$PC3<-pc$scores[,3]
+PcoAdf$PC4<-pc$scores[,4]
+PcoAdf$PC5<-pc$scores[,5]
+PcoAdf<- as.data.frame(PcoAdf)
+PcoAdf$SampleID<-rownames(PcoAdf)
+
+#merge the dataframe with the metadata in order to assign samples to populations. This assumes that both dataframes have a column named "SampleID" that matches between the two dataframes.
+PcoAdf<-merge(PcoAdf, rubrocapilla_metadata, by="SampleID")
+```
+
+Now we can make some exploratory plots before saving a more nicely formatted version for publication.
+```{R exploratory_plots}
+#plot the data
+
+#choose colour palette
+cbbPalette <- c("#D55E00", "#CC79A7", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#E69F00", "#D55E00", "#CC79A7", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#E69F00")
+
+#fitst, plot PC1 vs PC2
+ggplot(PcoAdf, aes(PC1, PC2, color=Population)) +
+  geom_point(size=3) +
+  geom_point(data=PcoAdf %>% filter(Code == "MT087"), pch=20,size=7,colour="#0072b2")+
+  geom_point(data=PcoAdf %>% filter(Code == "MT123"), pch=20,size=7,colour="#0072b2")+
+  geom_point(data=PcoAdf %>% filter(Code == "OP100"), pch=20,size=7,colour="#0072b2")+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ551"), pch=20,size=7,colour="#0072b2")+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ610"), pch=20,size=7,colour="#0072b2")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS352"), pch=20,size=7,colour="#0072b2")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS221"), pch=20,size=7,colour="#0072b2")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS041"), pch=20,size=7,colour="#0072b2")+
+  geom_point(data=PcoAdf %>% filter(Code == "MT087"), size=3,colour="#F0E442")+
+  geom_point(data=PcoAdf %>% filter(Code == "MT123"), size=3,colour="#F0E442")+
+  geom_point(data=PcoAdf %>% filter(Code == "OP100"), size=3,colour="#56B4E9")+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ551"), size=3,colour="#56B4E9")+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ610"), size=3,colour="#56B4E9")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS352"), size=3,colour="#009E73")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS221"), size=3,colour="#009E73")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS041"), size=3,colour="#009E73")+
+  geom_text_repel(aes(label=SampleID), size=2, max.overlaps=50) +#The part with geom_text_repel adds easy-readable labels. 
+  xlab(paste0("PC1: ",100*pc$eig[[1]]/sum(pc$eig),"% variance")) +
+  ylab(paste0("PC2: ",100*pc$eig[[2]]/sum(pc$eig),"% variance"))+
+  scale_color_manual(values=cbbPalette)+
+  theme_classic()+
+  ggtitle("PCoA")
+
+#let's see how it corresponds to latitude and longitude
+ggplot(PcoAdf, aes(PC1, PC2, color=as.numeric(Latitude))) +
+  geom_point(data=PcoAdf %>% filter(Code == "MT087"), pch=20,size=7,colour="#E69F00")+
+  geom_point(data=PcoAdf %>% filter(Code == "MT123"), pch=20,size=7,colour="#E69F00")+
+  geom_point(data=PcoAdf %>% filter(Code == "OP100"), pch=20,size=7,colour="#E69F00")+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ551"), pch=20,size=7,colour="#E69F00")+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ610"), pch=20,size=7,colour="#E69F00")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS352"), pch=20,size=7,colour="#E69F00")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS221"), pch=20,size=7,colour="#E69F00")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS041"), pch=20,size=7,colour="#E69F00")+
+  geom_point(size=3) +
+  geom_text_repel(aes(label=SampleID), size=2, max.overlaps=50) +#The part with geom_text_repel adds easy-readable labels. 
+  xlab(paste0("PC1: ",100*pc$eig[[1]]/sum(pc$eig),"% variance")) +
+  ylab(paste0("PC2: ",100*pc$eig[[2]]/sum(pc$eig),"% variance"))+
+  theme_classic()+
+  ggtitle("PCoA")
+
+ggplot(PcoAdf, aes(PC1, PC2, color=as.numeric(Longitude))) +
+  geom_point(data=PcoAdf %>% filter(Code == "MT087"), pch=20,size=7,colour="#E69F00")+
+  geom_point(data=PcoAdf %>% filter(Code == "MT123"), pch=20,size=7,colour="#E69F00")+
+  geom_point(data=PcoAdf %>% filter(Code == "OP100"), pch=20,size=7,colour="#E69F00")+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ551"), pch=20,size=7,colour="#E69F00")+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ610"), pch=20,size=7,colour="#E69F00")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS352"), pch=20,size=7,colour="#E69F00")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS221"), pch=20,size=7,colour="#E69F00")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS041"), pch=20,size=7,colour="#E69F00")+
+  geom_point(size=3) +
+  geom_text_repel(aes(label=SampleID), size=2, max.overlaps=50) +#The part with geom_text_repel adds easy-readable labels. 
+  xlab(paste0("PC1: ",100*pc$eig[[1]]/sum(pc$eig),"% variance")) +
+  ylab(paste0("PC2: ",100*pc$eig[[2]]/sum(pc$eig),"% variance"))+
+  theme_classic()+
+  ggtitle("PCoA")
+
+#Let's look at PC3 vs PC4
+ggplot(PcoAdf, aes(PC3, PC4, color=Population)) +
+  geom_point(data=PcoAdf %>% filter(Code == "MT087"), pch=20,size=7,colour="#E69F00")+
+  geom_point(data=PcoAdf %>% filter(Code == "MT123"), pch=20,size=7,colour="#E69F00")+
+  geom_point(data=PcoAdf %>% filter(Code == "OP100"), pch=20,size=7,colour="#E69F00")+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ551"), pch=20,size=7,colour="#E69F00")+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ610"), pch=20,size=7,colour="#E69F00")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS352"), pch=20,size=7,colour="#E69F00")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS221"), pch=20,size=7,colour="#E69F00")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS041"), pch=20,size=7,colour="#E69F00")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS352"), pch=20,size=7,colour="grey")+
+  geom_point(data=PcoAdf %>% filter(Code == "AMANA034"), pch=20,size=7,colour="grey")+
+  geom_point(data=PcoAdf %>% filter(Code == "BR364-040"), pch=20,size=7,colour="grey")+
+  geom_point(data=PcoAdf %>% filter(SampleID == "Ceratopipra_rubrocapilla_GAPTO289"), pch=20,size=7,colour="green")+
+  geom_point(data=PcoAdf %>% filter(SampleID == "Ceratopipra_rubrocapilla_OM215"), pch=20,size=7,colour="green")+
+  geom_point(data=PcoAdf %>% filter(SampleID == "Ceratopipra_rubrocapilla_PPBIO312"), pch=20,size=7,colour="green")+
+  geom_point(data=PcoAdf %>% filter(SampleID == "Ceratopipra_rubrocapilla_CPE071"), pch=20,size=7,colour="red")+
+  geom_point(size=3) +
+    #geom_text_repel(aes(label=Locality), size=2, max.overlaps=50) +#The part with geom_text_repel adds easy-readable labels. 
+  xlab(paste0("PC3: ",100*pc$eig[[3]]/sum(pc$eig),"% variance")) +
+  ylab(paste0("PC4: ",100*pc$eig[[4]]/sum(pc$eig),"% variance"))+
+  scale_color_manual(values=cbbPalette)+
+  theme_classic()+
+  ggtitle("PCoA")
+
+#let's look at 1 vs 5
+ggplot(PcoAdf, aes(PC1, PC5, color=Population)) +
+  geom_point(data=PcoAdf %>% filter(Code == "MT087"), pch=20,size=7,colour="#E69F00")+
+  geom_point(data=PcoAdf %>% filter(Code == "MT123"), pch=20,size=7,colour="#E69F00")+
+  geom_point(data=PcoAdf %>% filter(Code == "OP100"), pch=20,size=7,colour="#E69F00")+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ551"), pch=20,size=7,colour="#E69F00")+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ610"), pch=20,size=7,colour="#E69F00")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS352"), pch=20,size=7,colour="#E69F00")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS221"), pch=20,size=7,colour="#E69F00")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS041"), pch=20,size=7,colour="#E69F00")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS352"), pch=20,size=7,colour="grey")+
+  geom_point(data=PcoAdf %>% filter(Code == "AMANA034"), pch=20,size=7,colour="grey")+
+  geom_point(data=PcoAdf %>% filter(Code == "BR364-040"), pch=20,size=7,colour="grey")+
+  geom_point(data=PcoAdf %>% filter(SampleID == "Ceratopipra_rubrocapilla_GAPTO289"), pch=20,size=7,colour="green")+
+  geom_point(data=PcoAdf %>% filter(SampleID == "Ceratopipra_rubrocapilla_OM215"), pch=20,size=7,colour="green")+
+  geom_point(data=PcoAdf %>% filter(SampleID == "Ceratopipra_rubrocapilla_PPBIO312"), pch=20,size=7,colour="green")+
+  geom_point(data=PcoAdf %>% filter(SampleID == "Ceratopipra_rubrocapilla_CPE071"), pch=20,size=7,colour="red")+
+  geom_point(size=3) +
+  geom_text_repel(aes(label=Locality), size=2, max.overlaps=50) +#The part with geom_text_repel adds easy-readable labels. 
+  xlab(paste0("PC1: ",100*pc$eig[[1]]/sum(pc$eig),"% variance")) +
+  ylab(paste0("PC5: ",100*pc$eig[[5]]/sum(pc$eig),"% variance"))+
+  scale_color_manual(values=cbbPalette)+
+  theme_classic()+
+  ggtitle("PCoA")
+
+```
+
+# Test robustness of results
+Before finishing, I will test an additional set of datasets with different filters in order to assess the robustness of my conclusions to choices of bioinformatic filters.
+
+All of the different datasets for *Ceratopipra rubrocapilla* show the same patterns, with the Atlantic Forest forming a separate cluster from the Amazonians, and the Amazonian populations forming a smear that is more or less partitioned by interfluve. The headwaters samples tend to cluster with Rondonia instead of their own interfluve, but the Xingu interfluve samples are sometimes thrown far out of the Amazonian cluster. The exact placement of each sample varies somewhat between datasets, but these broad patterns remain constant, so our interpretations are robust to the choice of filters that we tested.
+
+```{r additional_datasets}
+#test additional filters to ensure that results are robust
+
+#this dataset has been most heavily filtered for missing data, including removing samples with high missingness. Patterns are the same.
+vcf6 <- vcfR::read.vcfR(file = "Input_data/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.thinned5k.forSVD.37_0.15_5_20.0.vcf.gz", verbose = 5)
+
+#check a few other filtering strategies to ensure that the results are not sensitive to choice of filters. Results are qualitatively the same. Position of the two MT samples is a bit unstable in PC1vsPC2, unsurprising since they are differentiated along a different PC axis.
+vcf7 <- vcfR::read.vcfR(file = "Input_data/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.thinned10k.forSVD.37_0.4_5_20.0.vcf.gz", verbose = 5)
+vcf8 <- vcfR::read.vcfR(file = "Input_data/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.thinned10k.intergenic.forSVD.37_0.4_5_20.0.vcf.gz", verbose = 5)
+vcf9 <- vcfR::read.vcfR(file = "Input_data/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.thinned5k.forSVD.37_0.2_5_20.0.vcf.gz", verbose = 5)
+vcf10 <- vcfR::read.vcfR(file = "Input_data/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.thinned5k.forSVD.37_0.4_5_20.0.vcf.gz", verbose = 5)
+vcf11 <- vcfR::read.vcfR(file = "Input_data/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.thinned5k.intergenic.forSVD.37_0.4_5_20.0.vcf.gz", verbose = 5)
+
+# filter for min allele count greater than 1 (i.e., allowing singleton homozygotes or doubleton heterozygotes)
+vcf12 <- vcfR::read.vcfR(file = "Input_data/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.thinned10k.forSVD.37_0.2_5_20.0.vcf.gz", verbose = 5)
+
+gl6 <- vcfR::vcfR2genlight(vcf6)
+D6 <- gl.dist.ind(gl6, method="Euclidean", scale=TRUE)
+pc6 <- gl.pcoa(D6)
+gl7 <- vcfR::vcfR2genlight(vcf7)
+D7 <- gl.dist.ind(gl7, method="Euclidean", scale=TRUE)
+pc7 <- gl.pcoa(D7)
+gl8 <- vcfR::vcfR2genlight(vcf8)
+D8 <- gl.dist.ind(gl8, method="Euclidean", scale=TRUE)
+pc8 <- gl.pcoa(D8)
+gl9 <- vcfR::vcfR2genlight(vcf9)
+D9 <- gl.dist.ind(gl9, method="Euclidean", scale=TRUE)
+pc9 <- gl.pcoa(D9)
+gl10 <- vcfR::vcfR2genlight(vcf10)
+D10 <- gl.dist.ind(gl10, method="Euclidean", scale=TRUE)
+pc10 <- gl.pcoa(D10)
+gl11 <- vcfR::vcfR2genlight(vcf11)
+D11 <- gl.dist.ind(gl11, method="Euclidean", scale=TRUE)
+pc11 <- gl.pcoa(D11)
+gl12 <- vcfR::vcfR2genlight(vcf12)
+D12 <- gl.dist.ind(gl12, method="Euclidean", scale=TRUE)
+pc12 <- gl.pcoa(D12)
+
+#format into a dataframe that we can save, and later plot
+PcoAdf6<-NULL
+PcoAdf6$PC1<-pc6$scores[,1]
+PcoAdf6$PC2<-pc6$scores[,2]
+PcoAdf6$PC3<-pc6$scores[,3]
+PcoAdf6$PC4<-pc6$scores[,4]
+PcoAdf6$PC5<-pc6$scores[,5]
+PcoAdf6<- as.data.frame(PcoAdf6)
+PcoAdf6$SampleID<-rownames(PcoAdf6)
+
+PcoAdf7<-NULL
+PcoAdf7$PC1<-pc7$scores[,1]
+PcoAdf7$PC2<-pc7$scores[,2]
+PcoAdf7$PC3<-pc7$scores[,3]
+PcoAdf7$PC4<-pc7$scores[,4]
+PcoAdf7$PC5<-pc7$scores[,5]
+PcoAdf7<- as.data.frame(PcoAdf7)
+PcoAdf7$SampleID<-rownames(PcoAdf7)
+
+PcoAdf8<-NULL
+PcoAdf8$PC1<-pc8$scores[,1]
+PcoAdf8$PC2<-pc8$scores[,2]
+PcoAdf8$PC3<-pc8$scores[,3]
+PcoAdf8$PC4<-pc8$scores[,4]
+PcoAdf8$PC5<-pc8$scores[,5]
+PcoAdf8<- as.data.frame(PcoAdf8)
+PcoAdf8$SampleID<-rownames(PcoAdf8)
+
+PcoAdf9<-NULL
+PcoAdf9$PC1<-pc9$scores[,1]
+PcoAdf9$PC2<-pc9$scores[,2]
+PcoAdf9$PC3<-pc9$scores[,3]
+PcoAdf9$PC4<-pc9$scores[,4]
+PcoAdf9$PC5<-pc9$scores[,5]
+PcoAdf9<- as.data.frame(PcoAdf9)
+PcoAdf9$SampleID<-rownames(PcoAdf9)
+
+PcoAdf10<-NULL
+PcoAdf10$PC1<-pc10$scores[,1]
+PcoAdf10$PC2<-pc10$scores[,2]
+PcoAdf10$PC3<-pc10$scores[,3]
+PcoAdf10$PC4<-pc10$scores[,4]
+PcoAdf10$PC5<-pc10$scores[,5]
+PcoAdf10<- as.data.frame(PcoAdf10)
+PcoAdf10$SampleID<-rownames(PcoAdf10)
+
+PcoAdf11<-NULL
+PcoAdf11$PC1<-pc11$scores[,1]
+PcoAdf11$PC2<-pc11$scores[,2]
+PcoAdf11$PC3<-pc11$scores[,3]
+PcoAdf11$PC4<-pc11$scores[,4]
+PcoAdf11$PC5<-pc11$scores[,5]
+PcoAdf11<- as.data.frame(PcoAdf11)
+PcoAdf11$SampleID<-rownames(PcoAdf11)
+
+PcoAdf12<-NULL
+PcoAdf12$PC1<-pc12$scores[,1]
+PcoAdf12$PC2<-pc12$scores[,2]
+PcoAdf12$PC3<-pc12$scores[,3]
+PcoAdf12$PC4<-pc12$scores[,4]
+PcoAdf12$PC5<-pc12$scores[,5]
+PcoAdf12<- as.data.frame(PcoAdf12)
+PcoAdf12$SampleID<-rownames(PcoAdf12)
+
+
+PcoAdf6<-merge(PcoAdf6, rubrocapilla_metadata, by="SampleID")
+PcoAdf7<-merge(PcoAdf7, rubrocapilla_metadata, by="SampleID")
+PcoAdf8<-merge(PcoAdf8, rubrocapilla_metadata, by="SampleID")
+PcoAdf9<-merge(PcoAdf9, rubrocapilla_metadata, by="SampleID")
+PcoAdf10<-merge(PcoAdf10, rubrocapilla_metadata, by="SampleID")
+PcoAdf11<-merge(PcoAdf11, rubrocapilla_metadata, by="SampleID")
+PcoAdf12<-merge(PcoAdf12, rubrocapilla_metadata, by="SampleID")
+
+```
+
+Then, plot these test datasets.
+```{r plot_testers}
+cbbPalette <- c("#E69F00", "#CC79A7", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#E69F00", "#D55E00", "#CC79A7", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#E69F00")
+
+#save a function to plot a PCoA customized for rubrocapilla
+plot_rubrocapillaPCoA <- function(PcoAdf, pc){
+  plot <- ggplot(PcoAdf, aes(PC1, PC2, color=Population)) +
+  geom_point(size=3) +
+  geom_point(data=PcoAdf %>% filter(Code == "MT087"), pch=20,size=7,colour="#0072b2")+
+  geom_point(data=PcoAdf %>% filter(Code == "MT123"), pch=20,size=7,colour="#0072b2")+
+  geom_point(data=PcoAdf %>% filter(Code == "OP100"), pch=20,size=7,colour="#0072b2")+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ551"), pch=20,size=7,colour="#0072b2")+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ610"), pch=20,size=7,colour="#0072b2")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS352"), pch=20,size=7,colour="#0072b2")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS221"), pch=20,size=7,colour="#0072b2")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS041"), pch=20,size=7,colour="#0072b2")+
+  geom_point(data=PcoAdf %>% filter(Code == "MT087"), size=3,colour="#F0E442")+
+  geom_point(data=PcoAdf %>% filter(Code == "MT123"), size=3,colour="#F0E442")+
+  geom_point(data=PcoAdf %>% filter(Code == "OP100"), size=3,colour="#56B4E9")+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ551"), size=3,colour="#56B4E9")+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ610"), size=3,colour="#56B4E9")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS352"), size=3,colour="#009E73")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS221"), size=3,colour="#009E73")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS041"), size=3,colour="#009E73")+
+  geom_text_repel(aes(label=SampleID), size=2, max.overlaps=50) +#The part with geom_text_repel adds easy-readable labels. 
+  xlab(paste0("PC1: ",100*pc$eig[[1]]/sum(pc$eig),"% variance")) +
+  ylab(paste0("PC2: ",100*pc$eig[[2]]/sum(pc$eig),"% variance"))+
+  scale_color_manual(values=cbbPalette)+
+  theme_classic()+
+  ggtitle("PCoA")
+  return(plot)
+}
+
+plot_rubrocapillaPCoA23 <- function(PcoAdf, pc){
+  plot <- ggplot(PcoAdf, aes(PC2, PC3, color=Population)) +
+  geom_point(size=3) +
+  geom_point(data=PcoAdf %>% filter(Code == "MT087"), pch=20,size=7,colour="#0072b2")+
+  geom_point(data=PcoAdf %>% filter(Code == "MT123"), pch=20,size=7,colour="#0072b2")+
+  geom_point(data=PcoAdf %>% filter(Code == "OP100"), pch=20,size=7,colour="#0072b2")+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ551"), pch=20,size=7,colour="#0072b2")+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ610"), pch=20,size=7,colour="#0072b2")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS352"), pch=20,size=7,colour="#0072b2")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS221"), pch=20,size=7,colour="#0072b2")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS041"), pch=20,size=7,colour="#0072b2")+
+  geom_point(data=PcoAdf %>% filter(Code == "MT087"), size=3,colour="#F0E442")+
+  geom_point(data=PcoAdf %>% filter(Code == "MT123"), size=3,colour="#F0E442")+
+  geom_point(data=PcoAdf %>% filter(Code == "OP100"), size=3,colour="#56B4E9")+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ551"), size=3,colour="#56B4E9")+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ610"), size=3,colour="#56B4E9")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS352"), size=3,colour="#009E73")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS221"), size=3,colour="#009E73")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS041"), size=3,colour="#009E73")+
+  geom_text_repel(aes(label=SampleID), size=2, max.overlaps=50) +#The part with geom_text_repel adds easy-readable labels. 
+  xlab(paste0("PC1: ",100*pc$eig[[1]]/sum(pc$eig),"% variance")) +
+  ylab(paste0("PC2: ",100*pc$eig[[2]]/sum(pc$eig),"% variance"))+
+  scale_color_manual(values=cbbPalette)+
+  theme_classic()+
+  ggtitle("PCoA")
+  return(plot)
+}
+
+#plot each of our datasets
+plot_rubrocapillaPCoA(PcoAdf, pc)
+plot_rubrocapillaPCoA(PcoAdf6, pc6)
+plot_rubrocapillaPCoA(PcoAdf7, pc7)
+plot_rubrocapillaPCoA(PcoAdf8, pc8)
+plot_rubrocapillaPCoA(PcoAdf9, pc9)
+plot_rubrocapillaPCoA(PcoAdf10, pc10)
+plot_rubrocapillaPCoA(PcoAdf11, pc11)
+plot_rubrocapillaPCoA(PcoAdf12, pc12)
+
+```
+
+Note that when we have relaxed filters for allele count, the two Atlantic Forest populations separate - that signal likely comes from alleles that are at low frequency in our dataset and so were removed when filtering for AC>4. Filtering out low frequency alleles can make broader patterns more distinct, but comes at a cost of these fine scale structures.
+
+# Save figures for publication
+Now that we have explored the data, Make a figure for the *Ceratopipra rubrocapilla* publication. These will be similar, but will not have individual names labelled. We will also save our data so that the figure can be regenerated in the future if needed.
+```{r figure}
+cbbPalette <- c("#E69F00", "#CC79A7", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00")
+  headwaters_colour <- "#FF3E24"
+
+ggplot(PcoAdf, aes(PC1, -PC2, color=Population)) +
+  geom_point(size=7, color="black") +
+  geom_point(size=6) +
+  geom_point(data=PcoAdf %>% filter(Code == "MT087"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=PcoAdf %>% filter(Code == "MT123"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=PcoAdf %>% filter(Code == "OP100"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ551"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ610"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS352"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS221"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS041"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=PcoAdf %>% filter(Code == "MT087"), size=5,colour="#F0E442")+
+  geom_point(data=PcoAdf %>% filter(Code == "MT123"), size=5,colour="#F0E442")+
+  geom_point(data=PcoAdf %>% filter(Code == "OP100"), size=5,colour="#56B4E9")+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ551"), size=5,colour="#56B4E9")+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ610"), size=5,colour="#56B4E9")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS352"), size=5,colour="#009E73")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS221"), size=5,colour="#009E73")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS041"), size=5,colour="#009E73")+
+  #geom_text_repel(aes(label=SampleID), size=2, max.overlaps=50) +#The part with geom_text_repel adds easy-readable labels. 
+  xlab(paste0("PCo1: (",sprintf("%.1f", round(100*pc$eig[[1]]/sum(pc$eig), digits=1)),"%)")) +
+  ylab(paste0("PCo2: (",sprintf("%.1f", round(100*pc$eig[[2]]/sum(pc$eig), digits=1)),"%)"))+
+  scale_color_manual(values=cbbPalette)+
+  theme_classic()+
+  theme(legend.position = "none", panel.background = element_rect(fill='transparent'),plot.background = element_rect(fill='transparent', color=NA)) #I prefer to draw my own legend by hand
+
+#save an image of the PCoA for use as a figure
+#ggsave("PCoA.Ceratopipra_rubrocapilla.autosomal.AC4.37_0.2_5_20.0.thinned10Kb.pdf", bg='transparent', width = 30, height = 20, units = "cm")
+
+#add a PC3 vs PC4 figure for the supplemental
+ggplot(PcoAdf, aes(PC3, PC4, color=Population)) +
+  geom_point(size=7, color="black") +
+  geom_point(size=6) +
+  geom_point(data=PcoAdf %>% filter(Code == "MT087"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=PcoAdf %>% filter(Code == "MT123"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=PcoAdf %>% filter(Code == "OP100"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ551"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ610"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS352"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS221"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS041"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=PcoAdf %>% filter(Code == "MT087"), size=5,colour="#F0E442")+
+  geom_point(data=PcoAdf %>% filter(Code == "MT123"), size=5,colour="#F0E442")+
+  geom_point(data=PcoAdf %>% filter(Code == "OP100"), size=5,colour="#56B4E9")+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ551"), size=5,colour="#56B4E9")+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ610"), size=5,colour="#56B4E9")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS352"), size=5,colour="#009E73")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS221"), size=5,colour="#009E73")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS041"), size=5,colour="#009E73")+
+  #geom_text_repel(aes(label=SampleID), size=2, max.overlaps=50) +#The part with geom_text_repel adds easy-readable labels. 
+  xlab(paste0("PC3: (",sprintf("%.1f", round(100*pc$eig[[3]]/sum(pc$eig), digits=1)),"%)")) +
+  ylab(paste0("PC4: (",sprintf("%.1f", round(100*pc$eig[[4]]/sum(pc$eig), digits=1)),"%)")) +
+  scale_color_manual(values=cbbPalette)+
+  theme_classic()+
+  theme(legend.position = "none", panel.background = element_rect(fill='transparent'),plot.background = element_rect(fill='transparent', color=NA)) #I prefer to draw my own legend by hand
+
+#save an image of the PCoA for use as a figure
+#ggsave("PCoA.PCo3vsPCo4.Ceratopipra_rubrocapilla.autosomal.AC4.37_0.2_5_20.0.thinned10Kb.pdf", bg='transparent', width = 30, height = 20, units = "cm")
+
+#add a PC1 vs PC5 figure for the Github repository
+ggplot(PcoAdf, aes(PC1, PC5, color=Population)) +
+  geom_point(size=7, color="black") +
+  geom_point(size=6) +
+  geom_point(data=PcoAdf %>% filter(Code == "MT087"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=PcoAdf %>% filter(Code == "MT123"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=PcoAdf %>% filter(Code == "OP100"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ551"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ610"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS352"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS221"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS041"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=PcoAdf %>% filter(Code == "MT087"), size=5,colour="#F0E442")+
+  geom_point(data=PcoAdf %>% filter(Code == "MT123"), size=5,colour="#F0E442")+
+  geom_point(data=PcoAdf %>% filter(Code == "OP100"), size=5,colour="#56B4E9")+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ551"), size=5,colour="#56B4E9")+
+  geom_point(data=PcoAdf %>% filter(Code == "AMZ610"), size=5,colour="#56B4E9")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS352"), size=5,colour="#009E73")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS221"), size=5,colour="#009E73")+
+  geom_point(data=PcoAdf %>% filter(Code == "PPS041"), size=5,colour="#009E73")+
+  #geom_text_repel(aes(label=SampleID), size=2, max.overlaps=50) +#The part with geom_text_repel adds easy-readable labels. 
+  xlab(paste0("PCo1: (",sprintf("%.1f", round(100*pc$eig[[1]]/sum(pc$eig), digits=1)),"%)")) +
+  ylab(paste0("PCo5: (",sprintf("%.1f", round(100*pc$eig[[5]]/sum(pc$eig), digits=1)),"%)"))+
+  scale_color_manual(values=cbbPalette)+
+  theme_classic()+
+  theme(legend.position = "none", panel.background = element_rect(fill='transparent'),plot.background = element_rect(fill='transparent', color=NA)) #I prefer to draw my own legend by hand
+
+#save an image of the PCoA for use as a figure
+#ggsave("PCoA.PCo1vsPCo5.Ceratopipra_rubrocapilla.autosomal.AC4.37_0.2_5_20.0.thinned10Kb.pdf", bg='transparent', width = 30, height = 20, units = "cm")
+
+
+#save a record of the data behind the PCoA
+#PcoAdf %>%
+#  select(Code, Population, PC1, PC2, PC3, PC4, PC5) %>%
+#  write_tsv(., file = "PCoA_data.Ceratopipra_rubrocapilla.autosomal.AC4.37_0.2_5_20.0.thinned10Kb.tsv")
+
+```
+(the commands to save the results are commented out to avoid accidentally overwriting the files)
+
+Now we have our PCoA analysis for the publication.
+
