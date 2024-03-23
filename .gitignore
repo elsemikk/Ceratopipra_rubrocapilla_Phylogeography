@@ -3,4 +3,5 @@
 1_Datasets/1.0*/Pipra_filicauda.ref.fa.gz
 *.RData
 2_Phylogeny/*BEAST*/*/run_*/*trees
-
+3_Structure/3.1aa_PCoA_files
+3_Structure/3.1aa_PCoA_cache
