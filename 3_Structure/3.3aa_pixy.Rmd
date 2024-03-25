@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "Ceratopipra rubrocapilla Pixy exploration"
 author: "Else Mikkelsen"
 date: "2023-05-13"
 output: html_document
@@ -177,7 +177,7 @@ chromosomes<-c("chr_1", "chr_1A", "chr_2", "chr_3", "chr_4", "chr_4A", "chr_5", 
 populations <- c("AtlanticForest", "AtlanticForest_Ibateguara", "AtlanticForest_Ilheus", "InambariE", "InambariW", "Inambari", "Rondonia", "RondoniaHeadwaters", "Tapajos", "TapajosHeadwaters", "XinguC", "XinguHeadwaters", "XinguN", "XinguBelem")
 
 #alternatively, could look at just the main populations
-populations <- c("Inambari", "Rondonia", "Tapajos", "XinguBelem", "AtlanticForest")
+#populations <- c("Inambari", "Rondonia", "Tapajos", "XinguBelem", "AtlanticForest")
 
 #calculate genome-wide pi for each population selected above
 print("calculating genome-wide pi per species")
@@ -405,16 +405,16 @@ pixy_df %>%
 ```
 
 
-Now, we will make a nicer plot for the publication:  
+Now, we will make a nicer plot:  
 ```{r publication}
 chromosomes<- c("chr_1", "chr_1A", "chr_2", "chr_3", "chr_4", "chr_4A", "chr_5", "chr_6", "chr_7", "chr_8", "chr_9", "chr_10", "chr_11", "chr_12", "chr_13", "chr_14", "chr_15", "chr_17", "chr_18", "chr_19", "chr_20", "chr_21", "chr_22", "chr_23", "chr_24", "chr_25", "chr_26", "chr_27", "chr_28", "chr_29", "chr_Z") #All chromosomes except W (well, and 16, and the GRC)
 
 #let's just look at three populations so that the figure is a bit cleaner and easier to read
-#species2 <- c("AtlanticForest_Ibateguara", "XinguN", "InambariW", "pi")
-#species1 <- c("AtlanticForest_Ibateguara", "XinguN", "InambariW")
+species2 <- c("AtlanticForest_Ibateguara", "XinguN", "InambariW", "pi")
+species1 <- c("AtlanticForest_Ibateguara", "XinguN", "InambariW")
 
-species2 <- c("AtlanticForest", "XinguBelem", "Inambari", "pi")
-species1 <- c("AtlanticForest", "XinguBelem", "Inambari")
+#species2 <- c("AtlanticForest", "XinguBelem", "Inambari", "pi")
+#species1 <- c("AtlanticForest", "XinguBelem", "Inambari")
 
 
 #plot Fst with MAF>0.05
@@ -443,7 +443,7 @@ pixy_fstdf %>%
   scale_colour_manual(values = c("#a9cc54", "#000000", "#bd271c")) +
   scale_x_continuous(expand = c(0, 0), limits=c(-1000000,NA)) +
   scale_y_continuous(expand = c(0, 0), limits = c(0,1))
-ggsave("fst_maf5_window500k_rubrocapilla.png", bg='transparent', width = 60, height = 5, units = "cm")
+#ggsave("fst_maf5_window500k_rubrocapilla.png", bg='transparent', width = 60, height = 5, units = "cm")
 
 #plot dxy only
 statistics <- "avg_dxy"
@@ -673,88 +673,6 @@ pixy_df2 %>%
 ```
 
 
-```{r scraps, eval = FALSE, echo=FALSE}
-#for the poster
-
-pixy_df %>%
-  dplyr::filter(chromosome %in% chromosomes) %>%
-  mutate(pop2 = replace_na(pop2, "pi")) %>%
-  mutate(chromosome = factor(chromosome, levels = chromosomes)) %>%
-  filter(statistic %in% c("avg_wc_fst")) %>%
-  ggplot(aes(x = (window_pos_1 + window_pos_2)/2, y = value, color = interaction(pop2, pop1)))+
-  geom_point(size = 0.9, alpha = 1, stroke = 0)+
-  facet_grid(statistic ~ chromosome, scales = "free", switch = "x", space="free_x", drop=T, shrink=T, #changed it so that chroms are proportional to their lengths
-             labeller = labeller(statistic = pixy_labeller,
-                                 value = label_value))+
-  xlab("Chromsome")+
-  ylab("Statistic Value")+
-  #scale_color_manual(values = c("grey50", "black"))+
-  theme_classic()+
-  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), panel.spacing = unit(0.1, "cm"), strip.background = element_blank(), strip.placement = "outside", axis.title.y = element_blank())+
-  theme(text=element_text(family="Times New Roman"), axis.title.x = element_text(size = 16), legend.text = element_text(size = 16)) +
-  scale_colour_manual(values = c("#648FFF", "#DC267F", "#FFB000")) +
-  scale_x_continuous(expand = c(0, 0)) +
-  scale_y_continuous(expand = c(0, 0), limits = c(0,NA))
-```
-
-can we find any iris-specific fst peaks?
-
-```{r specific}
-#plot the data!
-pixy_df2 %>%
-  dplyr::filter(chromosome %in% chromosomes) %>%
-  mutate(chromosome = factor(chromosome, levels = chromosomes)) %>%
-  ggplot(aes(x = (window_pos_1 + window_pos_2)/2, y = (Inambari-AtlanticForest_XinguBelem)))+
-  geom_point(size = 0.9, alpha = 1, stroke = 0)+
-  facet_grid( ~ chromosome, scales = "free", switch = "x", space="free_x", drop=T, shrink=T, #changed it so that chroms are proportional to their lengths
-             labeller = labeller(statistic = pixy_labeller,
-                                 value = label_value))+
-  xlab("Chromosome")+
-  ylab("Positive: Inambari more diverse Negative: AtlanticForest more diverse")+
-  theme_classic()+
-  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), panel.spacing = unit(0.1, "cm"), strip.background = element_blank(), strip.placement = "outside")+
-  theme(text=element_text(family="Times New Roman"), axis.title.x = element_text(size = 16), legend.text = element_text(size = 16)) +
-  scale_colour_manual(values = c("blue", "purple", "red", "#00b300", "#ff781f", "#FFD700")) +
-  scale_x_continuous(expand = c(0, 0)) +
-  scale_y_continuous(expand = c(0, 0), limits = c(NA,NA))
-
-pixy_df2 %>%
-  dplyr::filter(chromosome %in% chromosomes) %>%
-  mutate(chromosome = factor(chromosome, levels = chromosomes)) %>%
-  ggplot(aes(x = (window_pos_1 + window_pos_2)/2, y = (vilasboasi_Fst_nattereri-iris_Fst_nattereri)))+
-  geom_point(size = 0.9, alpha = 1, stroke = 0)+
-  facet_grid( ~ chromosome, scales = "free", switch = "x", space="free_x", drop=T, shrink=T, #changed it so that chroms are proportional to their lengths
-             labeller = labeller(statistic = pixy_labeller,
-                                 value = label_value))+
-  xlab("Chromosome")+
-  ylab("Positive: vilasboasi more different. Negative: iris more different")+
-  theme_classic()+
-  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), panel.spacing = unit(0.1, "cm"), strip.background = element_blank(), strip.placement = "outside")+
-  theme(text=element_text(family="Times New Roman"), axis.title.x = element_text(size = 16), legend.text = element_text(size = 16)) +
-  scale_colour_manual(values = c("blue", "purple", "red", "#00b300", "#ff781f", "#FFD700")) +
-  scale_x_continuous(expand = c(0, 0)) +
-  scale_y_continuous(expand = c(0, 0), limits = c(NA,NA))
-
-pixy_df2 %>%
-  dplyr::filter(chromosome %in% chromosomes) %>%
-  mutate(chromosome = factor(chromosome, levels = chromosomes)) %>%
-  #filter(statistic %in% c("avg_pi", "avg_dxy", "avg_wc_fst")) %>%
-  ggplot(aes(x = (window_pos_1 + window_pos_2)/2, y = (vilasboasi_Fst_iris-vilasboasi_Fst_nattereri)))+
-  geom_point(size = 0.9, alpha = 1, stroke = 0)+
-  facet_grid( ~ chromosome, scales = "free", switch = "x", space="free_x", drop=T, shrink=T, #changed it so that chroms are proportional to their lengths
-             labeller = labeller(statistic = pixy_labeller,
-                                 value = label_value))+
-  xlab("Chromosome")+
-  ylab("Positive: iris more different. Negative: nattereri more different")+
-  theme_classic()+
-  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), panel.spacing = unit(0.1, "cm"), strip.background = element_blank(), strip.placement = "outside")+
-  theme(text=element_text(family="Times New Roman"), axis.title.x = element_text(size = 16), legend.text = element_text(size = 16)) +
-  scale_colour_manual(values = c("blue", "purple", "red", "#00b300", "#ff781f", "#FFD700")) +
-  scale_x_continuous(expand = c(0, 0)) +
-  scale_y_continuous(expand = c(0, 0), limits = c(NA,NA))
-
-```
-
 # Plot pi per species
 I would like to compare the sequence diversity within each lineage
 ```{r picomp}
@@ -807,7 +725,7 @@ pixy_chrZ_investigation_fstdf %>%
   scale_colour_manual(values = c("#D55E00")) + #using Ceratopipra themed colours 
   scale_x_continuous(expand = c(0, 0), limits=c(NA,NA)) +
   scale_y_continuous(expand = c(0, 0), limits = c(0,1.05))
-ggsave("Fst_MalevsFemale_individualSNPs_Ceratopiprarubrocapilla.png", bg='transparent', width = 20, height = 10, units = "cm")
+#ggsave("Fst_MalevsFemale_individualSNPs_Ceratopiprarubrocapilla.png", bg='transparent', width = 20, height = 10, units = "cm")
 
 
 

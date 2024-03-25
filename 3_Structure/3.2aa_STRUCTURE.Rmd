@@ -552,13 +552,13 @@ cbbPalette <- c("#E69F00", "#0072B2", "#F0E442", "#009E73", "#E69F00", "#56B4E9"
 plot_Ceratopipra2(load_clumppk2(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=FALSE), title="K=2: AC4.37_0.2_5_20.0 CLUMPP")+
   theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.title.x = element_blank(), legend.position = "none")+
   scale_fill_manual(values=cbbPalette)
-ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K2.200k1000k_POPALPHAS.fullsearch.pdf", bg='transparent', width = 30, height = 10, units = "cm")
+#ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K2.200k1000k_POPALPHAS.fullsearch.pdf", bg='transparent', width = 30, height = 10, units = "cm")
 
 cbbPalette <- c("#F0E442", "#E69F00", "#0072B2", "#009E73", "#E69F00", "#56B4E9", "#CC79A7")
 plot_Ceratopipra2(load_clumppk3(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=FALSE), title="K=3: AC4.37_0.2_5_20.0 CLUMPP")+
   theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.title.x = element_blank(), legend.position = "none")+
   scale_fill_manual(values=cbbPalette)
-ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K3.200k1000k_POPALPHAS.fullsearch.pdf", bg='transparent', width = 30, height = 10, units = "cm")
+#ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K3.200k1000k_POPALPHAS.fullsearch.pdf", bg='transparent', width = 30, height = 10, units = "cm")
 
 
 #Save K=2-8 with the greedy algorithm of CLUMPP (fullsearch could not completefor K=4+)
@@ -566,57 +566,57 @@ cbbPalette <- c("#E69F00", "#0072B2", "#F0E442", "#009E73", "#E69F00", "#56B4E9"
 plot_Ceratopipra2(load_clumppk2(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=TRUE), title="K=2: AC4.37_0.2_5_20.0 CLUMPP")+
   theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.title.x = element_blank(), legend.position = "none")+
   scale_fill_manual(values=cbbPalette)
-ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K2.200k1000k_POPALPHAS.pdf", bg='transparent', width = 30, height = 10, units = "cm")
+#ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K2.200k1000k_POPALPHAS.pdf", bg='transparent', width = 30, height = 10, units = "cm")
 plot_Ceratopipra2(load_clumppk2(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=TRUE, latlon="longitude"), title="K=2: AC4.37_0.2_5_20.0 CLUMPP")+
   theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.title.x = element_blank(), legend.position = "none")+
   scale_fill_manual(values=cbbPalette)
-ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K2.200k1000k_POPALPHAS.longitude.pdf", bg='transparent', width = 30, height = 10, units = "cm")
+#ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K2.200k1000k_POPALPHAS.longitude.pdf", bg='transparent', width = 30, height = 10, units = "cm")
 
 
 cbbPalette <- c("#F0E442", "#E69F00", "#0072B2", "#009E73", "#E69F00", "#56B4E9", "#CC79A7")
 plot_Ceratopipra2(load_clumppk3(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=TRUE), title="K=3: AC4.37_0.2_5_20.0 CLUMPP")+
   theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.title.x = element_blank(), legend.position = "none")+
   scale_fill_manual(values=cbbPalette)
-ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K3.200k1000k_POPALPHAS.pdf", bg='transparent', width = 30, height = 10, units = "cm")
+#ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K3.200k1000k_POPALPHAS.pdf", bg='transparent', width = 30, height = 10, units = "cm")
 plot_Ceratopipra2(load_clumppk3(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=TRUE, latlon="longitude"), title="K=3: AC4.37_0.2_5_20.0 CLUMPP")+
   theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.title.x = element_blank(), legend.position = "none")+
   scale_fill_manual(values=cbbPalette)
-ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K3.200k1000k_POPALPHAS.longitude.pdf", bg='transparent', width = 30, height = 10, units = "cm")
+#ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K3.200k1000k_POPALPHAS.longitude.pdf", bg='transparent', width = 30, height = 10, units = "cm")
 
 cbbPalette <- c("#F0E442", "#E69F00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#CC79A7")
 plot_Ceratopipra2(load_clumppk4(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=TRUE), title="K=4: AC4.37_0.2_5_20.0 CLUMPP")+
   theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.title.x = element_blank(), legend.position = "none")+
   scale_fill_manual(values=cbbPalette)
-ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K4.200k1000k_POPALPHAS.pdf", bg='transparent', width = 30, height = 10, units = "cm")
+#ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K4.200k1000k_POPALPHAS.pdf", bg='transparent', width = 30, height = 10, units = "cm")
 plot_Ceratopipra2(load_clumppk4(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=TRUE, latlon="longitude"), title="K=4: AC4.37_0.2_5_20.0 CLUMPP")+
   theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.title.x = element_blank(), legend.position = "none")+
   scale_fill_manual(values=cbbPalette)
-ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K4.200k1000k_POPALPHAS.longitude.pdf", bg='transparent', width = 30, height = 10, units = "cm")
+#ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K4.200k1000k_POPALPHAS.longitude.pdf", bg='transparent', width = 30, height = 10, units = "cm")
 
 
 cbbPalette <- c("#F0E442", "#E69F00", "#CC79A7", "#009E73", "#000000", "#56B4E9", "#CC79A7")
 plot_Ceratopipra2(load_clumppk5(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=TRUE), title="K=5: AC4.37_0.2_5_20.0 CLUMPP")+
   theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.title.x = element_blank(), legend.position = "none")+
   scale_fill_manual(values=cbbPalette)
-ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K5.200k1000k_POPALPHAS.pdf", bg='transparent', width = 30, height = 10, units = "cm")
+#ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K5.200k1000k_POPALPHAS.pdf", bg='transparent', width = 30, height = 10, units = "cm")
 
 cbbPalette <- c("#F0E442", "#0072B2", "#E69F00", "#CC79A7", "#009E73", "#000000", "#56B4E9", "#CC79A7")
 plot_Ceratopipra2(load_clumppk6(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=TRUE), title="K=6: AC4.37_0.2_5_20.0 CLUMPP")+
   theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.title.x = element_blank(), legend.position = "none")+
   scale_fill_manual(values=cbbPalette)
-ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K6.200k1000k_POPALPHAS.pdf", bg='transparent', width = 30, height = 10, units = "cm")
+#ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K6.200k1000k_POPALPHAS.pdf", bg='transparent', width = 30, height = 10, units = "cm")
 
 cbbPalette <- c("#0072B2", "#F0E442", "#56B4E9", "#E69F00", "#CC79A7", "#009E73", "#000000")
 plot_Ceratopipra2(load_clumppk7(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=TRUE), title="K=7: AC4.37_0.2_5_20.0 CLUMPP")+
   theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.title.x = element_blank(), legend.position = "none")+
   scale_fill_manual(values=cbbPalette)
-ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K7.200k1000k_POPALPHAS.pdf", bg='transparent', width = 30, height = 10, units = "cm")
+#ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K7.200k1000k_POPALPHAS.pdf", bg='transparent', width = 30, height = 10, units = "cm")
 
 cbbPalette <- c("brown", "#0072B2", "#F0E442", "#56B4E9", "#E69F00", "#CC79A7", "#009E73", "#000000")
 plot_Ceratopipra2(load_clumppk8(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=TRUE), title="K=8: AC4.37_0.2_5_20.0 CLUMPP")+
   theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.title.x = element_blank(), legend.position = "none")+
   scale_fill_manual(values=cbbPalette)
-ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K8.200k1000k_POPALPHAS.pdf", bg='transparent', width = 30, height = 10, units = "cm")
+#ggsave("./STRUCTURE.AC4.37_0.2_5_20.0.K8.200k1000k_POPALPHAS.pdf", bg='transparent', width = 30, height = 10, units = "cm")
 
 ```
 # Evanno Figure
@@ -633,7 +633,7 @@ ggplot(as.data.frame(Evanno), aes(x=K_values, y=delta_K))+
   xlab("K")+
   ylab("Delta K")+
   theme_classic()
-ggsave("Evanno.pdf", bg='transparent', width = 30, height = 10, units = "cm")
+#ggsave("Evanno.pdf", bg='transparent', width = 30, height = 10, units = "cm")
 
 ggplot(as.data.frame(Evanno), aes(x=K_values, y=LnPK))+
   geom_point()+
