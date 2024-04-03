@@ -50,8 +50,3 @@ Instructions for replicating the Tajima's D estimates are in the file `4_Demogra
 
 ### Introgression analyses
 The folder `5_Introgression` contains the raw results and instructions for replicating the ABBA BABA tests. The input dataset for this analysis is `Ceratopipra_rubrocapilla_imeriout_m07.GBSPipfilbwa.allsites.filtered.genicintergenic.forSVD.49_0.2_5_20.vcf.gz`, found in the folder `1_Datasets/1.3a_genotyping/filteredSNPs`.  
-
-### Demographic simulations
-
-3_Structure/3.3aa_pixy.Rmd
-3_Structure/3.2aa_STRUCTURE.Rmd
