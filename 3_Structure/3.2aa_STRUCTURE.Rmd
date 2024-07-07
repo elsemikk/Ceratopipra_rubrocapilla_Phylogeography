@@ -621,6 +621,7 @@ plot_Ceratopipra2(load_clumppk8(species="Ceratopipra_rubrocapilla", Dataset="Cer
 ```
 # Evanno Figure
 
+Now let's generate a figure showing the delta K values for each value of K.
 ```{r evanno}
 Evanno <- NULL
 Evanno$K_values <- 1:8
@@ -639,6 +640,217 @@ ggplot(as.data.frame(Evanno), aes(x=K_values, y=LnPK))+
   geom_point()+
   geom_line()+
   xlab("K")+
-  ylab("Delta K")+
+  ylab("Ln PK")+
   theme_classic()
+```
+
+# map figure
+Now let's put the STRUCTURE plot bars onto a map so that we can see how the structure population assignments are distributed. Often authors will opt to aggregate samples from the same locality and then plot an average as a pie chart. I do not personally like this as it masks information about how variable samples are within a locality. I also prefer bars over pies so I will plot bars on the map. 
+```{r structure_bars}
+# Load required libraries
+library(sf)
+
+#load the range map, outline of the land, and rivers. This data will not be available in the repository because I do not have permissions to redistribute the raw data.
+
+#load the range of C. rubrocapilla
+load("~/Documents/GitHub/Ceratopipra/Writing/Manuscript_drafts/Figures/Figure1.1_map/Cerrub_range.RData")
+#read the shapefile of rivers
+brazil_rivers <- st_read("~/Documents/GitHub/Ceratopipra/Writing/Manuscript_drafts/Figures/Figure1.1_map/brazil_rivers_shapefile/ne_10m_rivers_lake_centerlines.shp")
+# Filter to keep only major rivers of interest (otherwise the map would be too messy and hard to read with all the small rivers plotted)
+#brazil_rivers <- brazil_rivers[brazil_rivers$name %in% c("Amazonas", "Madeira", "Tapajós", "Xingu", "Tocantins", "Rio Negro", "Teles Pires", "Juruena", "Jamanxim", "Arapiuns", "Crepori", "Cupari", "Purus", "Baía de Marajó", "São Francisco", "Araguaia", "Madre de Dios", "Marañón", "Branco", "Orinoco", "Purús", "Ucayali", "Japurá", "Caquetá"), ] #"Braco Menor", "Mamoré", "Juruá", "Jari", "Putumayo", 
+#add Huallaga
+brazil_rivers <- brazil_rivers[brazil_rivers$name %in% c("Amazonas", "Madeira", "Tapajós", "Xingu", "Tocantins", "Rio Negro", "Teles Pires", "Juruena", "Jamanxim", "Arapiuns", "Crepori", "Cupari", "Purus", "Baía de Marajó", "São Francisco", "Araguaia", "Madre de Dios", "Marañón", "Branco", "Orinoco", "Purús", "Ucayali", "Japurá", "Caquetá", "Huallaga"), ] #"Braco Menor", "Mamoré", "Juruá", "Jari", "Putumayo", 
+
+#read the shapefile of coastline
+brazil_coastline <- st_read("~/Documents/GitHub/Ceratopipra/Writing/Manuscript_drafts/Figures/Figure1.1_map/brazil_coastline_shapefile/ne_10m_coastline.shp")
+
+#read the country borders
+brazil_borders <- st_read("~/Documents/GitHub/Ceratopipra/Writing/Manuscript_drafts/Figures/Figure1.1_map/brazil_borders_shapefile/ne_10m_admin_0_countries.shp")
+
+
+#firstly, to reduce overplotting I am going to add some offsets to the longitude of samples from the same locality. This way their points (bars) will be plotted side-by-side instead of on top of each other. I will arbitrarily make side-by-side points have an offset of "1" between them. For example, if there are three samples from the same locality, I will give the first an offset of -1, the second an offset of 0, and the third an offset of +1. These offsets can later be arbitrarily scaled as needed to adjust how far apart they get plotted (which will depend on how wide we want to plot our bars.)
+
+#we will make a dataframe where column 1 is the sample's codename as it appears in the STRUCTURE data we will plot, and column 2 is the mannually-chosen offset to give each sample.
+offsets <- data.frame(Code=c("UNA002", "UNA018", "UNA088", "UNA110", "UNA124", "MT087", "MT123", "PPS352", "PPS041", "OP100", "AMZ551", "AMZ610", "PPS221", "UFAC305", "BR36440", "TLP123", "TLP025", "MSF107", "PPS174", "CPE012", "CPE025", "CPE049", "CPE069", "CPEII008", "MAR092", "BR036", "UFAC1007", "BR033", "UFAC476", "GAPTO259", "GAPTO268", "GAPTO277", "GAPTO327", "CAM117", "OM022", "OM112", "OM172", "MPDS628", "PIME521", "PIME522", "PIME482", "PIME169", "AMANA137", "CUJ072", "PIME460", "AMANA034", "CUJ027", "PUC007", "PUC008", "RDO007", "PIME062", "PIME079", "AMA340", "AMA601", "AMA656", "MF005", "B4615", "B5082", "FPR006", "FPR015", "FPR021", "PIME134", "PIME135", "UHE442", "WM281", "WM293", "MAM010", "PIME024", "PPBIO221", "PPBIO305"), offset=c(-2, -1, 0, 1, 2, -0.5, 0.5, 0, 0, 0, -0.5, 0.5, 0, 0, 0, 0, 0, -0.5, 0.5, -2, -1, 0, 1, 2, 0, 0, 0, 0, 0, -1.5, -0.5, 0.5, 1.5, 0, -1, 0, 1, 0, -0.5, 0.5, 0, -0.5, 0.5, 0, 0, 0, 0, -0.5, 0.5, 0, -0.5, 0.5, -1, 0, 1, 0, -0.5, 0.5, -1, 0, 1, -0.5, 0.5, 0, -0.5, 0.5, 0, 0, -0.5, 0.5))
+
+#load the data for K=2
+data <- load_clumppk2(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=TRUE) %>%
+  select(!(avg_assignment)) %>%
+  spread(key=pop, value=assignment_p)
+
+#add the offset data to the STRUCTURE dataframe
+offset_data <- merge(data, offsets, by="Code", all.x = T)
+#replace NAs with 0, if any are present
+offset_data$offset[is.na(offset_data$offset)] <- 0
+
+ggplot(offset_data %>% mutate(offset=offset/1.9))+
+  #geom_sf(data = atlantic, color = "#defade", fill = "#defade") +
+  #geom_sf(data = amazon, color = "#9CD089", fill = "#9CD089") +
+  geom_sf(data = Cerrub_range, color = "#ffcccb", fill = "#ffcccb") +
+  geom_sf(data = brazil_rivers, color = "#38afcd", linewidth=1) +
+  geom_sf(data = brazil_coastline, color = "black") +
+  geom_sf(data = brazil_borders, color = "black", fill = NA) +
+  #geom_sf(data = amazon, color = "black", fill=NA) +
+  #coord_sf(xlim = c(-80, -34), ylim = c(-24, 0), expand = FALSE) +
+  coord_sf(xlim = c(-80, -34), ylim = c(-17, 0), expand = FALSE) +
+     geom_rect(aes(xmin = Longitude+offset, ymin = Latitude, xmax = Longitude+offset + 0.5, ymax = Latitude+1.5), color="black")+
+  geom_rect(aes(xmin = Longitude+offset, ymin = Latitude, xmax = Longitude+offset + 0.5, ymax = Latitude+as.numeric(p1)*1.5), fill="#0072B2")+
+      geom_rect(aes(xmin = Longitude+offset, ymin = Latitude+(p1*1.5), xmax = Longitude+offset + 0.5, ymax = Latitude+(p1*1.5)+(as.numeric(p2)*1.5)), fill="#E69F00")+
+ theme_void()+
+  theme(legend.position = "none")
+ggsave("map_K2.pdf")
+
+#load the data for K=3
+data <- load_clumppk3(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=FALSE) %>%
+  select(!(avg_assignment)) %>%
+  spread(key=pop, value=assignment_p)
+
+#add the offset data to the STRUCTURE dataframe
+offset_data <- merge(data, offsets, by="Code", all.x = T)
+#replace NAs with 0, if any are present
+offset_data$offset[is.na(offset_data$offset)] <- 0
+
+ggplot(offset_data %>% mutate(offset=offset/1.9))+
+  #geom_sf(data = atlantic, color = "#defade", fill = "#defade") +
+  #geom_sf(data = amazon, color = "#9CD089", fill = "#9CD089") +
+  geom_sf(data = Cerrub_range, color = "#ffcccb", fill = "#ffcccb") +
+  geom_sf(data = brazil_rivers, color = "#38afcd", linewidth=1) +
+  geom_sf(data = brazil_coastline, color = "black") +
+  geom_sf(data = brazil_borders, color = "black", fill = NA) +
+  #geom_sf(data = amazon, color = "black", fill=NA) +
+  #coord_sf(xlim = c(-80, -34), ylim = c(-24, 0), expand = FALSE) +
+  coord_sf(xlim = c(-80, -34), ylim = c(-17, 0), expand = FALSE) +
+     geom_rect(aes(xmin = Longitude+offset, ymin = Latitude, xmax = Longitude+offset + 0.5, ymax = Latitude+1.5), color="black")+
+  geom_rect(aes(xmin = Longitude+offset, ymin = Latitude, xmax = Longitude+offset + 0.5, ymax = Latitude+as.numeric(p3)*1.5), fill="#0072B2")+
+      geom_rect(aes(xmin = Longitude+offset, ymin = Latitude+(p3*1.5), xmax = Longitude+offset + 0.5, ymax = Latitude+(p3*1.5)+(as.numeric(p2)*1.5)), fill="#E69F00")+
+      geom_rect(aes(xmin = Longitude+offset, ymin = Latitude+(p3*1.5)+(as.numeric(p2)*1.5), xmax = Longitude+offset + 0.5, ymax = Latitude+(p3*1.5)+(as.numeric(p2)*1.5)+(as.numeric(p1)*1.5)), fill="#F0E442")+
+ theme_void()+
+  theme(legend.position = "none")
+ggsave("map_K3.pdf")
+
+#load the data for K=4
+data <- load_clumppk4(species="Ceratopipra_rubrocapilla", Dataset="Cerrub.AC4.37_0.2_5_20.0", folder="200k1000k_POPALPHAS", greedy=TRUE) %>%
+  select(!(avg_assignment)) %>%
+  spread(key=pop, value=assignment_p)
+
+offset_data <- merge(data, offsets, by="Code", all.x = T)
+offset_data$offset[is.na(offset_data$offset)] <- 0
+
+ggplot(offset_data %>% mutate(offset=offset/1.9))+
+  #geom_sf(data = atlantic, color = "#defade", fill = "#defade") +
+  #geom_sf(data = amazon, color = "#9CD089", fill = "#9CD089") +
+  geom_sf(data = Cerrub_range, color = "#ffcccb", fill = "#ffcccb") +
+  geom_sf(data = brazil_rivers, color = "#38afcd", linewidth=1) +
+  geom_sf(data = brazil_coastline, color = "black") +
+  geom_sf(data = brazil_borders, color = "black", fill = NA) +
+  #geom_sf(data = amazon, color = "black", fill=NA) +
+ # coord_sf(xlim = c(-80, -34), ylim = c(-24, 0), expand = FALSE) +
+  coord_sf(xlim = c(-80, -34), ylim = c(-17, 0), expand = FALSE) +
+     geom_rect(aes(xmin = Longitude+offset, ymin = Latitude, xmax = Longitude+offset + 0.5, ymax = Latitude+1.5), color="black")+
+     geom_rect(aes(xmin = Longitude+offset, ymin = Latitude, xmax = Longitude+offset + 0.5, ymax = Latitude+as.numeric(p1)*1.5), fill="#CC79A7")+
+      geom_rect(aes(xmin = Longitude+offset, ymin = Latitude+(p1*1.5), xmax = Longitude+offset + 0.5, ymax = Latitude+(p1*1.5)+(as.numeric(p3)*1.5)), fill="#009E73")+
+      geom_rect(aes(xmin = Longitude+offset, ymin = Latitude+(p1*1.5)+(as.numeric(p3)*1.5), xmax = Longitude + 0.5+offset, ymax = Latitude+(p1*1.5)+(as.numeric(p3)*1.5)+(as.numeric(p4)*1.5)), fill="#F0E442")+
+      geom_rect(aes(xmin = Longitude+offset, ymin = Latitude+(p1*1.5)+(as.numeric(p3)*1.5)+(as.numeric(p4)*1.5), xmax = Longitude+offset + 0.5, ymax = Latitude+(p1*1.5)+(as.numeric(p3)*1.5)+(as.numeric(p4)*1.5)+(as.numeric(p2)*1.5)), fill="#E69F00")+
+ theme_void()+
+  theme(legend.position = "none")
+ggsave("map_K4.pdf")
+
+```
+# compare with snmf
+
+Lastly, I will compare the results of STRUCTURE with snmf. Results are qualitatively similar, though snmf seems to make our samples with more missing data assigned with more intermediate population assignments.
+
+```{r snmf_functions}
+load_Ceratopiprasnmfk2 <- function(folder, Dataset, samplenames){
+  Cerysnmf_data_k2 <- read_delim(col_names=c("p1", "p2"), file=paste(folder, "/", Dataset, ".2.Q", sep=""), delim=" ", trim_ws=TRUE, show_col_types = FALSE) 
+  Cerysnmf_data_k2$Code <- samples
+  Cerysnmf_data_k2 <- merge(Cerysnmf_data_k2, rubrocapilla_metadata, by="Code")
+  Cerysnmf_data_k2_long <- Cerysnmf_data_k2 %>%
+  arrange(Longitude) %>%
+  arrange(Population)%>%
+   mutate(Code=factor(Code, levels=Code)) %>%
+  gather(key=pop, value=assignment_p, p1:p2) %>%
+    group_by(pop) %>%
+    mutate(avg_assignment=mean(as.numeric(assignment_p))) %>%
+    ungroup() %>%
+    mutate(pop=fct_reorder(pop,avg_assignment))
+  return(Cerysnmf_data_k2_long)
+}
+
+load_Ceratopiprasnmfk3 <- function(folder, Dataset, samplenames){
+  Cerysnmf_data_k2 <- read_delim(col_names=c("p1", "p2", "p3"), file=paste(folder, "/", Dataset, ".3.Q", sep=""), delim=" ", trim_ws=TRUE, show_col_types = FALSE) 
+  Cerysnmf_data_k2$Code <- samples
+  Cerysnmf_data_k2 <- merge(Cerysnmf_data_k2, rubrocapilla_metadata, by="Code")
+  Cerysnmf_data_k2_long <- Cerysnmf_data_k2 %>%
+  arrange(Longitude) %>%
+  arrange(Population)%>%
+   mutate(Code=factor(Code, levels=Code)) %>%
+  gather(key=pop, value=assignment_p, p1:p3) %>%
+    group_by(pop) %>%
+    mutate(avg_assignment=mean(as.numeric(assignment_p))) %>%
+    ungroup() %>%
+    mutate(pop=fct_reorder(pop,avg_assignment))
+  return(Cerysnmf_data_k2_long)
+}
+
+load_Ceratopiprasnmfk4 <- function(folder, Dataset, samplenames){
+  Cerysnmf_data_k2 <- read_delim(col_names=c("p1", "p2", "p3", "p4"), file=paste(folder, "/", Dataset, ".4.Q", sep=""), delim=" ", trim_ws=TRUE, show_col_types = FALSE) 
+  Cerysnmf_data_k2$Code <- samples
+  Cerysnmf_data_k2 <- merge(Cerysnmf_data_k2, rubrocapilla_metadata, by="Code")
+  Cerysnmf_data_k2_long <- Cerysnmf_data_k2 %>%
+  arrange(Longitude) %>%
+  arrange(Population)%>%
+   mutate(Code=factor(Code, levels=Code)) %>%
+  gather(key=pop, value=assignment_p, p1:p4) %>%
+    group_by(pop) %>%
+    mutate(avg_assignment=mean(as.numeric(assignment_p))) %>%
+    ungroup() %>%
+    mutate(pop=fct_reorder(pop,avg_assignment))
+  return(Cerysnmf_data_k2_long)
+}
+
+load_Ceratopiprasnmfk5 <- function(folder, Dataset, samplenames){
+  Cerysnmf_data_k2 <- read_delim(col_names=c("p1", "p2", "p3", "p4", "p5"), file=paste(folder, "/", Dataset, ".5.Q", sep=""), delim=" ", trim_ws=TRUE, show_col_types = FALSE) 
+  Cerysnmf_data_k2$Code <- samples
+  Cerysnmf_data_k2 <- merge(Cerysnmf_data_k2, rubrocapilla_metadata, by="Code")
+  Cerysnmf_data_k2_long <- Cerysnmf_data_k2 %>%
+  arrange(Longitude) %>%
+  arrange(Population)%>%
+   mutate(Code=factor(Code, levels=Code)) %>%
+  gather(key=pop, value=assignment_p, p1:p5) %>%
+    group_by(pop) %>%
+    mutate(avg_assignment=mean(as.numeric(assignment_p))) %>%
+    ungroup() %>%
+    mutate(pop=fct_reorder(pop,avg_assignment))
+  return(Cerysnmf_data_k2_long)
+}
+
+samples <- c("AMA340","AMA601","AMA656","AMANA034","AMANA137","AMZ551","AMZ610","B4615","B5082","BR033","BR036","BR36440","CAM117","CPE012","CPE025","CPE049","CPE069","CPEII008","CUJ027","CUJ072","FPR006","FPR015","FPR021","GAPTO259","GAPTO268","GAPTO277","GAPTO327","MAM010","MAR092","MF005","MPDS628","MSF107","MT087","MT123","OM022","OM112","OM172","OP100","PIME024","PIME062","PIME079","PIME134","PIME135","PIME169","PIME460","PIME482","PIME521","PIME522","PPBIO221","PPBIO305","PPS041","PPS174","PPS221","PPS352","PUC008","RDO007","TLP025","TLP123","UFAC1007","UFAC305","UFAC476","UHE442","UNA002","UNA018","UNA088","UNA110","UNA124","WM281","WM293")
+
+#Cerysnmf_data_k2 <- load_Ceratopiprasnmfk2(folder="snmf", Dataset="Cerrub.AC4.37_0.2_5_20.0", samples)
+
+#Save K=2 and 3 with the fullsearch algorithm of CLUMPP (fullsearch could not completefor K=4)
+cbbPalette <- c("#E69F00", "#0072B2", "#F0E442", "#009E73", "#E69F00", "#56B4E9", "#CC79A7")
+plot_Ceratopipra2(load_Ceratopiprasnmfk2(folder="snmf", Dataset="Cerrub.AC4.37_0.2_5_20.0", samples), title="K=2: AC4.37_0.2_5_20.0 snmf")+
+  theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.title.x = element_blank(), legend.position = "none")+
+  scale_fill_manual(values=cbbPalette)
+#ggsave("snmf/snmf_k2.pdf")
+
+cbbPalette <- c("#E69F00", "#F0E442", "#0072B2", "#009E73", "#E69F00", "#56B4E9", "#CC79A7")
+plot_Ceratopipra2(load_Ceratopiprasnmfk3(folder="snmf", Dataset="Cerrub.AC4.37_0.2_5_20.0", samples), title="K=3: AC4.37_0.2_5_20.0 snmf")+
+  theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.title.x = element_blank(), legend.position = "none")+
+  scale_fill_manual(values=cbbPalette)
+#ggsave("snmf/snmf_k3.pdf")
+
+cbbPalette <- c("#F0E442", "#E69F00", "#CC79A7", "#009E73", "#E69F00", "#56B4E9", "#CC79A7")
+plot_Ceratopipra2(load_Ceratopiprasnmfk4(folder="snmf", Dataset="Cerrub.AC4.37_0.2_5_20.0", samples), title="K=4: AC4.37_0.2_5_20.0 snmf")+
+  theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.title.x = element_blank(), legend.position = "none")+
+  scale_fill_manual(values=cbbPalette)
+#ggsave("snmf/snmf_k4.pdf")
+
+cbbPalette <- c("#F0E442", "#E69F00", "#CC79A7", "#009E73", "#56B4E9", "#56B4E9", "#CC79A7")
+plot_Ceratopipra2(load_Ceratopiprasnmfk5(folder="snmf", Dataset="Cerrub.AC4.37_0.2_5_20.0", samples), title="K=5: AC4.37_0.2_5_20.0 snmf")+
+  theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.title.x = element_blank(), legend.position = "none")+
+  scale_fill_manual(values=cbbPalette)
+
 ```

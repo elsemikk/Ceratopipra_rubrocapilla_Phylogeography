@@ -1,0 +1,41 @@
+Input parameter values:
+               datapath = ./input_data_Ceratopipra_rubrocapilla/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.genicintergenic.forSVD.AC0.37_0.2_5_20.0.safe
+               mcmcpath = ./results_Ceratopipra_rubrocapilla/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.genicintergenic.forSVD.AC0.37_0.2_5_20.0.safe.ITERATION
+               prevpath = 
+               gridpath = 
+               distance = euclidean
+                diploid = 1
+                 nIndiv = 69
+                 nSites = 71852
+                 nDemes = 1000
+                   seed = 369
+            numMCMCIter = 20000
+            numBurnIter = 10000
+            numThinIter = 9999
+              negBiSize = 10
+              negBiProb = 0.670000
+             qVoronoiPr = 0.250000
+             mrateShape = 0.000500
+             qrateShape = 0.002000
+             sigmaShape = 0.001000
+             qrateScale = 0.500000
+             mrateScale = 2.000000
+             sigmaScale = 1.000000
+       mSeedsProposalS2 = 0.010000
+       qSeedsProposalS2 = 0.100000
+       mEffctProposalS2 = 0.100000
+       qEffctProposalS2 = 0.001000
+      mrateMuProposalS2 = 0.010000
+
+Acceptance proportions:
+	(870/1278) = 68% for proposal type "qTileRate",		 with proposal variance "qEffctProposalS2"
+	(521/1262) = 41% for proposal type "qTileMove",		 with proposal variance "qSeedsProposalS2"
+	(442/1215) = 36% for proposal type "qBirthDeath"
+	(2512/3716) = 68% for proposal type "mTileRate",		 with proposal variance "mEffctProposalS2"
+	(711/2433) = 29% for proposal type "mMeanRate",		 with proposal variance "mrateMuProposalS2"
+	(2190/3821) = 57% for proposal type "mTileMove",		 with proposal variance "mSeedsProposalS2"
+	(901/3717) = 24% for proposal type "mBirthDeath"
+	(1590/2558) = 62% for proposal type "degrees of freedom"
+
+Final log prior: 97.64
+Final log llike: 10713.64

@@ -389,7 +389,7 @@ ggplot(PcoAdf, aes(PC1, -PC2, color=Population)) +
   geom_point(data=PcoAdf %>% filter(Code == "PPS352"), size=5,colour="#009E73")+
   geom_point(data=PcoAdf %>% filter(Code == "PPS221"), size=5,colour="#009E73")+
   geom_point(data=PcoAdf %>% filter(Code == "PPS041"), size=5,colour="#009E73")+
-  #geom_text_repel(aes(label=SampleID), size=2, max.overlaps=50) +#The part with geom_text_repel adds easy-readable labels. 
+  geom_text_repel(aes(label=SampleID), size=2, max.overlaps=50) +#The part with geom_text_repel adds easy-readable labels. 
   xlab(paste0("PCo1: (",sprintf("%.1f", round(100*pc$eig[[1]]/sum(pc$eig), digits=1)),"%)")) +
   ylab(paste0("PCo2: (",sprintf("%.1f", round(100*pc$eig[[2]]/sum(pc$eig), digits=1)),"%)"))+
   scale_color_manual(values=cbbPalette)+
@@ -470,3 +470,79 @@ ggplot(PcoAdf, aes(PC1, PC5, color=Population)) +
 
 Now we have our PCoA analysis for the publication.
 
+# PCA comparison
+
+Lastly, we can compare our PCoA results to a PCA. Results are qualitatively very similar. I prefer PCoA because it is able to handle missing data more robustly (PCA does not handle missing data well. Common work-arounds are to heavily filter sites/samples to obtain data with no missing data, or to impute genotypes or replace them with averages, which can lead to bias). Our results are quite similar between PCA and PCoA, but we don't have so much missing data.
+
+```{r PCA_comparison}
+df<-read.delim(file="Input_data/PCA_comparison/plink.eigenvec", sep=" ", header=FALSE)
+colnames(df)<-c("SampleID", "ID", "PC1", "PC2", "PC3", "PC4", "PC5", "PC6", "PC7", "PC8", "PC9", "PC10", "PC11", "PC12", "PC13", "PC14", "PC15", "PC16", "PC17", "PC18", "PC19", "PC20") #read in eigenvectors
+eigens<-read.delim("Input_data/PCA_comparison/plink.eigenval",header=F) #read in eignevalues
+
+sum_eig<-sum(eigens$V1)
+
+sum_eigs<-lapply(eigens$V1,function(x){
+  rt<-(x/sum_eig)*100
+  rt<-round(rt)
+  return(rt)
+})
+
+#merge the dataframe with the metadata in order to assign samples to populations. This assumes that both dataframes have a column named "SampleID" that matches between the two dataframes.
+df<-merge(df, rubrocapilla_metadata, by="SampleID")
+
+cbbPalette <- c("#E69F00", "#CC79A7", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00")
+  headwaters_colour <- "#FF3E24"
+
+ggplot(df, aes(-PC1, PC2, color=Population)) +
+  geom_point(size=7, color="black") +
+  geom_point(size=6) +
+  geom_point(data=df %>% filter(Code == "MT087"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=df %>% filter(Code == "MT123"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=df %>% filter(Code == "OP100"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=df %>% filter(Code == "AMZ551"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=df %>% filter(Code == "AMZ610"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=df %>% filter(Code == "PPS352"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=df %>% filter(Code == "PPS221"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=df %>% filter(Code == "PPS041"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=df %>% filter(Code == "MT087"), size=5,colour="#F0E442")+
+  geom_point(data=df %>% filter(Code == "MT123"), size=5,colour="#F0E442")+
+  geom_point(data=df %>% filter(Code == "OP100"), size=5,colour="#56B4E9")+
+  geom_point(data=df %>% filter(Code == "AMZ551"), size=5,colour="#56B4E9")+
+  geom_point(data=df %>% filter(Code == "AMZ610"), size=5,colour="#56B4E9")+
+  geom_point(data=df %>% filter(Code == "PPS352"), size=5,colour="#009E73")+
+  geom_point(data=df %>% filter(Code == "PPS221"), size=5,colour="#009E73")+
+  geom_point(data=df %>% filter(Code == "PPS041"), size=5,colour="#009E73")+
+  #geom_text_repel(aes(label=SampleID), size=2, max.overlaps=50) +#The part with geom_text_repel adds easy-readable labels. 
+  xlab(paste0("PC1: (",sprintf("%.1f", sum_eigs[[1]]),"%)")) +
+  ylab(paste0("PC2: (",sprintf("%.1f", sum_eigs[[2]]),"%)"))+
+  scale_color_manual(values=cbbPalette)+
+  theme_classic()+
+  theme(legend.position = "none", panel.background = element_rect(fill='transparent'),plot.background = element_rect(fill='transparent', color=NA)) #I prefer to draw my own legend by hand
+
+ggplot(df, aes(PC3, PC4, color=Population)) +
+  geom_point(size=7, color="black") +
+  geom_point(size=6) +
+  geom_point(data=df %>% filter(Code == "MT087"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=df %>% filter(Code == "MT123"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=df %>% filter(Code == "OP100"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=df %>% filter(Code == "AMZ551"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=df %>% filter(Code == "AMZ610"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=df %>% filter(Code == "PPS352"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=df %>% filter(Code == "PPS221"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=df %>% filter(Code == "PPS041"), pch=20,size=14,colour=headwaters_colour)+
+  geom_point(data=df %>% filter(Code == "MT087"), size=5,colour="#F0E442")+
+  geom_point(data=df %>% filter(Code == "MT123"), size=5,colour="#F0E442")+
+  geom_point(data=df %>% filter(Code == "OP100"), size=5,colour="#56B4E9")+
+  geom_point(data=df %>% filter(Code == "AMZ551"), size=5,colour="#56B4E9")+
+  geom_point(data=df %>% filter(Code == "AMZ610"), size=5,colour="#56B4E9")+
+  geom_point(data=df %>% filter(Code == "PPS352"), size=5,colour="#009E73")+
+  geom_point(data=df %>% filter(Code == "PPS221"), size=5,colour="#009E73")+
+  geom_point(data=df %>% filter(Code == "PPS041"), size=5,colour="#009E73")+
+  #geom_text_repel(aes(label=SampleID), size=2, max.overlaps=50) +#The part with geom_text_repel adds easy-readable labels. 
+  xlab(paste0("PC3: (",sprintf("%.1f", sum_eigs[[3]]),"%)")) +
+  ylab(paste0("PC4: (",sprintf("%.1f", sum_eigs[[4]]),"%)"))+
+  scale_color_manual(values=cbbPalette)+
+  theme_classic()+
+  theme(legend.position = "none", panel.background = element_rect(fill='transparent'),plot.background = element_rect(fill='transparent', color=NA)) #I prefer to draw my own legend by hand
+
+```

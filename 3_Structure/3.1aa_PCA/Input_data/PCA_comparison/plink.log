@@ -1,0 +1,27 @@
+PLINK v1.90b7.2 64-bit (11 Dec 2023)
+Options in effect:
+  --allow-extra-chr
+  --double-id
+  --pca
+  --vcf /home/1_Else/Ceratopipra/1_Datasets/1.3a_genotyping/filteredSNPs/thinned_datasets/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.thinned10k.forSVD.AC4.37_0.2_5_20.0.vcf.gz
+
+Hostname: weirlab60
+Working directory: /home/1_Else/Ceratopipra/3_Structure/3.1aa_PCA/PCA_Ceratopipra_rubrocapilla/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.thinned10k.forSVD.AC4.37_0.2_5_20.0
+Start time: Tue Jun 11 20:47:41 2024
+
+Random number seed: 1718153261
+515838 MB RAM detected; reserving 257919 MB for main workspace.
+--vcf: plink-temporary.bed + plink-temporary.bim + plink-temporary.fam written.
+7865 variants loaded from .bim file.
+69 people (0 males, 0 females, 69 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to plink.nosex .
+Using up to 119 threads (change this with --threads).
+Before main variant filters, 69 founders and 0 nonfounders present.
+Calculating allele frequencies... done.
+Total genotyping rate is 0.856093.
+7865 variants and 69 people pass filters and QC.
+Note: No phenotypes present.
+Relationship matrix calculation complete.
+--pca: Results saved to plink.eigenval and plink.eigenvec .
+
+End time: Tue Jun 11 20:47:42 2024

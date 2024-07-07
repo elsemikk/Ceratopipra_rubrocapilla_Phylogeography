@@ -1,0 +1,41 @@
+Input parameter values:
+               datapath = ./input_data_Ceratopipra_rubrocapilla/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.genicintergenic.forSVD.AC0.37_0.2_5_20.0.safe
+               mcmcpath = ./results_Ceratopipra_rubrocapilla/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.genicintergenic.forSVD.AC0.37_0.2_5_20.0.safe.1000k2000k.m2.8.restarted
+               prevpath = ./results_Ceratopipra_rubrocapilla/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.genicintergenic.forSVD.AC0.37_0.2_5_20.0.safe.1000k2000k.m2.8
+               gridpath = 
+               distance = euclidean
+                diploid = 1
+                 nIndiv = 69
+                 nSites = 71852
+                 nDemes = 1000
+                   seed = 1718686696
+            numMCMCIter = 2000000
+            numBurnIter = 0
+            numThinIter = 9999
+              negBiSize = 10
+              negBiProb = 0.670000
+             qVoronoiPr = 0.250000
+             mrateShape = 0.000500
+             qrateShape = 0.002000
+             sigmaShape = 0.001000
+             qrateScale = 0.500000
+             mrateScale = 2.000000
+             sigmaScale = 1.000000
+       mSeedsProposalS2 = 0.010000
+       qSeedsProposalS2 = 0.100000
+       mEffctProposalS2 = 0.150000
+       qEffctProposalS2 = 0.001000
+      mrateMuProposalS2 = 0.010000
+
+Acceptance proportions:
+	(67294/124420) = 54% for proposal type "qTileRate",		 with proposal variance "qEffctProposalS2"
+	(40714/124123) = 33% for proposal type "qTileMove",		 with proposal variance "qSeedsProposalS2"
+	(35859/125256) = 29% for proposal type "qBirthDeath"
+	(207180/375026) = 55% for proposal type "mTileRate",		 with proposal variance "mEffctProposalS2"
+	(37634/249558) = 15% for proposal type "mMeanRate",		 with proposal variance "mrateMuProposalS2"
+	(164203/375987) = 44% for proposal type "mTileMove",		 with proposal variance "mSeedsProposalS2"
+	(72900/375237) = 19% for proposal type "mBirthDeath"
+	(229729/250393) = 92% for proposal type "degrees of freedom"
+
+Final log prior: 92.21
+Final log llike: 10756.95

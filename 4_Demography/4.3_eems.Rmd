@@ -1,0 +1,100 @@
+---
+title: "Untitled"
+author: "Else Mikkelsen"
+date: "2024-06-16"
+output: html_document
+---
+
+This R markdown file includes the code to generate a figure from the EEMS result for *Ceratopipra rubrocapilla*. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = '/Users/elsemikkelsen/Documents/GitHub/Ceratopipra_rubrocapilla_Phylogeography/4_Demography/4.3_eems')
+
+# Load required libraries
+library("reemsplots2")
+
+```
+
+First, load the results from EEMS. The function `make_eems_plots()` can take a list of output folders if more than one run was performed (and more than one run should be performed to check for convergence between runs). 
+
+```{r eems}
+#could load a single test run like this
+plots <- make_eems_plots("~/Documents/GitHub/Ceratopipra_rubrocapilla_Phylogeography/4_Demography/4.3_eems/results_Ceratopipra_rubrocapilla/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.genicintergenic.forSVD.AC0.37_0.2_5_20.0.safe.100k200k.ITERATION", longlat = FALSE, add_grid = TRUE, add_demes = TRUE)
+
+#or, provide a list of many runs
+
+#these runs were too short
+plots_files <- c("results_Ceratopipra_rubrocapilla/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.genicintergenic.forSVD.AC0.37_0.2_5_20.0.safe.1000k2000k.m2.1", "results_Ceratopipra_rubrocapilla/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.genicintergenic.forSVD.AC0.37_0.2_5_20.0.safe.1000k2000k.m2.2", "results_Ceratopipra_rubrocapilla/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.genicintergenic.forSVD.AC0.37_0.2_5_20.0.safe.1000k2000k.m2.3", "results_Ceratopipra_rubrocapilla/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.genicintergenic.forSVD.AC0.37_0.2_5_20.0.safe.1000k2000k.m2.4", "results_Ceratopipra_rubrocapilla/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.genicintergenic.forSVD.AC0.37_0.2_5_20.0.safe.1000k2000k.m2.5", "results_Ceratopipra_rubrocapilla/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.genicintergenic.forSVD.AC0.37_0.2_5_20.0.safe.1000k2000k.m2.6" ,"results_Ceratopipra_rubrocapilla/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.genicintergenic.forSVD.AC0.37_0.2_5_20.0.safe.1000k2000k.m2.7", "results_Ceratopipra_rubrocapilla/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.genicintergenic.forSVD.AC0.37_0.2_5_20.0.safe.1000k2000k.m2.8", "results_Ceratopipra_rubrocapilla/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.genicintergenic.forSVD.AC0.37_0.2_5_20.0.safe.1000k2000k.m2.9", "results_Ceratopipra_rubrocapilla/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.genicintergenic.forSVD.AC0.37_0.2_5_20.0.safe.1000k2000k.m2.10")
+
+#these runs ran for longer
+plots_files <- c("results_Ceratopipra_rubrocapilla/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.genicintergenic.forSVD.AC0.37_0.2_5_20.0.safe.1000k2000k.m2.1.restarted", "results_Ceratopipra_rubrocapilla/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.genicintergenic.forSVD.AC0.37_0.2_5_20.0.safe.1000k2000k.m2.2.restarted", "results_Ceratopipra_rubrocapilla/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.genicintergenic.forSVD.AC0.37_0.2_5_20.0.safe.1000k2000k.m2.3.restarted", "results_Ceratopipra_rubrocapilla/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.genicintergenic.forSVD.AC0.37_0.2_5_20.0.safe.1000k2000k.m2.4.restarted", "results_Ceratopipra_rubrocapilla/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.genicintergenic.forSVD.AC0.37_0.2_5_20.0.safe.1000k2000k.m2.5.restarted", "results_Ceratopipra_rubrocapilla/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.genicintergenic.forSVD.AC0.37_0.2_5_20.0.safe.1000k2000k.m2.6" ,"results_Ceratopipra_rubrocapilla/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.genicintergenic.forSVD.AC0.37_0.2_5_20.0.safe.1000k2000k.m2.7.restarted", "results_Ceratopipra_rubrocapilla/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.genicintergenic.forSVD.AC0.37_0.2_5_20.0.safe.1000k2000k.m2.8.restarted", "results_Ceratopipra_rubrocapilla/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.genicintergenic.forSVD.AC0.37_0.2_5_20.0.safe.1000k2000k.m2.9.restarted", "results_Ceratopipra_rubrocapilla/Ceratopipra_rubrocapilla.GBSPipfilbwa.allsites.filtered.genicintergenic.forSVD.AC0.37_0.2_5_20.0.safe.1000k2000k.m2.10.restarted")
+
+#provide the list of runs to make_eems_plots() to generate the plots
+plots <- make_eems_plots(plots_files, longlat = FALSE, add_grid = TRUE, add_demes = FALSE, add_outline=F, m_colscale = c(-1.5, 1.5))
+
+```
+First, we should look at the MCMC chain to ensure that the runs converged and the MCMC looks like it ran for long enough and reached stationary.
+```{r view_plots}
+plots$pilogl01
+plots$rdist01
+plots$rdist02
+plots$rdist03
+
+```
+Then, we can visualize the results on a map.
+```{r formatted_map}
+#quick view of the migration surfaces
+plots$mrates01$data
+plots$mrates02
+
+max(plots$mrates01$data)
+min(plots$mrates01$data)
+
+#add more data to the map (rivers, land borders, samples coloured by population)
+
+#load sample metadata
+rubrocapilla_map_metadata <- read.delim(file="~/Documents/GitHub/Ceratopipra_rubrocapilla_Phylogeography/3_Structure/3.1aa_PCA/Ceratopipra_rubrocapilla_extendedmetadata.txt", sep="\t", header=TRUE) %>%
+  filter(IQtree2=="1" | PCoA=="1")
+
+#load the outline of the land, and rivers. This data will not be available in the repository because I do not have permissions to redistribute the raw data.
+#read the shapefile of rivers
+# Load required libraries
+library(sf)
+brazil_rivers <- st_read("~/Documents/GitHub/Ceratopipra/Writing/Manuscript_drafts/Figures/Figure1.1_map/brazil_rivers_shapefile/ne_10m_rivers_lake_centerlines.shp")
+# Filter to keep only major rivers of interest (otherwise the map would be too messy and hard to read with all the small rivers plotted)
+brazil_rivers <- brazil_rivers[brazil_rivers$name %in% c("Amazonas", "Madeira", "Tapajós", "Xingu", "Tocantins", "Rio Negro", "Teles Pires", "Juruena", "Jamanxim", "Arapiuns", "Crepori", "Cupari", "Purus", "Baía de Marajó", "São Francisco", "Araguaia", "Madre de Dios", "Marañón", "Branco", "Orinoco", "Purús", "Ucayali", "Japurá", "Caquetá", "Huallaga"), ] #"Braco Menor", "Mamoré", "Juruá", "Jari", "Putumayo", 
+#read the shapefile of coastline
+brazil_coastline <- st_read("~/Documents/GitHub/Ceratopipra/Writing/Manuscript_drafts/Figures/Figure1.1_map/brazil_coastline_shapefile/ne_10m_coastline.shp")
+#read the country borders
+brazil_borders <- st_read("~/Documents/GitHub/Ceratopipra/Writing/Manuscript_drafts/Figures/Figure1.1_map/brazil_borders_shapefile/ne_10m_admin_0_countries.shp")
+
+
+cbbPalette <- c("#E69F00", "#CC79A7", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#E69F00", "#D55E00", "#CC79A7", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#E69F00")
+headwaters_colour <- "#EE3026"
+
+plots$mrates01 +
+  geom_sf(data = brazil_rivers, color = "#38afcd", linewidth=1, inherit.aes = FALSE) +
+  #geom_sf(data = Cerrub_range, color = "#ffcccb", fill = "#ffcccb") +
+  geom_sf(data = brazil_coastline, color = "black", inherit.aes = FALSE) +
+  geom_sf(data = brazil_borders, color = "black", fill = NA, inherit.aes = FALSE) +
+  #geom_sf(data = amazon, color = "black", fill=NA) +
+  coord_sf(xlim = c(-80, -34), ylim = c(-24, 0), expand = FALSE) +
+  #geom_point(data=rubrocapilla_map_metadata %>% filter(Species == "rubrocapilla"), aes(x=Longitude, y=Latitude), color="black", size=1)+
+  geom_point(data=rubrocapilla_map_metadata %>% filter(Species == "rubrocapilla"), aes(x=Longitude, y=Latitude, color=Population), size=4)+
+  geom_point(data=rubrocapilla_map_metadata %>% filter(SampleID == "Ceratopipra_rubrocapilla_OP100"),stroke=2, size=4, colour=headwaters_colour, aes(x=Longitude, y=Latitude))+
+  geom_point(data=rubrocapilla_map_metadata %>% filter(SampleID == "Ceratopipra_rubrocapilla_AMZ551"), stroke=2, size=4, colour=headwaters_colour, aes(x=Longitude, y=Latitude))+
+  geom_point(data=rubrocapilla_map_metadata %>% filter(SampleID == "Ceratopipra_rubrocapilla_AMZ610"), stroke=2, size=4, colour=headwaters_colour, aes(x=Longitude, y=Latitude))+
+  geom_point(data=rubrocapilla_map_metadata %>% filter(SampleID == "Ceratopipra_rubrocapilla_PPS221"), stroke=2, size=4, colour=headwaters_colour, aes(x=Longitude, y=Latitude))+
+  geom_point(data=rubrocapilla_map_metadata %>% filter(SampleID == "Ceratopipra_rubrocapilla_PPS352"), stroke=2, size=4, colour=headwaters_colour, aes(x=Longitude, y=Latitude))+
+  geom_point(data=rubrocapilla_map_metadata %>% filter(SampleID == "Ceratopipra_rubrocapilla_PPS041"), stroke=2, size=4, colour=headwaters_colour, aes(x=Longitude, y=Latitude))+
+  geom_point(data=rubrocapilla_map_metadata %>% filter(SampleID == "Ceratopipra_rubrocapilla_MT087"), stroke=2, size=4, colour=headwaters_colour, aes(x=Longitude, y=Latitude))+
+geom_point(data=rubrocapilla_map_metadata %>% filter(SampleID == "Ceratopipra_rubrocapilla_MT123"), stroke=2, size=4, colour=headwaters_colour, aes(x=Longitude, y=Latitude))+
+geom_point(data=rubrocapilla_map_metadata %>% filter(SampleID == "Ceratopipra_rubrocapilla_MT123" | SampleID == "Ceratopipra_rubrocapilla_PPS041"| SampleID == "Ceratopipra_rubrocapilla_PPS352" | SampleID == "Ceratopipra_rubrocapilla_PPS221"| SampleID == "Ceratopipra_rubrocapilla_AMZ610"| SampleID == "Ceratopipra_rubrocapilla_OP100"), aes(x=Longitude, y=Latitude, color=Population), size=4)+
+  scale_color_manual(values=cbbPalette)+
+  #geom_text_repel(data=rubrocapilla_map_metadata %>% filter(Species == "rubrocapilla"), aes(x=Longitude, y=Latitude, label=Code), size=2, max.overlaps=50) +#The part with geom_text_repel adds easy-readable labels. 
+  theme_void()
+
+ggsave("eems_map.pdf", width = 30, height = 30, units="cm")
+
+```
