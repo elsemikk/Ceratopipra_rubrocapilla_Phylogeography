@@ -125,6 +125,6 @@ plots$mrates01 +
   #geom_text_repel(data=rubrocapilla_map_metadata %>% filter(Species == "rubrocapilla"), aes(x=Longitude, y=Latitude, label=Code), size=2, max.overlaps=50) +#The part with geom_text_repel adds easy-readable labels. 
   theme_void()
 
-ggsave("eems_map.pdf", width = 30, height = 30, units="cm")
+#ggsave("eems_map.pdf", width = 30, height = 30, units="cm")
 
 ```
