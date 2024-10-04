@@ -12,7 +12,7 @@ The pipeline for preparing the reference genome, including the step of scaffoldi
 ### Raw data trimming
 The pipeline for downloading, assessing, and trimming the raw data is in the file `1_Datasets/1.1aa_GBSDatasets.md`. The pipeline for downloading the data will be different, as the raw sequencing reads will be available from the NCBI SRA after publication. The trimming logs and QC data for the reads is in the folder `1_Datasets/1.1aa_GBSDatasets` (not on Dryad due to copyright of FastQC reports).
 
-### mapping to reference genome
+### Mapping to reference genome
 The file `1_Datasets/1.2a_mapping.md` contains the instructions for mapping the trimmed sequencing reads to the reference genome, as well as the pipeline for identifying whether a sample is dilpoid or hemizygous on the Z chromosome. Quality reports related to the mapping are in the folder `1_Datasets/1.2a_mapping`. The raw `.bam` files of sequence alignments are too large to be placed in the repository, but can be regenerated with the code in the markdown file.  
 
 ### Genotype calling  
@@ -30,10 +30,10 @@ The instructions for replicating the SVDQuartets phylogenetic tree are in the fi
 The instructions for replicating the Splitstree phylogenetic network are in the file `2_Phylogeny/2.3aa_splitstree.md`; the input and raw output are in the folder `2_Phylogeny/2.3aa_splitstree`.  
 
 ### Maximum likelihood mitochondrial tree
-The instructions for replicating the maximum likelihood tree from the mitochondrial data are in the file `2_Phylogeny/2.4aa_ML_mtDNAtree.md`; the input aligment and output tree are in the folder `2_Phylogeny/2.4aa_ML_mtDNAtree/datasets`
+The instructions for replicating the maximum likelihood tree from the mitochondrial data are in the file `2_Phylogeny/2.4aa_ML_mtDNAtree.md`; the input aligment and output tree are in the folder `2_Phylogeny/2.4aa_ML_mtDNAtree/datasets`.
 
 ### Time-calibrated mitochondrial phylogeny
-The instructions for replicating the time-calibrated tree from the mitochondrial data are in the file `2_Phylogeny/2.5aa_BEAST_mtDNAtree.md`; the input aligment and output tree are in the folder `2_Phylogeny/2.5aa_BEAST_mtDNAtree/datasets`
+The instructions for replicating the time-calibrated tree from the mitochondrial data are in the file `2_Phylogeny/2.5aa_BEAST_mtDNAtree.md`; the input aligment and output tree are in the folder `2_Phylogeny/2.5aa_BEAST_mtDNAtree/datasets`.
 
 ### PCoA Analysis
 The code for replicating the PCoA analysis is in the R markdown file `3_Structure/3.1aa_PCoA.Rmd` which is also knit into `3_Structure/3.1aa_PCoA.html`. The output and input data for this analysis is in the foldder `3_Structure/3.1aa_PCA/Input_data`.
